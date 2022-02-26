@@ -49,9 +49,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     
     
-    
-    
-    
         //セルの個数
         func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
             return iconArray.count
@@ -61,7 +58,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
             cell.backgroundColor = UIColor.white
             cell.layer.cornerRadius = 12
-            cell.layer.shadowOpacity = 0.4
+            cell.layer.shadowOpacity = 0.2
             cell.layer.shadowRadius = 12
             cell.layer.shadowColor = UIColor.black.cgColor
             cell.layer.shadowOffset = CGSize(width: 8, height: 8)
@@ -74,18 +71,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
         //セル同士の間隔
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-            return 24
+            return 20
         }
         //セルのサイズ
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-            cellWidth = viewWidth-75
-            cellHeight = viewHeight-300
-            cellOffset = viewWidth-cellWidth
+            cellWidth = viewWidth - 30
+            cellHeight = cellWidth / 3
+            cellOffset = viewWidth - cellWidth
             return CGSize(width: cellWidth, height: cellHeight)
         }
         //余白の調整
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-            return UIEdgeInsets(top: -navHeight,left: cellOffset/2,bottom: 0,right: cellOffset/2)
+            return UIEdgeInsets(top: 20,left: cellOffset/2,bottom: 0,right: cellOffset/2)
         }
     
     

@@ -17,6 +17,12 @@ class CollectionViewCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
+        
+        NSLayoutConstraint.activate([
+                    contentView.leadingAnchor.constraint(equalTo: leadingAnchor),
+                    contentView.trailingAnchor.constraint(equalTo: trailingAnchor),
+                    contentView.topAnchor.constraint(equalTo: topAnchor),
+                    contentView.bottomAnchor.constraint(equalTo: bottomAnchor)])
 //        self.contentView.layer.cornerRadius = 2.0
 //        self.contentView.layer.borderWidth = 1.0
 //        self.contentView.layer.borderColor = UIColor.clear.cgColor
