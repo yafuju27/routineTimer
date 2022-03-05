@@ -13,12 +13,11 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var taskList: UICollectionView!
     @IBOutlet weak var iconImageView: UIButton!
     @IBOutlet weak var startButton: UIButton!
-    @IBOutlet weak var iconBack: UITextView!
-    
-    @IBOutlet weak var notificationBack: UITextView!
-    @IBOutlet weak var colorDesignBack: UITextView!
     @IBOutlet weak var titleTextField: UITextField!
     
+    @IBOutlet weak var iconBack: UIImageView!
+    @IBOutlet weak var colorBack: UIImageView!
+    @IBOutlet weak var bellBack: UIImageView!
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -47,8 +46,8 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         startButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         
         iconBack.layer.cornerRadius = 12
-        notificationBack.layer.cornerRadius = 12
-        colorDesignBack.layer.cornerRadius = 12
+        colorBack.layer.cornerRadius = 12
+        bellBack.layer.cornerRadius = 12
         //テキストフィールドのカスタマイズ
         titleTextField.setUnderLine()
         

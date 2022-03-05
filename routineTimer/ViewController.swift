@@ -73,7 +73,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 12
         cell.layer.shadowOpacity = 0.1
-        cell.layer.shadowRadius = 12
+        cell.layer.shadowRadius = 4
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: 1, height: 1)
         cell.layer.masksToBounds = false
