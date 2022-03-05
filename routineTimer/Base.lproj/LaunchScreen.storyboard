@@ -17,9 +17,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="coolHue-52E5E7-130CB7" translatesAutoresizingMaskIntoConstraints="NO" id="Zsn-XZ-zdJ">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="スクリーンショット 2021-11-18 4.12.12" translatesAutoresizingMaskIntoConstraints="NO" id="Zsn-XZ-zdJ">
                                 <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hello" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U3b-ns-JgQ">
                                 <rect key="frame" x="142" y="412" width="130.5" height="72"/>
@@ -32,6 +31,10 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="U3b-ns-JgQ" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="4XB-VE-mCq"/>
+                            <constraint firstAttribute="bottom" secondItem="Zsn-XZ-zdJ" secondAttribute="bottom" id="64M-fD-SlV"/>
+                            <constraint firstItem="Zsn-XZ-zdJ" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="XPJ-71-DKP"/>
+                            <constraint firstItem="Zsn-XZ-zdJ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="b8Y-8j-dPx"/>
+                            <constraint firstItem="Zsn-XZ-zdJ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="fp3-xN-KiB"/>
                             <constraint firstItem="U3b-ns-JgQ" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="kzT-aM-pWi"/>
                         </constraints>
                     </view>
@@ -42,7 +45,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="coolHue-52E5E7-130CB7" width="1000" height="1000"/>
+        <image name="スクリーンショット 2021-11-18 4.12.12" width="874" height="1423"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

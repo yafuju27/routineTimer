@@ -345,14 +345,14 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" alpha="0.84999999999999998" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sp5-ze-5rb">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sp5-ze-5rb">
                                         <rect key="frame" x="304" y="0.0" width="50" height="50"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="50" id="ZRn-UT-BR0"/>
                                             <constraint firstAttribute="width" constant="50" id="z3S-QX-sXp"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="next"/>
+                                        <state key="normal" image="表むき"/>
                                         <connections>
                                             <action selector="nextButton:" destination="Xp2-FX-xsx" eventType="touchUpInside" id="zNt-FI-yKu"/>
                                         </connections>
@@ -414,9 +414,9 @@
         <image name="add" width="256" height="256"/>
         <image name="bell" width="256" height="256"/>
         <image name="color" width="256" height="256"/>
-        <image name="next" width="256" height="256"/>
         <image name="sun" width="1024" height="1024"/>
         <image name="white" width="1536" height="1536"/>
+        <image name="表むき" width="1000" height="1000"/>
         <image name="逆むき" width="1007" height="960"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
