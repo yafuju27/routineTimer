@@ -19,12 +19,18 @@
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="3458004" translatesAutoresizingMaskIntoConstraints="NO" id="viQ-DY-ict">
-                        <rect key="frame" x="10" y="15" width="50" height="50"/>
+                        <rect key="frame" x="20" y="20" width="40" height="40"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="50" id="IpK-ne-kOq"/>
-                            <constraint firstAttribute="height" constant="50" id="Mo1-c1-c5W"/>
+                            <constraint firstAttribute="height" constant="40" id="U7A-SQ-0rh"/>
+                            <constraint firstAttribute="width" constant="40" id="c9X-ZP-ilL"/>
                         </constraints>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="25分30秒" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P8t-n5-hK1">
+                        <rect key="frame" x="313" y="57" width="67" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <color key="textColor" systemColor="systemGray2Color"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Morning Routine " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zvy-1B-at6">
                         <rect key="frame" x="80" y="20" width="159.5" height="40"/>
                         <constraints>
@@ -34,12 +40,6 @@
                         <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="25分30秒" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P8t-n5-hK1">
-                        <rect key="frame" x="313" y="57" width="67" height="18"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <color key="textColor" systemColor="systemGray3Color"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
@@ -47,9 +47,10 @@
                 <constraint firstAttribute="bottom" secondItem="P8t-n5-hK1" secondAttribute="bottom" constant="5" id="2Ww-nf-SA5"/>
                 <constraint firstItem="zvy-1B-at6" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="3QF-z0-0d5"/>
                 <constraint firstAttribute="trailing" secondItem="P8t-n5-hK1" secondAttribute="trailing" constant="10" id="BSc-6D-Mxi"/>
-                <constraint firstItem="viQ-DY-ict" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="10" id="XSt-dt-T4R"/>
-                <constraint firstItem="zvy-1B-at6" firstAttribute="leading" secondItem="viQ-DY-ict" secondAttribute="trailing" constant="20" id="aCc-Zb-jpx"/>
-                <constraint firstItem="viQ-DY-ict" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="rrv-aV-9xK"/>
+                <constraint firstItem="viQ-DY-ict" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" constant="20" id="Lg2-X4-jpQ"/>
+                <constraint firstItem="zvy-1B-at6" firstAttribute="leading" secondItem="viQ-DY-ict" secondAttribute="trailing" constant="20" id="dXY-r4-4Zz"/>
+                <constraint firstItem="viQ-DY-ict" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="eYv-sQ-nzL"/>
+                <constraint firstItem="viQ-DY-ict" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="20" id="y8p-4c-HCY"/>
             </constraints>
             <size key="customSize" width="435" height="79"/>
             <connections>
@@ -62,8 +63,8 @@
     </objects>
     <resources>
         <image name="3458004" width="256" height="256"/>
-        <systemColor name="systemGray3Color">
-            <color red="0.7803921568627451" green="0.7803921568627451" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <systemColor name="systemGray2Color">
+            <color red="0.68235294117647061" green="0.68235294117647061" blue="0.69803921568627447" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

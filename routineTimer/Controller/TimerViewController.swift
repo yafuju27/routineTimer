@@ -1,9 +1,12 @@
-//
-//  TimerViewController.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/02/27.
-//
+//taskTitle反映
+//残り時間反映
+//ボタンを一種類に変更
+//<>ボタンでタイマーを進めるようにする
+//タイマーが全部終了したら完了ラベル出現させる
+//音声や効果音を追加する
+//ボタンを押したときの軽いアニメーション
+//ボタンの振動
+
 
 import UIKit
 
@@ -71,7 +74,7 @@ class TimerViewController: UIViewController {
 
     private func createCircleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: 120, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 3, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
         layer.lineWidth = 10

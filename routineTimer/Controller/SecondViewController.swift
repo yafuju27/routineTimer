@@ -1,9 +1,11 @@
-//
-//  SubViewController.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/02/26.
-//
+//titleTextFieldのバグ
+//キーボード閉じ
+//タスクの合計時間反映
+//セル並び替え&削除
+//セルのタイトル変更
+//セルの時間変更
+//ボタンの振動
+
 
 import Foundation
 import UIKit
@@ -12,6 +14,7 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     
     @IBOutlet weak var taskList: UICollectionView!
     @IBOutlet weak var startButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
     
     @IBOutlet weak var iconBack: UIView!
@@ -48,11 +51,16 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         
+        saveButton.layer.cornerRadius = 12
+        
         iconBack.layer.cornerRadius = 12
         colorBack.layer.cornerRadius = 12
         bellBack.layer.cornerRadius = 12
+        
+        colorButton.imageView?.tintColor = .red
         //テキストフィールドのカスタマイズ
         titleTextField.setUnderLine()
+        titleTextField.text = "モーニングルーティーン"
         
         viewWidth = view.frame.width
         viewHeight = view.frame.height
@@ -97,8 +105,9 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     //セルのサイズ
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         cellWidth = viewWidth - 30
-        cellHeight = cellWidth / 8
+        cellHeight = 48
         cellOffset = viewWidth - cellWidth
+        print(CGFloat(cellHeight))
         return CGSize(width: cellWidth, height: cellHeight)
     }
     //    // Cell が選択された場合
@@ -111,11 +120,40 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     //        }
     
 
-    
+    //------------------------------------
     @IBAction func startButton(_ sender: Any) {
         //画面遷移
     }
+    @IBAction func saveButton(_ sender: Any) {
+//        //(タイトル、日付、本文)のセットである「日記」を配列の中に入れる
+//        //date,body,date
+//        print("セーブボタン押した")
+//        contentsArray = saveGetModel.getData()
+//        //「DateModel」で定義した設計図をインスタンスにする
+//        let dateModel = DateModel()
+//        //構造体の設計図をインスタンスとして定義する
+//        //左の「contentsModel」はインスタンス、右の「ContentsModel」は設計図
+//        //構造体はインスタンスにしなければ使用することができない
+//        let routinesModel = RoutinesModel(title: titleTextField.text!,body:honbunTextView.text!, date: dateModel.getTodayDate())
+//        print("🟥\(routinesModel)")
+//        //インスタンス化された「ContentsModel()」を「contentsArray」に入れる
+//        contentsArray.append(routinesModel)
+//        //「saveGetModel」の「backProtocol」を自分に委任する
+//        saveGetModel.backProtocol = self
+//        //保存をする(モデルに渡す)
+//        //「SveGetModel.swift」で作成したメソッド「saveData」を発動
+//        //saveData()を発動したことにより、データを保存する
+//        saveGetModel.saveData(contentsArray: contentsArray)
+    }
+    
+    
+    
     @IBAction func iconButton(_ sender: Any) {
     }
+    @IBAction func colorButton(_ sender: Any) {
+    }
+    @IBAction func bellButton(_ sender: Any) {
+    }
+    
     
 }

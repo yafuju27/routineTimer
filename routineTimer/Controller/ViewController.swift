@@ -1,16 +1,16 @@
-//
-//  ViewController.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/02/24.
-//
+//セルの並べ替え&削除
+//セル新規追加
+//ボタンの振動
+
+
 
 import UIKit
 
-class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class ViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     
     @IBOutlet weak var routinesCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var todayDateLabel: UILabel!
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -25,12 +25,18 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     
     var selectedImage : UIImage?
     
+    //まだ時計が更新されない状態
+    var myTimer: Timer!
+    var dateModel = DateModel()
+    
+    
     
     
     //---------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        todayDateLabel.text = dateModel.getTodayDate()
         
         viewWidth = view.frame.width
         viewHeight = view.frame.height
@@ -38,6 +44,10 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         
         routinesCollectionView.delegate = self
         routinesCollectionView.dataSource = self
+        routinesCollectionView.dropDelegate = self
+        routinesCollectionView.dragDelegate = self
+        routinesCollectionView.dragInteractionEnabled
+        
         //セルの登録
         let nib = UINib(nibName: "CollectionViewCell", bundle: .main)
         routinesCollectionView.register(nib, forCellWithReuseIdentifier: "cell")
@@ -72,7 +82,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         cell.backgroundColor = .white
         cell.layer.cornerRadius = 12
-        cell.layer.shadowOpacity = 0.1
+        cell.layer.shadowOpacity = 0.05
         cell.layer.shadowRadius = 4
         cell.layer.shadowColor = UIColor.black.cgColor
         cell.layer.shadowOffset = CGSize(width: 1, height: 1)
@@ -109,6 +119,40 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    //---------------------------------------------------------
+    //セルのドラッグ
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let itemIdentifier = indexPath.item.description
+                let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
+                let dragItem = UIDragItem(itemProvider: itemProvider)
+                return [dragItem]
+    }
+    //謎
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+    //セルのドロップ
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        if coordinator.proposal.operation == .move {
+                    guard let item = coordinator.items.first,
+                          let destinationIndexPath = coordinator.destinationIndexPath,
+                          let sourceIndexPath = item.sourceIndexPath else {
+                        return
+                    }
+
+                    collectionView.performBatchUpdates({
+//                        // データソースの更新
+//                        let n = dataList.remove(at: sourceIndexPath.item)
+//                        dataList.insert(n, at: destinationIndexPath.item)
+                        //セルの移動
+                        collectionView.deleteItems(at: [sourceIndexPath])
+                        collectionView.insertItems(at: [destinationIndexPath])
+                    })
+                    coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+    }
+    
+    //---------------------------------------------------------
     
     @IBAction func addButton(_ sender: Any) {
     }

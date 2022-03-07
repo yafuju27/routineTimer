@@ -24,17 +24,23 @@
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="タスク名" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cd-Xy-mAi">
-                        <rect key="frame" x="50" y="15" width="69.5" height="20.5"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                        <rect key="frame" x="44" y="16" width="61.5" height="18"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="2ia-mr-OM6">
+                        <rect key="frame" x="15" y="-231" width="17" height="512"/>
+                    </imageView>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
+                <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="2ia-mr-OM6" secondAttribute="trailing" constant="12" id="6Ym-dP-6H2"/>
                 <constraint firstItem="mJU-cY-ler" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="KuO-LI-dc1"/>
-                <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="50" id="mHV-C8-gd8"/>
+                <constraint firstItem="2ia-mr-OM6" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="a94-CB-lU8"/>
+                <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="44" id="mHV-C8-gd8"/>
+                <constraint firstItem="2ia-mr-OM6" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="15" id="qqD-Oq-CtJ"/>
                 <constraint firstAttribute="trailing" secondItem="mJU-cY-ler" secondAttribute="trailing" constant="20" id="x2u-iS-gah"/>
                 <constraint firstItem="9cd-Xy-mAi" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="xRk-43-il4"/>
             </constraints>
@@ -43,7 +49,10 @@
                 <outlet property="taskName" destination="9cd-Xy-mAi" id="5eo-Hc-WBq"/>
                 <outlet property="taskTime" destination="mJU-cY-ler" id="nPf-Qf-LFk"/>
             </connections>
-            <point key="canvasLocation" x="-72.463768115942031" y="110.15625"/>
+            <point key="canvasLocation" x="-72.463768115942031" y="109.82142857142857"/>
         </collectionViewCell>
     </objects>
+    <resources>
+        <image name="circle" width="512" height="512"/>
+    </resources>
 </document>
