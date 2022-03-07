@@ -11,22 +11,20 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="gTV-IL-0wX" customClass="TaskCollectionViewCell" customModule="routineTimer" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
+            <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
             <autoresizingMask key="autoresizingMask"/>
             <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                <rect key="frame" x="0.0" y="0.0" width="374" height="51"/>
+                <rect key="frame" x="0.0" y="0.0" width="374" height="50"/>
                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="25分30秒" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cY-ler">
-                        <rect key="frame" x="284" y="15" width="76" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="25分30秒" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mJU-cY-ler">
+                        <rect key="frame" x="287" y="16" width="67" height="18"/>
                         <fontDescription key="fontDescription" type="system" pointSize="15"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="タスク名" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cd-Xy-mAi">
-                        <rect key="frame" x="40" y="5" width="198" height="40"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="タスク名" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9cd-Xy-mAi">
+                        <rect key="frame" x="50" y="15" width="69.5" height="20.5"/>
                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
@@ -34,6 +32,12 @@
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
+            <constraints>
+                <constraint firstItem="mJU-cY-ler" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="KuO-LI-dc1"/>
+                <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="50" id="mHV-C8-gd8"/>
+                <constraint firstAttribute="trailing" secondItem="mJU-cY-ler" secondAttribute="trailing" constant="20" id="x2u-iS-gah"/>
+                <constraint firstItem="9cd-Xy-mAi" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="xRk-43-il4"/>
+            </constraints>
             <size key="customSize" width="340" height="51"/>
             <connections>
                 <outlet property="taskName" destination="9cd-Xy-mAi" id="5eo-Hc-WBq"/>

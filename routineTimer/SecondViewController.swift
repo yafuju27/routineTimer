@@ -11,13 +11,16 @@ import UIKit
 class SecondViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var taskList: UICollectionView!
-    @IBOutlet weak var iconImageView: UIButton!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
     
-    @IBOutlet weak var iconBack: UIImageView!
-    @IBOutlet weak var colorBack: UIImageView!
-    @IBOutlet weak var bellBack: UIImageView!
+    @IBOutlet weak var iconBack: UIView!
+    @IBOutlet weak var colorBack: UIView!
+    @IBOutlet weak var bellBack: UIView!
+    
+    @IBOutlet weak var iconButton: UIButton!
+    @IBOutlet weak var colorButton: UIButton!
+    @IBOutlet weak var bellButton: UIButton!
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -59,7 +62,7 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         taskList.dataSource = self
         //iconImageView.image = selectedImage
         // 画像のアスペクト比を維持しUIImageViewサイズに収まるように表示
-        iconImageView.contentMode = UIView.ContentMode.scaleAspectFit
+        iconButton.contentMode = UIView.ContentMode.scaleAspectFit
         let nib = UINib(nibName: "TaskCollectionViewCell", bundle: .main)
         taskList.register(nib, forCellWithReuseIdentifier: "taskCell")
         
