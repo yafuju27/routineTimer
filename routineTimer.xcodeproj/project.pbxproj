@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38663F43084305273B55CE41 /* Pods_routineTimer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E45C2DC424D863A71C7C9E0 /* Pods_routineTimer.framework */; };
 		98313EC127D5A9130023E69C /* RoutinesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC027D5A9120023E69C /* RoutinesModel.swift */; };
 		98313EC327D5AA6F0023E69C /* SaveGetModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC227D5AA6F0023E69C /* SaveGetModel.swift */; };
 		98313EC527D5AAB30023E69C /* DateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC427D5AAB30023E69C /* DateModel.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1E45C2DC424D863A71C7C9E0 /* Pods_routineTimer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_routineTimer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		98313EC027D5A9120023E69C /* RoutinesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesModel.swift; sourceTree = "<group>"; };
 		98313EC227D5AA6F0023E69C /* SaveGetModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveGetModel.swift; sourceTree = "<group>"; };
 		98313EC427D5AAB30023E69C /* DateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateModel.swift; sourceTree = "<group>"; };
@@ -44,6 +46,8 @@
 		98BA191D27CB24350045E0C0 /* TaskCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskCollectionViewCell.xib; sourceTree = "<group>"; };
 		98BA192027CB58260045E0C0 /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
 		98BA192227CC55860045E0C0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E89B19DAB53D601880F7CEF8 /* Pods-routineTimer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routineTimer.debug.xcconfig"; path = "Target Support Files/Pods-routineTimer/Pods-routineTimer.debug.xcconfig"; sourceTree = "<group>"; };
+		FDF6AE9FC33DC0DB07FA191E /* Pods-routineTimer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routineTimer.release.xcconfig"; path = "Target Support Files/Pods-routineTimer/Pods-routineTimer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,12 +55,31 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				38663F43084305273B55CE41 /* Pods_routineTimer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2A3E1E2DFE4611446BA2EF84 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				1E45C2DC424D863A71C7C9E0 /* Pods_routineTimer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3E317CDD23F6FCACD2324C17 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E89B19DAB53D601880F7CEF8 /* Pods-routineTimer.debug.xcconfig */,
+				FDF6AE9FC33DC0DB07FA191E /* Pods-routineTimer.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		98313EBC27D59C7D0023E69C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -92,6 +115,8 @@
 			children = (
 				9847C33127C7CAEF004C5BDE /* routineTimer */,
 				9847C33027C7CAEF004C5BDE /* Products */,
+				3E317CDD23F6FCACD2324C17 /* Pods */,
+				2A3E1E2DFE4611446BA2EF84 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,9 +153,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9847C34327C7CAF0004C5BDE /* Build configuration list for PBXNativeTarget "routineTimer" */;
 			buildPhases = (
+				246AE529CBBBA1E7B911029A /* [CP] Check Pods Manifest.lock */,
 				9847C32B27C7CAEF004C5BDE /* Sources */,
 				9847C32C27C7CAEF004C5BDE /* Frameworks */,
 				9847C32D27C7CAEF004C5BDE /* Resources */,
+				E7BFA6AAA347E7410019FECC /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -188,6 +215,48 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		246AE529CBBBA1E7B911029A /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-routineTimer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E7BFA6AAA347E7410019FECC /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-routineTimer/Pods-routineTimer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-routineTimer/Pods-routineTimer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-routineTimer/Pods-routineTimer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9847C32B27C7CAEF004C5BDE /* Sources */ = {
@@ -348,6 +417,7 @@
 		};
 		9847C34427C7CAF0004C5BDE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E89B19DAB53D601880F7CEF8 /* Pods-routineTimer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -377,6 +447,7 @@
 		};
 		9847C34527C7CAF0004C5BDE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = FDF6AE9FC33DC0DB07FA191E /* Pods-routineTimer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
