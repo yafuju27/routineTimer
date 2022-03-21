@@ -1,11 +1,10 @@
 //taskTitle反映
 //残り時間反映
-//ボタンを一種類に変更
 //<>ボタンでタイマーを進めるようにする
 //タイマーが全部終了したら完了ラベル出現させる
 //音声や効果音を追加する
 //ボタンを押したときの軽いアニメーション
-//ボタンの振動
+
 import UIKit
 
 class TimerViewController: UIViewController {
@@ -139,8 +138,12 @@ class TimerViewController: UIViewController {
     //-----------------------------------------------------
     
     @IBAction func backButton(_ sender: Any) {
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
     }
     @IBAction func nextButton(_ sender: Any) {
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
     }
     
     
@@ -175,20 +178,33 @@ class TimerViewController: UIViewController {
             animateCircle()
             
         }
+        
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
+        
         }
         
 
     @IBAction func minusButton(_ sender: Any) {
+        
         timeRemainingA -= 5
         timeRemainingB -= 5
         timerLabel.text = "残り \n\(Int(timeRemainingA))"
         animateCircle()
+        
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
+        
     }
     @IBAction func plusButton(_ sender: Any) {
         timeRemainingA += 5
         timeRemainingB += 5
         timerLabel.text = "残り \n\(Int(timeRemainingA))"
         animateCircle()
+        
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
+        
     }
     
     //------------------------------------------------------

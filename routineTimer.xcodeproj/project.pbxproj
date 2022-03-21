@@ -21,6 +21,7 @@
 		9847C34A27C81D9F004C5BDE /* CollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C34827C81D9F004C5BDE /* CollectionViewCell.swift */; };
 		9847C34B27C81D9F004C5BDE /* CollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9847C34927C81D9F004C5BDE /* CollectionViewCell.xib */; };
 		985DF91227E8A3230081DC4A /* IconViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985DF91127E8A3230081DC4A /* IconViewController.swift */; };
+		985DF91427E8B57C0081DC4A /* MyButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 985DF91327E8B57C0081DC4A /* MyButton.swift */; };
 		987584B427E879FE008DF96F /* pulsingAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 987584B327E879FE008DF96F /* pulsingAnimation.swift */; };
 		98BA191B27CA214E0045E0C0 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA191A27CA214E0045E0C0 /* SecondViewController.swift */; };
 		98BA191E27CB24350045E0C0 /* TaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA191C27CB24350045E0C0 /* TaskCollectionViewCell.swift */; };
@@ -46,6 +47,7 @@
 		9847C34827C81D9F004C5BDE /* CollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCell.swift; sourceTree = "<group>"; };
 		9847C34927C81D9F004C5BDE /* CollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CollectionViewCell.xib; sourceTree = "<group>"; };
 		985DF91127E8A3230081DC4A /* IconViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IconViewController.swift; sourceTree = "<group>"; };
+		985DF91327E8B57C0081DC4A /* MyButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyButton.swift; sourceTree = "<group>"; };
 		987584B327E879FE008DF96F /* pulsingAnimation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pulsingAnimation.swift; sourceTree = "<group>"; };
 		98BA191A27CA214E0045E0C0 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		98BA191C27CB24350045E0C0 /* TaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -146,6 +148,7 @@
 				98BA191C27CB24350045E0C0 /* TaskCollectionViewCell.swift */,
 				98BA192227CC55860045E0C0 /* Extensions.swift */,
 				987584B327E879FE008DF96F /* pulsingAnimation.swift */,
+				985DF91327E8B57C0081DC4A /* MyButton.swift */,
 				98313EBD27D59C9D0023E69C /* View */,
 				9847C33B27C7CAF0004C5BDE /* Assets.xcassets */,
 				9847C33D27C7CAF0004C5BDE /* LaunchScreen.storyboard */,
@@ -273,6 +276,7 @@
 			files = (
 				9847C33727C7CAEF004C5BDE /* ViewController.swift in Sources */,
 				9847C33327C7CAEF004C5BDE /* AppDelegate.swift in Sources */,
+				985DF91427E8B57C0081DC4A /* MyButton.swift in Sources */,
 				98BA191B27CA214E0045E0C0 /* SecondViewController.swift in Sources */,
 				98BA192327CC55860045E0C0 /* Extensions.swift in Sources */,
 				98BA192127CB58260045E0C0 /* TimerViewController.swift in Sources */,

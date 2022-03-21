@@ -1,8 +1,5 @@
-//3/7
 
 //セルの並べ替え&削除
-//セル新規追加
-//ボタンの振動
 
 import UIKit
 import RealmSwift
@@ -57,7 +54,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         routinesCollectionView.dataSource = self
         routinesCollectionView.dropDelegate = self
         routinesCollectionView.dragDelegate = self
-        routinesCollectionView.dragInteractionEnabled
+        //routinesCollectionView.dragInteractionEnabled
         
         //セルの登録
         let nib = UINib(nibName: "CollectionViewCell", bundle: .main)
@@ -89,9 +86,6 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             secondVC.selectedImage = selectedImage
         }
     }
-    //---------------------------------------------------------------------------------------
-    
-    
     
     //セルの個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -145,6 +139,9 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             // SubViewController へ遷移するために Segue を呼び出す
             performSegue(withIdentifier: "toSecondViewController",sender: nil)
         }
+        //ボタンの振動
+        let generator = UINotificationFeedbackGenerator()
+        generator.notificationOccurred(.success)
     }
     
     
@@ -191,6 +188,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
     //---------------------------------------------------------
     
     @IBAction func addButton(_ sender: Any) {
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
     }
     
     

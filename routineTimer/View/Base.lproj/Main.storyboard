@@ -204,13 +204,13 @@
                             <constraint firstItem="xAM-Q4-NWp" firstAttribute="trailing" secondItem="YJy-XZ-fvR" secondAttribute="trailing" constant="20" id="783-9x-9iE"/>
                             <constraint firstItem="VIv-r5-IFB" firstAttribute="top" secondItem="T1B-dT-rAL" secondAttribute="bottom" constant="54" id="CIT-Wx-NSM"/>
                             <constraint firstItem="lJn-ku-JPM" firstAttribute="top" secondItem="T1B-dT-rAL" secondAttribute="bottom" constant="20" id="D62-Wh-d9Q"/>
+                            <constraint firstItem="T1B-dT-rAL" firstAttribute="centerX" secondItem="1dr-jH-Kvl" secondAttribute="centerX" id="GaV-3m-phW"/>
                             <constraint firstItem="VIv-r5-IFB" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" id="HbC-kr-dD4"/>
+                            <constraint firstItem="T1B-dT-rAL" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="20" id="Kx7-74-Knc"/>
                             <constraint firstItem="YJy-XZ-fvR" firstAttribute="top" secondItem="T1B-dT-rAL" secondAttribute="bottom" constant="20" id="Pze-tL-UWs"/>
                             <constraint firstItem="xAM-Q4-NWp" firstAttribute="bottom" secondItem="rV1-SI-c4g" secondAttribute="bottom" constant="11" id="QWp-WX-ROH"/>
-                            <constraint firstItem="T1B-dT-rAL" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="20" id="bY7-BR-mHM"/>
                             <constraint firstAttribute="bottom" secondItem="VIv-r5-IFB" secondAttribute="bottom" id="c8K-EW-5cD"/>
                             <constraint firstItem="VIv-r5-IFB" firstAttribute="trailing" secondItem="xAM-Q4-NWp" secondAttribute="trailing" id="rkS-Ai-w2E"/>
-                            <constraint firstItem="xAM-Q4-NWp" firstAttribute="trailing" secondItem="T1B-dT-rAL" secondAttribute="trailing" constant="20" id="tDq-bB-V1Q"/>
                             <constraint firstItem="lJn-ku-JPM" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="20" id="uIK-mA-9Iw"/>
                         </constraints>
                     </view>

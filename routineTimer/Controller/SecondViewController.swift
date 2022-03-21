@@ -1,10 +1,10 @@
 //titleTextFieldのバグ
-//キーボード閉じ
+//キーボード閉じ(returnキー)
 //タスクの合計時間反映
 //セル並び替え&削除
 //セルのタイトル変更
 //セルの時間変更
-//ボタンの振動
+//セルのbackgroundcolor選択
 
 import UIKit
 import RealmSwift
@@ -16,12 +16,7 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
     
-    @IBOutlet weak var iconBack: UIView!
-    @IBOutlet weak var colorBack: UIView!
-    @IBOutlet weak var bellBack: UIView!
-    
-    @IBOutlet weak var iconButton: UIButton!
-    @IBOutlet weak var colorButton: UIButton!
+
     @IBOutlet weak var bellButton: UIButton!
     
     private var viewWidth: CGFloat!
@@ -134,7 +129,8 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     //------------------------------------
     @IBAction func startButton(_ sender: Any) {
-        //画面遷移
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
     }
     @IBAction func saveButton(_ sender: Any) {
         
@@ -169,12 +165,15 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
 //        //「SveGetModel.swift」で作成したメソッド「saveData」を発動
 //        //saveData()を発動したことにより、データを保存する
 //        saveGetModel.saveData(contentsArray: contentsArray)
+        
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
     }
 
-    @IBAction func iconButton(_ sender: Any) {
-    }
-    @IBAction func colorButton(_ sender: Any) {
-    }
+    
+    
     @IBAction func bellButton(_ sender: Any) {
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
     }
 }
