@@ -1,7 +1,9 @@
-import UIKit
+import Foundation
+import RealmSwift
 
-struct RoutinesModel {
-    var title: String?
-    var time: String?
-    var icon: UIImageView?
+class Routine: Object {
+    @objc dynamic var title = ""
+    @objc dynamic var time = ""
+    @objc dynamic var number = ""
+    //@objc dynamic var color = ".darkGray"
 }

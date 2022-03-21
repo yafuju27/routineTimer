@@ -6,8 +6,6 @@
 //音声や効果音を追加する
 //ボタンを押したときの軽いアニメーション
 //ボタンの振動
-
-
 import UIKit
 
 class TimerViewController: UIViewController {
@@ -16,19 +14,23 @@ class TimerViewController: UIViewController {
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
-    @IBOutlet weak var playButton: UIButton!
-    @IBOutlet weak var pauseButton: UIButton!
-    @IBOutlet weak var replayButton: UIButton!
+    @IBOutlet weak var startStopButton: UIButton!
     @IBOutlet weak var minusButton: UIButton!
     @IBOutlet weak var plusButton: UIButton!
     
-    private var shapeLayer = CAShapeLayer()
+    private var shapeLayerA = CAShapeLayer()
+    private var shapeLayerB = CAShapeLayer()
     private var pulsatingLayer: CAShapeLayer!
     private var timer = Timer()
     //残り時間
-    private var timeRemaining:Float = 60
+    private var timeRemainingA:Float = 60
+    private var timeRemainingB:Float = 300
     //スタート時点の残り時間
-    private var timeStart:Int = 60
+    private var timeStartA:Int = 60
+    private var timeStartB:Int = 300
+    var timerCounting: Bool = false
+    
+    
     
     
     //---------------------------------------------------------------------------------------
@@ -37,18 +39,15 @@ class TimerViewController: UIViewController {
         //タイトルの色
         taskTitle.textColor = .color4
         //ボタンの丸み
-        playButton.layer.cornerRadius = 12
-        pauseButton.layer.cornerRadius = 12
-        minusButton.layer.cornerRadius = 12
-        plusButton.layer.cornerRadius = 12
+        startStopButton.layer.cornerRadius = 50
+        minusButton.layer.cornerRadius = 25
+        plusButton.layer.cornerRadius = 25
         //ボタンのテキストの色
-        playButton.titleLabel?.textColor = .color4
-        pauseButton.titleLabel?.textColor = .color4
+        startStopButton.titleLabel?.textColor = .color4
         minusButton.titleLabel?.textColor = .color4
         plusButton.titleLabel?.textColor = .color4
         //ボタンの背景色
-        playButton.backgroundColor = .color3
-        pauseButton.backgroundColor = .color3
+        startStopButton.backgroundColor = .color3
         minusButton.backgroundColor = .color3
         plusButton.backgroundColor = .color3
         
@@ -56,7 +55,7 @@ class TimerViewController: UIViewController {
         view.backgroundColor = .color1
         
         //残り時間表示ラベル
-        timerLabel.text = "Start"
+        timerLabel.text = "START"
         timerLabel.textAlignment = .center
         timerLabel.font = .boldSystemFont(ofSize: 40)
         timerLabel.textColor = .color4
@@ -65,16 +64,13 @@ class TimerViewController: UIViewController {
         
         setupCircleLayers()
         view.addSubview(timerLabel)
-        
-        
-        
-        
     }
     //---------------------------------------------------------------------------------------
 
-    private func createCircleShapeLayer(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
+    
+    private func createCircleShapeLayerA(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 3, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 2.5, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
         layer.lineWidth = 10
@@ -83,21 +79,38 @@ class TimerViewController: UIViewController {
         layer.position = view.center
         return layer
     }
-    
+    private func createCircleShapeLayerB(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
+        let layer = CAShapeLayer()
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 15, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        layer.path = circularPath.cgPath
+        layer.strokeColor = strokeColor.cgColor
+        layer.lineWidth = 10
+        layer.fillColor = fillColor.cgColor
+        layer.lineCap = CAShapeLayerLineCap.round
+        layer.position = view.center
+        return layer
+    }
     private func setupCircleLayers() {
         
-        pulsatingLayer = createCircleShapeLayer(strokeColor: .color2, fillColor: .color2)
+        pulsatingLayer = createCircleShapeLayerA(strokeColor: .color3, fillColor: .color2)
         view.layer.addSublayer(pulsatingLayer)
-        animatePulsatingLayer()
+        //animatePulsatingLayer()
 
-        let trackLayer = createCircleShapeLayer(strokeColor: .color3, fillColor: .color1)
-        view.layer.addSublayer(trackLayer)
+        let trackLayerA = createCircleShapeLayerA(strokeColor: .color2, fillColor: .color1)
+        view.layer.addSublayer(trackLayerA)
+        let trackLayerB = createCircleShapeLayerB(strokeColor: .color2, fillColor: .color1)
+        view.layer.addSublayer(trackLayerB)
 
-        shapeLayer = createCircleShapeLayer(strokeColor: .color4, fillColor: .clear)
+        shapeLayerA = createCircleShapeLayerA(strokeColor: .color3, fillColor: .clear)
+        shapeLayerA.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+        shapeLayerA.strokeEnd = 0
         
-        shapeLayer.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
-        shapeLayer.strokeEnd = 0
-        view.layer.addSublayer(shapeLayer)
+        shapeLayerB = createCircleShapeLayerB(strokeColor: .systemOrange, fillColor: .clear)
+        shapeLayerB.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+        shapeLayerB.strokeEnd = 0
+        
+        view.layer.addSublayer(shapeLayerA)
+        view.layer.addSublayer(shapeLayerB)
     }
     
     private func animatePulsatingLayer() {
@@ -112,7 +125,6 @@ class TimerViewController: UIViewController {
         pulsatingLayer.add(animation, forKey: "pulsing")
     }
     
-
     fileprivate func animateCircle(){
         //アニメーションに関してはここで完結している
         let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
@@ -120,11 +132,9 @@ class TimerViewController: UIViewController {
         //basicAnimation.duration = 2
         basicAnimation.fillMode = .forwards
         basicAnimation.isRemovedOnCompletion = false
-        shapeLayer.add(basicAnimation, forKey: "urSoBasic")
+        shapeLayerA.add(basicAnimation, forKey: "urSoBasic")
+        shapeLayerB.add(basicAnimation, forKey: "urSoBasic")
     }
-    
-  
-
     
     //-----------------------------------------------------
     
@@ -132,53 +142,75 @@ class TimerViewController: UIViewController {
     }
     @IBAction func nextButton(_ sender: Any) {
     }
-    @IBAction func playButton(_ sender: Any) {
-        timer.invalidate()
-        timer = Timer.scheduledTimer(timeInterval: 0.1,
-                                     target: self,
-                                     selector: #selector(TimerViewController.timerClass),
-                                     userInfo: nil,
-                                     repeats: true)
+    
+    
+    
+    @IBAction func startStopButton(_ sender: UIButton) {
+        
+        if(timerCounting){
+            timerCounting = false
+            startStopButton.setTitle("START", for: .normal)
+            startStopButton.backgroundColor = .color3
+            //STOPボタンの役割
+            timer.invalidate()
+            
+        } else {
+            timerCounting = true
+            //水面アニメーション
+//            let pulse = PulsingAnimation(numberOfPulses: 1, radius: 100, position: startStopButton.center)
+//            pulse.animationDuration = 1.0
+//            pulse.backgroundColor = CGColor.init(red: 0, green: 173, blue: 181, alpha: 20)
+//            self.view.layer.insertSublayer(pulse, below: self.view.layer)
+            
+            startStopButton.setTitle("STOP", for: .normal)
+            startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
+            
+            //STARTボタンの役割
+            timer.invalidate()
+            timer = Timer.scheduledTimer(timeInterval: 0.1,
+                                         target: self,
+                                         selector: #selector(TimerViewController.timerClass),
+                                         userInfo: nil,
+                                         repeats: true)
+            animateCircle()
+            
+        }
+        }
+        
+
+    @IBAction func minusButton(_ sender: Any) {
+        timeRemainingA -= 5
+        timeRemainingB -= 5
+        timerLabel.text = "残り \n\(Int(timeRemainingA))"
         animateCircle()
     }
-    @IBAction func pauseButton(_ sender: Any) {
-        timer.invalidate()
-    }
-    
-    @IBAction func minusButton(_ sender: Any) {
-        timeRemaining -= 5
-        timerLabel.text = "残り \n\(Int(timeRemaining))"
-    }
     @IBAction func plusButton(_ sender: Any) {
-        timeRemaining += 5
-        timerLabel.text = "残り \n\(Int(timeRemaining))"
+        timeRemainingA += 5
+        timeRemainingB += 5
+        timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        animateCircle()
     }
-    
     
     //------------------------------------------------------
     
-    
-    
     @objc func timerClass() {
         
-        if timeRemaining > 0 {
-            timeRemaining -= 0.1
+        if timeRemainingA > 0 {
+            timeRemainingA -= 0.1
+            timeRemainingB -= 0.1
         } else {
             timer.invalidate()
-            timeRemaining = 60
+            timeRemainingA = 60
+            timeRemainingB = 300
         }
         
-        let percentage = CGFloat(1 - Float(timeRemaining) * 1 / Float(timeStart))
-        self.shapeLayer.strokeEnd = percentage
+        let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
+        let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
+        self.shapeLayerA.strokeEnd = percentageA
+        self.shapeLayerB.strokeEnd = percentageB
         
-        timerLabel.text = "残り \n\(Int(timeRemaining))"
-        print("割合は\(percentage)")
+        timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        print("割合は\(percentageA)")
     }
-    
-    
-    
-    
-    
-    
     
 }

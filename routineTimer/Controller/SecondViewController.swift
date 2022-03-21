@@ -6,9 +6,8 @@
 //セルの時間変更
 //ボタンの振動
 
-
-import Foundation
 import UIKit
+import RealmSwift
 
 class SecondViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -32,13 +31,15 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     private var cellOffset: CGFloat!
     private var navHeight: CGFloat!
     
-    var taskArray = ["トイレ","うがい","水分補給","体重測定","スクワット","ストレッチ","英単語","Todoリスト確認"]
-    var taskTimeArray = ["5分30秒","2分00秒","1分00秒","3分00秒","4分30秒","2分20秒","0分30秒","1分20秒"]
+    var taskArray = ["トイレ","うがい","水分補給","体重測定","スクワット","ストレッチ","英単語","Todoリスト確認","トイレ","うがい","水分補給","体重測定","スクワット","ストレッチ","英単語","Todoリスト確認","トイレ","うがい","水分補給","体重測定","スクワット","ストレッチ","英単語","Todoリスト確認"]
+    var taskTimeArray = ["5分30秒","2分00秒","1分00秒","3分00秒","4分30秒","2分20秒","0分30秒","1分20秒","5分30秒","2分00秒","1分00秒","3分00秒","4分30秒","2分20秒","0分30秒","1分20秒","5分30秒","2分00秒","1分00秒","3分00秒","4分30秒","2分20秒","0分30秒","1分20秒"]
     
     
     //var imageOfIcon = iconImageView.imageView
     var selectedImage: UIImage!
     
+    //Realmを使う時のお決まりのやつ
+    let realm = try! Realm()
     
     //---------------------------------------------------------------------------------------
     
@@ -50,17 +51,13 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         startButton.layer.shadowRadius = 12
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+        startButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
         
         saveButton.layer.cornerRadius = 12
+        saveButton.backgroundColor = .color3
         
-        iconBack.layer.cornerRadius = 12
-        colorBack.layer.cornerRadius = 12
-        bellBack.layer.cornerRadius = 12
-        
-        colorButton.imageView?.tintColor = .red
         //テキストフィールドのカスタマイズ
-        titleTextField.setUnderLine()
-        titleTextField.text = "モーニングルーティーン"
+        titleTextField.setCustomeLine()
         
         viewWidth = view.frame.width
         viewHeight = view.frame.height
@@ -70,7 +67,6 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         taskList.dataSource = self
         //iconImageView.image = selectedImage
         // 画像のアスペクト比を維持しUIImageViewサイズに収まるように表示
-        iconButton.contentMode = UIView.ContentMode.scaleAspectFit
         let nib = UINib(nibName: "TaskCollectionViewCell", bundle: .main)
         taskList.register(nib, forCellWithReuseIdentifier: "taskCell")
         
@@ -80,9 +76,26 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white
         ]
+        
+        //画面がタップされたらキーボード閉じるための処理準備
+        let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGR.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGR)
+        
+        let routineItems = realm.objects(Routine.self)
+        print("🟥全てのデータ\(routineItems)")
     }
     //---------------------------------------------------------------------------------------
     
+    //キーボード閉じる処理
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.titleTextField.resignFirstResponder()
+        return true
+    }
     
     //セルの個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -100,14 +113,13 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     }
     //セル同士の間隔
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
+        return 7
     }
     //セルのサイズ
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         cellWidth = viewWidth - 30
-        cellHeight = 48
+        cellHeight = 45
         cellOffset = viewWidth - cellWidth
-        print(CGFloat(cellHeight))
         return CGSize(width: cellWidth, height: cellHeight)
     }
     //    // Cell が選択された場合
@@ -125,6 +137,19 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         //画面遷移
     }
     @IBAction func saveButton(_ sender: Any) {
+        
+        //ボタンを押したら、先ほど用意したデータの箱に、テキストフィールドに入力された値を書き込む処理を追記。
+        let routine = Routine()
+        routine.title = titleTextField.text!
+//        routine.time = timeBox.text!
+//        routine.number = numberBox.text!
+        //routine.color = optionColor
+        try! realm.write {
+            realm.add(routine)
+        }
+        
+        //ViewControllerへ戻る処理
+        self.navigationController?.popViewController(animated: true)
 //        //(タイトル、日付、本文)のセットである「日記」を配列の中に入れる
 //        //date,body,date
 //        print("セーブボタン押した")
@@ -145,15 +170,11 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
 //        //saveData()を発動したことにより、データを保存する
 //        saveGetModel.saveData(contentsArray: contentsArray)
     }
-    
-    
-    
+
     @IBAction func iconButton(_ sender: Any) {
     }
     @IBAction func colorButton(_ sender: Any) {
     }
     @IBAction func bellButton(_ sender: Any) {
     }
-    
-    
 }
