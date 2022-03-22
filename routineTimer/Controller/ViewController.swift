@@ -98,7 +98,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         let routineItems = realm.objects(Routine.self)
         cell.backgroundColor = .color3
-        cell.layer.cornerRadius = 12
+        cell.layer.cornerRadius = 15
         cell.layer.shadowOpacity = 0.2
         cell.layer.shadowRadius = 6
         cell.layer.shadowColor = UIColor.black.cgColor

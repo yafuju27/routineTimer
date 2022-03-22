@@ -4,6 +4,7 @@
 //タイマーが全部終了したら完了ラベル出現させる
 //音声や効果音を追加する
 //ボタンを押したときの軽いアニメーション
+//stackviewで真ん中に表示
 
 import UIKit
 
@@ -11,6 +12,7 @@ class TimerViewController: UIViewController {
 
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
+    @IBOutlet weak var endTimeLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var startStopButton: UIButton!
@@ -22,39 +24,40 @@ class TimerViewController: UIViewController {
     private var pulsatingLayer: CAShapeLayer!
     private var timer = Timer()
     //残り時間
-    private var timeRemainingA:Float = 60
+    private var timeRemainingA:Float = 80
     private var timeRemainingB:Float = 300
     //スタート時点の残り時間
-    private var timeStartA:Int = 60
-    private var timeStartB:Int = 300
+    private let timeStartA:Int = 80
+    private let timeStartB:Int = 300
     var timerCounting: Bool = false
-    
-    
     
     
     //---------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //タイトルの色
         taskTitle.textColor = .color4
         //ボタンの丸み
         startStopButton.layer.cornerRadius = 50
         minusButton.layer.cornerRadius = 25
         plusButton.layer.cornerRadius = 25
-        //ボタンのテキストの色
-        startStopButton.titleLabel?.textColor = .color4
-        minusButton.titleLabel?.textColor = .color4
-        plusButton.titleLabel?.textColor = .color4
         //ボタンの背景色
         startStopButton.backgroundColor = .color3
-        minusButton.backgroundColor = .color3
-        plusButton.backgroundColor = .color3
-        
+        minusButton.backgroundColor = .color1
+        plusButton.backgroundColor = .color1
+        //ボタンの枠線
+        self.minusButton.layer.borderWidth = 5.0    // 枠線の幅
+        self.minusButton.layer.borderColor = UIColor.rgb(r: 0, g: 173, b: 181).cgColor    // 枠線の色
+        self.plusButton.layer.borderWidth = 5.0    // 枠線の幅
+        self.plusButton.layer.borderColor = UIColor.rgb(r: 234, g: 84, b: 85).cgColor    // 枠線の色
         //背景の色
         view.backgroundColor = .color1
-        
+        //ボタンのテキストの色
+        minusButton.setTitleColor(UIColor.rgb(r: 0, g: 173, b: 181), for: .normal)
+        plusButton.setTitleColor(UIColor.rgb(r: 234, g: 84, b: 85), for: .normal)
         //残り時間表示ラベル
-        timerLabel.text = "START"
+        makeTimerLabel()
         timerLabel.textAlignment = .center
         timerLabel.font = .boldSystemFont(ofSize: 40)
         timerLabel.textColor = .color4
@@ -63,9 +66,14 @@ class TimerViewController: UIViewController {
         
         setupCircleLayers()
         view.addSubview(timerLabel)
+        view.addSubview(endTimeLabel)
     }
     //---------------------------------------------------------------------------------------
-
+    func makeTimerLabel() {
+        let min = Int(timeRemainingA / 60)
+        let sec = Int(timeRemainingA) % 60
+        self.timerLabel.text = String(format: "%02d:%02d", min, sec)
+    }
     
     private func createCircleShapeLayerA(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
@@ -189,7 +197,8 @@ class TimerViewController: UIViewController {
         
         timeRemainingA -= 5
         timeRemainingB -= 5
-        timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        //timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        makeTimerLabel()
         animateCircle()
         
         //ボタンの振動
@@ -199,7 +208,8 @@ class TimerViewController: UIViewController {
     @IBAction func plusButton(_ sender: Any) {
         timeRemainingA += 5
         timeRemainingB += 5
-        timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        //timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        makeTimerLabel()
         animateCircle()
         
         //ボタンの振動
@@ -216,7 +226,7 @@ class TimerViewController: UIViewController {
             timeRemainingB -= 0.1
         } else {
             timer.invalidate()
-            timeRemainingA = 60
+            timeRemainingA = 80
             timeRemainingB = 300
         }
         
@@ -225,8 +235,11 @@ class TimerViewController: UIViewController {
         self.shapeLayerA.strokeEnd = percentageA
         self.shapeLayerB.strokeEnd = percentageB
         
-        timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        //timerLabel.text = "残り \n\(Int(timeRemainingA))"
+        makeTimerLabel()
         print("割合は\(percentageA)")
+        
     }
+    
     
 }
