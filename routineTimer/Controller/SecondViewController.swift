@@ -207,7 +207,11 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
 
     
     
-    @IBAction func bellButton(_ sender: Any) {
+    @IBAction func addTaskButtonAction(_ sender: Any) {
+    }
+    
+    
+    @IBAction func bellButtonAction(_ sender: Any) {
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
