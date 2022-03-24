@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class SecondViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+class SecondViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     
     @IBOutlet weak var taskList: UICollectionView!
     @IBOutlet weak var startButton: UIButton!
@@ -60,7 +60,9 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
         
         taskList.delegate = self
         taskList.dataSource = self
-        //iconImageView.image = selectedImage
+        taskList.dropDelegate = self
+        taskList.dragDelegate = self
+        
         // 画像のアスペクト比を維持しUIImageViewサイズに収まるように表示
         let nib = UINib(nibName: "TaskCollectionViewCell", bundle: .main)
         taskList.register(nib, forCellWithReuseIdentifier: "taskCell")
@@ -125,6 +127,39 @@ class SecondViewController: UIViewController, UICollectionViewDelegate, UICollec
     //            // SubViewController へ遷移するために Segue を呼び出す
     //            performSegue(withIdentifier: "toSecondViewController",sender: nil)
     //        }
+    
+    //セルのドラッグ
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        let itemIdentifier = indexPath.item.description
+                let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
+                let dragItem = UIDragItem(itemProvider: itemProvider)
+                return [dragItem]
+    }
+    
+    //謎
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+    //セルのドロップ
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        if coordinator.proposal.operation == .move {
+                    guard let item = coordinator.items.first,
+                          let destinationIndexPath = coordinator.destinationIndexPath,
+                          let sourceIndexPath = item.sourceIndexPath else {
+                        return
+                    }
+
+                    collectionView.performBatchUpdates({
+//                        // データソースの更新
+//                        let n = dataList.remove(at: sourceIndexPath.item)
+//                        dataList.insert(n, at: destinationIndexPath.item)
+                        //セルの移動
+                        collectionView.deleteItems(at: [sourceIndexPath])
+                        collectionView.insertItems(at: [destinationIndexPath])
+                    })
+                    coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
+            }
+    }
     
 
     //------------------------------------

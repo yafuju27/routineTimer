@@ -87,6 +87,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         }
     }
     
+    
     //セルの個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         //データがあるだけセルを作るようにします。
@@ -151,6 +152,8 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
             realm.delete(routineItems[index])
         }
     }
+    
+    
     
     //---------------------------------------------------------
     //セルのドラッグ
