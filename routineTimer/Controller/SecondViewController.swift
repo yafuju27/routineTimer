@@ -147,6 +147,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let storyboard = UIStoryboard(name: "TaskDetail", bundle: nil)
         let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! TaskDetailViewController
+        taskDetailVC.taskTitle = taskArray[indexPath.row]
         self.present(taskDetailVC, animated: true)
     }
 }

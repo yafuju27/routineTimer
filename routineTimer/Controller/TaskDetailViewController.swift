@@ -8,9 +8,12 @@
 import UIKit
 
 class TaskDetailViewController: UIViewController {
-
+    @IBOutlet weak var taskTextField: UITextField!
+    var taskTitle = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        taskTextField.text = taskTitle
     }
     
     @IBAction func cancelBarButtonAction(_ sender: Any) {
@@ -18,8 +21,6 @@ class TaskDetailViewController: UIViewController {
     }
     
     @IBAction func doneBarButtonAction(_ sender: Any) {
-    }
-    
-    @IBAction func taskTitleTextField(_ sender: Any) {
+        print(taskTitle)
     }
 }
