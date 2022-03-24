@@ -40,7 +40,7 @@ class SecondViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         //ボタンを押したら、先ほど用意したデータの箱に、テキストフィールドに入力された値を書き込む処理を追記。
         let routine = Routine()
-        routine.title = titleTextField.text!
+        routine.routinetitle = titleTextField.text!
         try! realm.write {
             realm.add(routine)
         }

@@ -106,7 +106,7 @@ class ViewController: UIViewController, UICollectionViewDelegate, UICollectionVi
         cell.layer.shadowOffset = CGSize(width: 1, height: 1)
         cell.layer.masksToBounds = false
         
-        cell.cellTitle!.text = "\(routineItems[indexPath.row].title)"
+        cell.cellTitle!.text = "\(routineItems[indexPath.row].routinetitle)"
 //        cell.cellTime!.text = "\(routineItems[indexPath.row].time)"
 //        cell.cellImage!.text = "\(routineItems[indexPath.row].number)"
         
