@@ -121,16 +121,7 @@
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="taskCell" id="uWj-RM-P6s">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="Ikw-77-H1j">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
+                                <cells/>
                             </collectionView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rV1-SI-c4g">
                                 <rect key="frame" x="147" y="806" width="120" height="45"/>
@@ -194,7 +185,7 @@
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button" image="add"/>
                                 <connections>
-                                    <action selector="addTask:" destination="evd-mc-JpS" eventType="touchUpInside" id="zCA-Tk-Eg8"/>
+                                    <action selector="addTaskButtonAction:" destination="evd-mc-JpS" eventType="touchUpInside" id="jR7-vK-vZG"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -244,7 +235,7 @@
                     <connections>
                         <outlet property="saveButton" destination="lGR-aj-hJW" id="5oZ-X4-1fQ"/>
                         <outlet property="startButton" destination="rV1-SI-c4g" id="Az0-3K-shT"/>
-                        <outlet property="taskList" destination="VIv-r5-IFB" id="0JO-yO-ti1"/>
+                        <outlet property="taskCollectionView" destination="VIv-r5-IFB" id="bIx-kO-M8K"/>
                         <outlet property="titleTextField" destination="T1B-dT-rAL" id="yV0-FJ-zQe"/>
                     </connections>
                 </viewController>

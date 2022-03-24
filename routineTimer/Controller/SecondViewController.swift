@@ -10,12 +10,10 @@ import UIKit
 import RealmSwift
 
 class SecondViewController: UIViewController {
-    @IBOutlet weak var taskList: UICollectionView!
+    @IBOutlet weak var taskCollectionView: UICollectionView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
-    
-    @IBOutlet weak var bellButton: UIButton!
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -31,9 +29,7 @@ class SecondViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupView()
-        
     }
     
     @IBAction func startButton(_ sender: Any) {
@@ -41,25 +37,23 @@ class SecondViewController: UIViewController {
         Feedbacker.impact(style: .medium)
     }
     @IBAction func saveButton(_ sender: Any) {
-        
         //ボタンを押したら、先ほど用意したデータの箱に、テキストフィールドに入力された値を書き込む処理を追記。
         let routine = Routine()
         routine.title = titleTextField.text!
         try! realm.write {
             realm.add(routine)
         }
-        
         //ViewControllerへ戻る処理
         self.navigationController?.popViewController(animated: true)
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
     
-    
-    
     @IBAction func addTaskButtonAction(_ sender: Any) {
+        taskArray.append("歯磨き")
+        taskTimeArray.append("1分30秒")
+        taskCollectionView.reloadData()
     }
-    
     
     @IBAction func bellButtonAction(_ sender: Any) {
         //ボタンの振動
@@ -75,7 +69,6 @@ class SecondViewController: UIViewController {
         self.titleTextField.resignFirstResponder()
         return true
     }
-    
     
     private func setupView() {
         startButton.layer.cornerRadius = 12
@@ -95,14 +88,14 @@ class SecondViewController: UIViewController {
         viewHeight = view.frame.height
         navHeight = self.navigationController?.navigationBar.frame.size.height
         
-        taskList.delegate = self
-        taskList.dataSource = self
-        taskList.dropDelegate = self
-        taskList.dragDelegate = self
+        taskCollectionView.delegate = self
+        taskCollectionView.dataSource = self
+        taskCollectionView.dropDelegate = self
+        taskCollectionView.dragDelegate = self
         
         // 画像のアスペクト比を維持しUIImageViewサイズに収まるように表示
         let nib = UINib(nibName: "TaskCollectionViewCell", bundle: .main)
-        taskList.register(nib, forCellWithReuseIdentifier: "taskCell")
+        taskCollectionView.register(nib, forCellWithReuseIdentifier: "taskCell")
         
         self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController!.navigationBar.shadowImage = UIImage()
@@ -121,18 +114,6 @@ class SecondViewController: UIViewController {
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
 
 extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -169,10 +150,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
     //            // SubViewController へ遷移するために Segue を呼び出す
     //            performSegue(withIdentifier: "toSecondViewController",sender: nil)
     //        }
-    
-    
 }
-
 
 extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     
