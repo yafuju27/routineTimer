@@ -36,6 +36,7 @@ class SecondViewController: UIViewController {
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
+    
     @IBAction func saveButton(_ sender: Any) {
         //ボタンを押したら、先ほど用意したデータの箱に、テキストフィールドに入力された値を書き込む処理を追記。
         let routine = Routine()
@@ -142,14 +143,12 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cellOffset = viewWidth - cellWidth
         return CGSize(width: cellWidth, height: cellHeight)
     }
-    //    // Cell が選択された場合
-    //    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-    //        // [indexPath.row] から画像名を探し、UImage を設定
-    //        selectedImage = UIImage(named: iconArray[indexPath.row])
-    //        if selectedImage != nil {
-    //            // SubViewController へ遷移するために Segue を呼び出す
-    //            performSegue(withIdentifier: "toSecondViewController",sender: nil)
-    //        }
+    // Cell が選択された場合
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let storyboard = UIStoryboard(name: "TaskDetail", bundle: nil)
+        let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! TaskDetailViewController
+        self.present(taskDetailVC, animated: true)
+    }
 }
 
 extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
