@@ -24,8 +24,6 @@ class SecondViewController: UIViewController {
     private let routineModel = Routine()
     
     var selectedID = ""
-    var taskArray = ["トイレ"]
-    var taskTimeArray = ["5分30秒"]
     var selectedImage: UIImage!
     let realm = try! Realm()
     
