@@ -42,8 +42,15 @@ class SecondViewController: UIViewController {
     @IBAction func saveButton(_ sender: Any) {
         guard let routineTitle = titleTextField.text else {
             // TDOO: - ここにアラートを入れる
-            return }
-        routineModel.createRoutine(routineTitle: routineTitle)
+            return
+            
+        }
+        if selectedID == "" {
+            routineModel.createRoutine(routineTitle: routineTitle)
+        } else {
+            routineModel.updateRoutine(routineID: selectedID, routineTitle: routineTitle)
+        }
+
         //ViewControllerへ戻る処理
         self.navigationController?.popViewController(animated: true)
         //ボタンの振動

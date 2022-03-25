@@ -99,7 +99,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         cell.layer.masksToBounds = false
         
         cell.cellTitle!.text = "\(routineItems[indexPath.row].routinetitle)"
-        cell.cellTime.text = "\(timeArray[indexPath.row])"
+        //cell.cellTime.text = "\(timeArray[indexPath.row])"
         return cell
     }
     //セル同士の間隔

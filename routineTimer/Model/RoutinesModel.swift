@@ -22,6 +22,14 @@ extension Routine {
         }
     }
     
+    func updateRoutine(routineID: String, routineTitle: String) {
+        let realm = try! Realm()
+        let target = realm.objects(Routine.self).filter("routineID == %@", routineID).first
+        try! realm.write {
+            target?.routinetitle = routineTitle
+        }
+    }
+    
     func createTask(routineID: String, taskTitle: String) {
         let realm = try! Realm()
         let target = realm.objects(Routine.self).filter("routineID == %@", routineID).first
