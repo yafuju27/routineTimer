@@ -9,7 +9,7 @@ class Routine: Object {
 
 class Task: Object {
     @objc dynamic var taskTitle = ""
-    @objc dynamic var taskID = ""
+    @objc dynamic var taskID = UUID().uuidString
 }
 
 extension Routine {
@@ -19,6 +19,18 @@ extension Routine {
         routine.routinetitle = routineTitle
         try! realm.write {
             realm.add(routine)
+        }
+    }
+    
+    func createTask(routineID: String, taskTitle: String) {
+        let realm = try! Realm()
+        let target = realm.objects(Routine.self).filter("routineID == %@", routineID).first
+        let task = Task(value: ["taskTitle": taskTitle])
+        task.taskTitle = taskTitle
+        
+        
+        try! realm.write {
+            target?.task.append(task)
         }
     }
 }

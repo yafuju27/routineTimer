@@ -51,8 +51,7 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
-        taskArray.append("歯磨き")
-        taskTimeArray.append("1分30秒")
+        routineModel.createTask(routineID: selectedID, taskTitle: "歯磨き")
         taskCollectionView.reloadData()
     }
     
@@ -110,29 +109,28 @@ class SecondViewController: UIViewController {
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
         
-        let routineItems = realm.objects(Routine.self)
-        let selectedRoutine = routineItems.filter("routineID == %@", selectedID)
-        titleTextField.text = selectedRoutine.first?.routinetitle
-        print("🟦選択したデータ\(selectedRoutine)")
-        print("🟥全てのデータ\(routineItems)")
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+        titleTextField.text = target?.routinetitle
+        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
-    
 }
 
 extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
     //セルの個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return taskArray.count
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+        return target?.task.count ?? 0
     }
     //セルの中身
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         let taskCell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as! TaskCollectionViewCell
         taskCell.layer.cornerRadius = 24
         taskCell.backgroundColor = UIColor.white
         taskCell.layer.masksToBounds = false
-        taskCell.taskName.text = "\(taskArray[indexPath.row])"
-        taskCell.taskTime.text = "\(taskTimeArray[indexPath.row])"
+        taskCell.taskName.text = target?.task[indexPath.row].taskTitle
+        taskCell.taskTime.text = "14:22"
         return taskCell
     }
     //セル同士の間隔
@@ -146,11 +144,14 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cellOffset = viewWidth - cellWidth
         return CGSize(width: cellWidth, height: cellHeight)
     }
+    
     // Cell が選択された場合
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         let storyboard = UIStoryboard(name: "TaskDetail", bundle: nil)
         let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! TaskDetailViewController
-        taskDetailVC.taskTitle = taskArray[indexPath.row]
+        taskDetailVC.selectedRoutineID = selectedID
+        taskDetailVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
         self.present(taskDetailVC, animated: true)
     }
 }

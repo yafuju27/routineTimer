@@ -6,14 +6,20 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TaskDetailViewController: UIViewController {
     @IBOutlet weak var taskTextField: UITextField!
-    var taskTitle = ""
+    var selectedRoutineID = ""
+    var selectedTaskID = ""
+    let realm = try! Realm()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        taskTextField.text = taskTitle
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
+        let task = target?.task.filter("taskID == %@", selectedTaskID).first
+        taskTextField.text = task?.taskTitle
     }
     
     @IBAction func cancelBarButtonAction(_ sender: Any) {
@@ -21,6 +27,5 @@ class TaskDetailViewController: UIViewController {
     }
     
     @IBAction func doneBarButtonAction(_ sender: Any) {
-        print(taskTitle)
     }
 }
