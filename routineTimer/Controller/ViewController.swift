@@ -118,7 +118,11 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         //画面遷移
         let secondVC = self.storyboard?.instantiateViewController(withIdentifier: "Second") as! SecondViewController
+        let routineItems = realm.objects(Routine.self)
+        secondVC.selectedID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(secondVC, animated: true)
+        
+        
         //ボタンの振動
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)

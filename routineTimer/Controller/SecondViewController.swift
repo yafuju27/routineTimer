@@ -23,6 +23,7 @@ class SecondViewController: UIViewController {
     private var navHeight: CGFloat!
     private let routineModel = Routine()
     
+    var selectedID = ""
     var taskArray = ["トイレ"]
     var taskTimeArray = ["5分30秒"]
     var selectedImage: UIImage!
@@ -110,6 +111,9 @@ class SecondViewController: UIViewController {
         self.view.addGestureRecognizer(tapGR)
         
         let routineItems = realm.objects(Routine.self)
+        let selectedRoutine = routineItems.filter("routineID == %@", selectedID)
+        titleTextField.text = selectedRoutine.first?.routinetitle
+        print("🟦選択したデータ\(selectedRoutine)")
         print("🟥全てのデータ\(routineItems)")
     }
     

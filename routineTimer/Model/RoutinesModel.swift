@@ -3,7 +3,7 @@ import RealmSwift
 
 class Routine: Object {
     @objc dynamic var routinetitle = ""
-    @objc dynamic var routineID = ""
+    @objc dynamic var routineID = UUID().uuidString
     var task = List<Task>()
 }
 
