@@ -13,5 +13,12 @@ class Task: Object {
 }
 
 extension Routine {
-    
+    func createRoutine(routineTitle: String) {
+        let realm = try! Realm()
+        let routine = Routine()
+        routine.routinetitle = routineTitle
+        try! realm.write {
+            realm.add(routine)
+        }
+    }
 }

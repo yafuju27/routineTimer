@@ -5,9 +5,6 @@ import UIKit
 import RealmSwift
 
 class ViewController: UIViewController {
-    
-    
-    
     @IBOutlet weak var routinesCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var todayDateLabel: UILabel!
@@ -33,16 +30,6 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         routinesCollectionView.reloadData()
-    }
-    
-    // Segue 準備
-    override func prepare(for segue: UIStoryboardSegue, sender: Any!) {
-        if (segue.identifier == "toSecondViewController") {
-            let secondVC: SecondViewController = (segue.destination as? SecondViewController)!
-            
-            // SubViewController のselectedImgに選択された画像を設定する
-            secondVC.selectedImage = selectedImage
-        }
     }
     
     @IBAction func addButton(_ sender: Any) {
@@ -81,6 +68,13 @@ class ViewController: UIViewController {
         routineItems = realm.objects(Routine.self)
         
         routinesCollectionView.reloadData()
+    }
+    
+    private func deleteRoutine(at index: Int) {
+        let realm = try! Realm()
+        try! realm.write {
+            realm.delete(routineItems[index])
+        }
     }
 }
 
@@ -122,17 +116,12 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     // Cell が選択された場合
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        performSegue(withIdentifier: "toSecondViewController",sender: nil)
+        //画面遷移
+        let secondVC = self.storyboard?.instantiateViewController(withIdentifier: "Second") as! SecondViewController
+        self.navigationController?.pushViewController(secondVC, animated: true)
         //ボタンの振動
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
-    }
-    
-    private func deleteRoutine(at index: Int) {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.delete(routineItems[index])
-        }
     }
 }
 
@@ -168,6 +157,4 @@ extension ViewController: UICollectionViewDragDelegate, UICollectionViewDropDele
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
     }
-    
-    
 }

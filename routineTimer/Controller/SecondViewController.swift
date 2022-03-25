@@ -21,6 +21,7 @@ class SecondViewController: UIViewController {
     private var cellHeight: CGFloat!
     private var cellOffset: CGFloat!
     private var navHeight: CGFloat!
+    private let routineModel = Routine()
     
     var taskArray = ["トイレ"]
     var taskTimeArray = ["5分30秒"]
@@ -38,12 +39,10 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func saveButton(_ sender: Any) {
-        //ボタンを押したら、先ほど用意したデータの箱に、テキストフィールドに入力された値を書き込む処理を追記。
-        let routine = Routine()
-        routine.routinetitle = titleTextField.text!
-        try! realm.write {
-            realm.add(routine)
-        }
+        guard let routineTitle = titleTextField.text else {
+            // TDOO: - ここにアラートを入れる
+            return }
+        routineModel.createRoutine(routineTitle: routineTitle)
         //ViewControllerへ戻る処理
         self.navigationController?.popViewController(animated: true)
         //ボタンの振動

@@ -37,9 +37,6 @@
                                         </collectionViewCellContentView>
                                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                                         <size key="customSize" width="398" height="128"/>
-                                        <connections>
-                                            <segue destination="evd-mc-JpS" kind="show" identifier="toSecondViewController" id="Q0f-fY-F5l"/>
-                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                                 <connections>
@@ -107,7 +104,7 @@
         <!--Second View Controller-->
         <scene sceneID="qux-PI-eJv">
             <objects>
-                <viewController id="evd-mc-JpS" customClass="SecondViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Second" id="evd-mc-JpS" customClass="SecondViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1dr-jH-Kvl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -412,9 +409,6 @@
             <point key="canvasLocation" x="1965" y="878"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="Q0f-fY-F5l"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <image name="add" width="512" height="512"/>
         <image name="表むき" width="1000" height="1000"/>
