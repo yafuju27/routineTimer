@@ -11,3 +11,7 @@ class Task: Object {
     @objc dynamic var taskTitle = ""
     @objc dynamic var taskID = ""
 }
+
+extension Routine {
+    
+}

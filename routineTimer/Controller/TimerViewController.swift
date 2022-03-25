@@ -9,7 +9,7 @@
 import UIKit
 
 class TimerViewController: UIViewController {
-
+    
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var endTimeLabel: UILabel!
@@ -31,8 +31,6 @@ class TimerViewController: UIViewController {
     private let timeStartB:Int = 300
     var timerCounting: Bool = false
     
-    
-    //---------------------------------------------------------------------------------------
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -68,7 +66,7 @@ class TimerViewController: UIViewController {
         view.addSubview(timerLabel)
         view.addSubview(endTimeLabel)
     }
-    //---------------------------------------------------------------------------------------
+    
     func makeTimerLabel() {
         let min = Int(timeRemainingA / 60)
         let sec = Int(timeRemainingA) % 60
@@ -143,8 +141,6 @@ class TimerViewController: UIViewController {
         shapeLayerB.add(basicAnimation, forKey: "urSoBasic")
     }
     
-    //-----------------------------------------------------
-    
     @IBAction func backButton(_ sender: Any) {
         //ボタンの振動
         Feedbacker.impact(style: .medium)
@@ -153,8 +149,6 @@ class TimerViewController: UIViewController {
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
-    
-    
     
     @IBAction func startStopButton(_ sender: UIButton) {
         
