@@ -24,7 +24,7 @@ class SecondViewController: UIViewController {
     private let routineModel = Routine()
     
     var selectedID = ""
-    var selectedImage: UIImage!
+    //var selectedImage: UIImage!
     let realm = try! Realm()
     
     override func viewDidLoad() {
@@ -56,7 +56,7 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
-        routineModel.createTask(routineID: selectedID, taskTitle: "歯磨き")
+        routineModel.createTask(routineID: selectedID, taskTitle: "新規タスク")
         taskCollectionView.reloadData()
     }
     
@@ -124,18 +124,31 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
     
     //セルの個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        return target?.task.count ?? 0
+        if selectedID == "" {
+            return 1
+        } else {
+            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+            return target?.task.count ?? 0
+        }
     }
     //セルの中身
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         let taskCell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as! TaskCollectionViewCell
-        taskCell.layer.cornerRadius = 24
+        taskCell.layer.cornerRadius = viewWidth / 18
         taskCell.backgroundColor = UIColor.white
         taskCell.layer.masksToBounds = false
-        taskCell.taskName.text = target?.task[indexPath.row].taskTitle
-        taskCell.taskTime.text = "14:22"
+        
+        if selectedID == "" {
+            taskCell.taskName.text = "着替え"
+            taskCell.taskTime.text = "3分20秒"
+            taskCell.taskName.textColor = .systemGray3
+            taskCell.taskTime.textColor = .systemGray3
+        } else {
+            taskCell.taskName.text = target?.task[indexPath.row].taskTitle
+            taskCell.taskTime.text = "1分40秒"
+        }
+        
         return taskCell
     }
     //セル同士の間隔

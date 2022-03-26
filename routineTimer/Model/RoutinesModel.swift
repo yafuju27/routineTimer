@@ -1,3 +1,5 @@
+
+
 import Foundation
 import RealmSwift
 
@@ -35,10 +37,12 @@ extension Routine {
         let target = realm.objects(Routine.self).filter("routineID == %@", routineID).first
         let task = Task(value: ["taskTitle": taskTitle])
         task.taskTitle = taskTitle
-        
-        
         try! realm.write {
             target?.task.append(task)
         }
+    }
+    
+    func updateTask() {
+        
     }
 }

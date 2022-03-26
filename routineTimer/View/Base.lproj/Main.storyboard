@@ -110,7 +110,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="VIv-r5-IFB">
-                                <rect key="frame" x="0.0" y="282" width="414" height="614"/>
+                                <rect key="frame" x="0.0" y="232" width="414" height="664"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="oGQ-3n-fss">
                                     <size key="itemSize" width="128" height="128"/>
@@ -141,7 +141,7 @@
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="例:モーニングルーティーン" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T1B-dT-rAL">
+                            <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="例:朝の準備" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="T1B-dT-rAL">
                                 <rect key="frame" x="20" y="128" width="374" height="50"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
@@ -151,11 +151,11 @@
                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="qfI-34-BZ4">
-                                <rect key="frame" x="13" y="192" width="388" height="20"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" translatesAutoresizingMaskIntoConstraints="NO" id="qfI-34-BZ4">
+                                <rect key="frame" x="15" y="192" width="379" height="20"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jj4-Fm-RXN">
-                                        <rect key="frame" x="0.0" y="0.0" width="145.5" height="20"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="81.5" height="20"/>
                                         <state key="normal" title="Button"/>
                                         <buttonConfiguration key="configuration" style="plain" title="通知設定"/>
                                         <connections>
@@ -163,7 +163,7 @@
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="合計　46分30秒" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YJy-XZ-fvR">
-                                        <rect key="frame" x="151.5" y="0.0" width="236.5" height="20"/>
+                                        <rect key="frame" x="249" y="0.0" width="130" height="20"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                         <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
@@ -173,16 +173,18 @@
                                     <constraint firstAttribute="height" constant="20" id="aWk-cY-Oib"/>
                                 </constraints>
                             </stackView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Cr-Sf-xeQ">
-                                <rect key="frame" x="182" y="222" width="50" height="50"/>
+                            <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RXf-Ng-M4m">
+                                <rect key="frame" x="324" y="702" width="60" height="60"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="0Cr-Sf-xeQ" secondAttribute="height" multiplier="1:1" id="JEd-gI-3ey"/>
-                                    <constraint firstAttribute="width" constant="50" id="hwC-ad-i56"/>
+                                    <constraint firstAttribute="width" constant="60" id="88r-yI-jZs"/>
+                                    <constraint firstAttribute="height" constant="60" id="Uqr-rY-fti"/>
                                 </constraints>
+                                <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="Button" image="add"/>
                                 <connections>
-                                    <action selector="addTaskButtonAction:" destination="evd-mc-JpS" eventType="touchUpInside" id="jR7-vK-vZG"/>
+                                    <action selector="addButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="E4e-u7-DxZ"/>
+                                    <action selector="addTaskButtonAction:" destination="evd-mc-JpS" eventType="touchUpInside" id="Fmu-nf-si0"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -193,18 +195,18 @@
                             <constraint firstItem="T1B-dT-rAL" firstAttribute="top" secondItem="bpc-aE-sfk" secondAttribute="bottom" constant="7.5" id="1wL-dT-vol"/>
                             <constraint firstItem="bpc-aE-sfk" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="20" id="37k-Ka-uzy"/>
                             <constraint firstItem="rV1-SI-c4g" firstAttribute="centerX" secondItem="1dr-jH-Kvl" secondAttribute="centerX" id="4Zn-Ow-4nu"/>
+                            <constraint firstItem="VIv-r5-IFB" firstAttribute="top" secondItem="qfI-34-BZ4" secondAttribute="bottom" constant="20" id="68N-Lk-YW7"/>
+                            <constraint firstItem="xAM-Q4-NWp" firstAttribute="trailing" secondItem="qfI-34-BZ4" secondAttribute="trailing" constant="20" id="EHI-34-OzJ"/>
                             <constraint firstItem="T1B-dT-rAL" firstAttribute="centerX" secondItem="1dr-jH-Kvl" secondAttribute="centerX" id="GaV-3m-phW"/>
                             <constraint firstItem="VIv-r5-IFB" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" id="HbC-kr-dD4"/>
-                            <constraint firstItem="VIv-r5-IFB" firstAttribute="top" secondItem="0Cr-Sf-xeQ" secondAttribute="bottom" constant="10" id="JoU-RU-aIW"/>
                             <constraint firstItem="T1B-dT-rAL" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="20" id="Kx7-74-Knc"/>
                             <constraint firstItem="xAM-Q4-NWp" firstAttribute="bottom" secondItem="rV1-SI-c4g" secondAttribute="bottom" constant="11" id="QWp-WX-ROH"/>
-                            <constraint firstAttribute="trailing" secondItem="qfI-34-BZ4" secondAttribute="trailing" constant="13" id="WYm-ao-ofX"/>
                             <constraint firstAttribute="bottom" secondItem="VIv-r5-IFB" secondAttribute="bottom" id="c8K-EW-5cD"/>
-                            <constraint firstItem="0Cr-Sf-xeQ" firstAttribute="centerX" secondItem="1dr-jH-Kvl" secondAttribute="centerX" id="dEJ-c0-n1N"/>
+                            <constraint firstItem="xAM-Q4-NWp" firstAttribute="bottom" secondItem="RXf-Ng-M4m" secondAttribute="bottom" constant="100" id="eqI-dl-HdU"/>
                             <constraint firstItem="qfI-34-BZ4" firstAttribute="top" secondItem="T1B-dT-rAL" secondAttribute="bottom" constant="14" id="flJ-KM-1pv"/>
-                            <constraint firstItem="qfI-34-BZ4" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="13" id="ne9-iG-oAK"/>
+                            <constraint firstItem="xAM-Q4-NWp" firstAttribute="trailing" secondItem="RXf-Ng-M4m" secondAttribute="trailing" constant="30" id="rVe-Cb-eDV"/>
                             <constraint firstItem="VIv-r5-IFB" firstAttribute="trailing" secondItem="xAM-Q4-NWp" secondAttribute="trailing" id="rkS-Ai-w2E"/>
-                            <constraint firstItem="0Cr-Sf-xeQ" firstAttribute="top" secondItem="qfI-34-BZ4" secondAttribute="bottom" constant="10" id="vp1-Wj-JeA"/>
+                            <constraint firstItem="qfI-34-BZ4" firstAttribute="leading" secondItem="xAM-Q4-NWp" secondAttribute="leading" constant="15" id="zUE-rl-InM"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="POt-zT-zRE">
