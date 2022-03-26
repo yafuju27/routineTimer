@@ -3,21 +3,24 @@
 //  routineTimer
 //
 //  Created by Yazici Yahya on 2022/03/24.
-//
+//「分」「秒」を追加
+
 
 import UIKit
 import RealmSwift
 
-class TaskDetailViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource  {
+class TaskDetailViewController: UIViewController {
     
     
+    @IBOutlet weak var taskTitleView: UIView!
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskTimeTextView: UITextView!
     @IBOutlet weak var taskTimePickerView: UIPickerView!
     
     private var timer:Timer = Timer()
-    private var count:Int = 0
     let timeList = [[Int](0...60), [Int](0...60)]
+    var minCount:Int = 0
+    var secCount:Int = 0
     
     var selectedRoutineID = ""
     var selectedTaskID = ""
@@ -29,8 +32,10 @@ class TaskDetailViewController: UIViewController, UIPickerViewDelegate, UIPicker
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
         taskTextField.text = task?.taskTitle
-        
+    
         createPickerLabel()
+        createShape()
+        getTimeCount()
     }
     
     func createPickerLabel() {
@@ -53,6 +58,37 @@ class TaskDetailViewController: UIViewController, UIPickerViewDelegate, UIPicker
                                      height: sStr.bounds.height))
         taskTimePickerView.addSubview(sStr)
     }
+    
+    func getTimeCount() {
+        minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
+        secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
+        taskTimeTextView.text = " \(minCount) 分 \(secCount) 秒"
+    }
+    
+    func createShape() {
+        taskTitleView.layer.cornerRadius = 5.0
+        taskTimeTextView.layer.masksToBounds = true
+//        taskTextField.layer.borderColor = UIColor.systemGray4.cgColor
+//        taskTextField.layer.borderWidth = 3.0
+        taskTextField.layer.cornerRadius = 5.0
+        taskTextField.layer.masksToBounds = true
+//        taskTimeTextView.layer.borderColor = UIColor.systemGray4.cgColor
+//        taskTimeTextView.layer.borderWidth = 3.0
+        taskTimeTextView.layer.cornerRadius = 5.0
+        taskTimeTextView.layer.masksToBounds = true
+    }
+    
+    @IBAction func cancelBarButtonAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
+    @IBAction func doneBarButtonAction(_ sender: Any) {
+        //タイトルと時間をSecondViewControllerに与える処理
+        dismiss(animated: true)
+    }
+}
+
+extension TaskDetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     //コンポーネントの個数
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return timeList.count
@@ -70,18 +106,10 @@ class TaskDetailViewController: UIViewController, UIPickerViewDelegate, UIPicker
     }
     //データ選択時
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        
+        getTimeCount()
     }
     //サイズ
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         return taskTimePickerView.bounds.width * 1/3
-    }
-    
-    @IBAction func cancelBarButtonAction(_ sender: Any) {
-        dismiss(animated: true)
-    }
-    
-    @IBAction func doneBarButtonAction(_ sender: Any) {
-        dismiss(animated: true)
     }
 }
