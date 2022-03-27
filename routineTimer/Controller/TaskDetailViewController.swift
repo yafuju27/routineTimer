@@ -10,12 +10,11 @@ import UIKit
 import RealmSwift
 
 class TaskDetailViewController: UIViewController {
-    
-    
     @IBOutlet weak var taskTitleView: UIView!
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskTimeTextView: UITextView!
     @IBOutlet weak var taskTimePickerView: UIPickerView!
+    private let routineModel = Routine()
     
     private var timer:Timer = Timer()
     let timeList = [[Int](0...60), [Int](0...60)]
@@ -28,35 +27,15 @@ class TaskDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        //ScondViewControllerの値を反映
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
         taskTextField.text = task?.taskTitle
+        taskTimeTextView.text = task?.taskTime
     
-        createPickerLabel()
+        createPickerLabels()
         createShape()
         getTimeCount()
-    }
-    
-    func createPickerLabel() {
-        //「分」のラベルを追加
-        var mStr = UILabel()
-        mStr.text = "分"
-        mStr.sizeToFit()
-        mStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width/3 - mStr.bounds.width/2,
-                                     y: taskTimePickerView.bounds.height/2 - (mStr.bounds.height/2),
-                                     width: mStr.bounds.width,
-                                     height: mStr.bounds.height))
-        taskTimePickerView.addSubview(mStr)
-        //「秒」のラベルを追加
-        var sStr = UILabel()
-        sStr.text = "秒"
-        sStr.sizeToFit()
-        sStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width*2/3 - sStr.bounds.width/2,
-                                     y: taskTimePickerView.bounds.height/2 - (sStr.bounds.height/2),
-                                     width: sStr.bounds.width,
-                                     height: sStr.bounds.height))
-        taskTimePickerView.addSubview(sStr)
     }
     
     func getTimeCount() {
@@ -68,12 +47,8 @@ class TaskDetailViewController: UIViewController {
     func createShape() {
         taskTitleView.layer.cornerRadius = 5.0
         taskTimeTextView.layer.masksToBounds = true
-//        taskTextField.layer.borderColor = UIColor.systemGray4.cgColor
-//        taskTextField.layer.borderWidth = 3.0
         taskTextField.layer.cornerRadius = 5.0
         taskTextField.layer.masksToBounds = true
-//        taskTimeTextView.layer.borderColor = UIColor.systemGray4.cgColor
-//        taskTimeTextView.layer.borderWidth = 3.0
         taskTimeTextView.layer.cornerRadius = 5.0
         taskTimeTextView.layer.masksToBounds = true
     }
@@ -83,7 +58,8 @@ class TaskDetailViewController: UIViewController {
     }
     
     @IBAction func doneBarButtonAction(_ sender: Any) {
-        //タイトルと時間をSecondViewControllerに与える処理
+        
+        routineModel.updateTask(taskTitle: "あいうえお", taskTime: "0分20秒", routineID: selectedRoutineID, taskID: selectedTaskID)
         dismiss(animated: true)
     }
 }
@@ -111,5 +87,26 @@ extension TaskDetailViewController: UIPickerViewDelegate, UIPickerViewDataSource
     //サイズ
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         return taskTimePickerView.bounds.width * 1/3
+    }
+    
+    func createPickerLabels() {
+        //「分」のラベルを追加
+        var mStr = UILabel()
+        mStr.text = "分"
+        mStr.sizeToFit()
+        mStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width/3 - mStr.bounds.width/2,
+                                     y: taskTimePickerView.bounds.height/2 - (mStr.bounds.height/2),
+                                     width: mStr.bounds.width,
+                                     height: mStr.bounds.height))
+        taskTimePickerView.addSubview(mStr)
+        //「秒」のラベルを追加
+        var sStr = UILabel()
+        sStr.text = "秒"
+        sStr.sizeToFit()
+        sStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width*2/3 - sStr.bounds.width/2,
+                                     y: taskTimePickerView.bounds.height/2 - (sStr.bounds.height/2),
+                                     width: sStr.bounds.width,
+                                     height: sStr.bounds.height))
+        taskTimePickerView.addSubview(sStr)
     }
 }

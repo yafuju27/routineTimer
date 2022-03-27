@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     private var routineItems: Results<Routine>!
     private var selectedImage : UIImage?
     
-    //private let timeArray = ["45分30秒","20分00秒","15分00秒","12時間30分00秒","45分30秒"]
     private let dateModel = DateModel()
     private let realm = try! Realm()
     
@@ -77,7 +76,6 @@ class ViewController: UIViewController {
         }
     }
 }
-
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     //セルの個数
