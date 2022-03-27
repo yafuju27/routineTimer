@@ -27,9 +27,6 @@ class SecondViewController: UIViewController {
     var selectedID = ""
     let realm = try! Realm()
     
-    var allMinute: Int = 0
-    var allSecond: Int = 0
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -66,7 +63,8 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
-        routineModel.createTask(taskTitle: "新規タスク", taskTime: "0分0秒", routineID: selectedID)
+        //🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
+        routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
         taskCollectionView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
@@ -87,8 +85,6 @@ class SecondViewController: UIViewController {
     }
     
     private func calcurateAllTime() {
-        //合計時間の計算
-        allTimeLabel.text = "合計 \(allMinute)分 \(allSecond)秒"
     }
     
     private func setupView() {
@@ -150,9 +146,9 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         taskCell.layer.cornerRadius = viewWidth / 18
         taskCell.backgroundColor = UIColor.white
         taskCell.layer.masksToBounds = false
-        
+        //🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
         taskCell.taskName.text = target?.task[indexPath.row].taskTitle
-        taskCell.taskTime.text = target?.task[indexPath.row].taskTime
+        taskCell.taskTime.text = "\(String(describing: target?.task[indexPath.row].taskTime))"
         return taskCell
     }
     //セル同士の間隔

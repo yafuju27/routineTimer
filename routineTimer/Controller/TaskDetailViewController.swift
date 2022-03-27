@@ -31,8 +31,7 @@ class TaskDetailViewController: UIViewController {
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
         taskTextField.text = task?.taskTitle
-        taskTimeTextView.text = task?.taskTime
-        
+        taskTimeTextView.text = "\(String(describing: task?.taskTime))"
         createPickerLabels()
         createShape()
         getTimeCount()
@@ -65,7 +64,7 @@ class TaskDetailViewController: UIViewController {
         let title = taskTextField.text ?? ""
         minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
         secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
-        let time = "\(minCount)分\(secCount)秒"
+        let time = minCount*60 + secCount
         routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
         dismiss(animated: true)
         
