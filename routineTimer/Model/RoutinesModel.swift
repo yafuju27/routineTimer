@@ -55,7 +55,6 @@ extension Routine {
             if let target = target {
                 target.taskTitle = taskTitle
                 target.taskTime = taskTime
-                realm.add(target, update: .modified)
             }
         }
     }

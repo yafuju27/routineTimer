@@ -14,6 +14,7 @@ class SecondViewController: UIViewController {
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
+    @IBOutlet weak var allTimeLabel: UILabel!
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -24,12 +25,22 @@ class SecondViewController: UIViewController {
     private let routineModel = Routine()
     
     var selectedID = ""
-    //var selectedImage: UIImage!
     let realm = try! Realm()
+    
+    var allMinute: Int = 0
+    var allSecond: Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        taskCollectionView.reloadData()
+        //allTimeLabelの計算&表示
+        calcurateAllTime()
     }
     
     @IBAction func startButton(_ sender: Any) {
@@ -47,7 +58,7 @@ class SecondViewController: UIViewController {
         } else {
             routineModel.updateRoutine(routineID: selectedID, routineTitle: routineTitle)
         }
-
+        
         //ViewControllerへ戻る処理
         self.navigationController?.popViewController(animated: true)
         //ボタンの振動
@@ -55,7 +66,7 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
-        routineModel.createTask(taskTitle: "新規タスク", taskTime: " 0 分 0 秒", routineID: selectedID)
+        routineModel.createTask(taskTitle: "新規タスク", taskTime: "0分0秒", routineID: selectedID)
         taskCollectionView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
@@ -73,6 +84,11 @@ class SecondViewController: UIViewController {
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.titleTextField.resignFirstResponder()
         return true
+    }
+    
+    private func calcurateAllTime() {
+        //合計時間の計算
+        allTimeLabel.text = "合計 \(allMinute)分 \(allSecond)秒"
     }
     
     private func setupView() {
@@ -158,6 +174,7 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! TaskDetailViewController
         taskDetailVC.selectedRoutineID = selectedID
         taskDetailVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
+        taskDetailVC.modalPresentationStyle = .fullScreen
         self.present(taskDetailVC, animated: true)
     }
 }

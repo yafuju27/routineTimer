@@ -232,6 +232,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="allTimeLabel" destination="YJy-XZ-fvR" id="HeC-bh-6Pq"/>
                         <outlet property="saveButton" destination="lGR-aj-hJW" id="5oZ-X4-1fQ"/>
                         <outlet property="startButton" destination="rV1-SI-c4g" id="Az0-3K-shT"/>
                         <outlet property="taskCollectionView" destination="VIv-r5-IFB" id="bIx-kO-M8K"/>

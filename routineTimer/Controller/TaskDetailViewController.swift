@@ -32,10 +32,14 @@ class TaskDetailViewController: UIViewController {
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
         taskTextField.text = task?.taskTitle
         taskTimeTextView.text = task?.taskTime
-    
+        
         createPickerLabels()
         createShape()
         getTimeCount()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
     }
     
     func getTimeCount() {
@@ -58,9 +62,13 @@ class TaskDetailViewController: UIViewController {
     }
     
     @IBAction func doneBarButtonAction(_ sender: Any) {
-        
-        routineModel.updateTask(taskTitle: "あいうえお", taskTime: "0分20秒", routineID: selectedRoutineID, taskID: selectedTaskID)
+        let title = taskTextField.text ?? ""
+        minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
+        secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
+        let time = "\(minCount)分\(secCount)秒"
+        routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
         dismiss(animated: true)
+        
     }
 }
 
