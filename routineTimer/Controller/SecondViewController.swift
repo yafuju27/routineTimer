@@ -63,7 +63,6 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
-        //🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
         routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
         taskCollectionView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
@@ -146,12 +145,9 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         taskCell.layer.cornerRadius = viewWidth / 18
         taskCell.backgroundColor = UIColor.white
         taskCell.layer.masksToBounds = false
-        //🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
         taskCell.taskName.text = target?.task[indexPath.row].taskTitle
-//        taskCell.taskTime.text = "\(String(describing: target?.task[indexPath.row].taskTime))"
         if let unwrappedTime = target?.task[indexPath.row].taskTime {
-//            taskCell.taskTime.text = "\(target?.task[indexPath.row].taskTime)"
-            taskCell.taskTime.text = "\(unwrappedTime)"
+            taskCell.taskTime.text = "\(Int(unwrappedTime/60))分\(Int(unwrappedTime%60))秒"
         } else {
             print("taskTimeはnil")
         }
