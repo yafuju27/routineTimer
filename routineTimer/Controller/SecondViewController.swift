@@ -148,7 +148,13 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         taskCell.layer.masksToBounds = false
         //🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦🟦
         taskCell.taskName.text = target?.task[indexPath.row].taskTitle
-        taskCell.taskTime.text = "\(String(describing: target?.task[indexPath.row].taskTime))"
+//        taskCell.taskTime.text = "\(String(describing: target?.task[indexPath.row].taskTime))"
+        if let unwrappedTime = target?.task[indexPath.row].taskTime {
+//            taskCell.taskTime.text = "\(target?.task[indexPath.row].taskTime)"
+            taskCell.taskTime.text = "\(unwrappedTime)"
+        } else {
+            print("taskTimeはnil")
+        }
         return taskCell
     }
     //セル同士の間隔

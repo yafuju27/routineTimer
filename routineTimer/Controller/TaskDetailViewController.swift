@@ -31,7 +31,13 @@ class TaskDetailViewController: UIViewController {
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
         taskTextField.text = task?.taskTitle
-        taskTimeTextView.text = "\(String(describing: task?.taskTime))"
+        if let unwrappedTime = task?.taskTime {
+//            taskTimeTextView.text = "\(String(describing: unwrappedTime))"
+            taskTimeTextView.text = "\(unwrappedTime)"
+        } else {
+            print("taskTimeはnil")
+        }
+        
         createPickerLabels()
         createShape()
         getTimeCount()
