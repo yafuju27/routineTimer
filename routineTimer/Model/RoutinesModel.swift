@@ -3,6 +3,7 @@ import RealmSwift
 
 class Routine: Object {
     @objc dynamic var routinetitle = ""
+    @objc dynamic var totalTime = 0
     @objc dynamic var routineID = UUID().uuidString
     var task = List<Task>()
     override class func primaryKey() -> String? {
@@ -12,7 +13,7 @@ class Routine: Object {
 
 class Task: Object {
     @objc dynamic var taskTitle = ""
-    @objc dynamic var taskTime: Int = 0
+    @objc dynamic var taskTime = 0
     @objc dynamic var taskID = UUID().uuidString
     override class func primaryKey() -> String? {
         return "taskID"
@@ -58,4 +59,15 @@ extension Routine {
             }
         }
     }
+    
+    func calcTotalTime(routineID: String, taskTime: Int) {
+        let realm = try! Realm()
+        let target = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        let sum: Int = realm.objects(Task.self).sum(ofProperty: "taskTime")
+        try! realm.write {
+            target?.totalTime = sum
+        }
+        
+    }
 }
+

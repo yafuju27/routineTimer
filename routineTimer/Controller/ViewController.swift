@@ -17,9 +17,13 @@ class ViewController: UIViewController {
     private var navHeight: CGFloat!
     private var routineItems: Results<Routine>!
     private var selectedImage : UIImage?
+    private var selectedID = ""
+    private var unwrappedAllTimeInt = 0
     
     private let dateModel = DateModel()
     private let realm = try! Realm()
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -98,6 +102,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         cell.layer.masksToBounds = false
         
         cell.cellTitle!.text = "\(routineItems[indexPath.row].routinetitle)"
+        cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
+//        cell.cellTime!.text
         return cell
     }
     //セル同士の間隔

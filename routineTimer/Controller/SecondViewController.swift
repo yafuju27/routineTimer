@@ -25,7 +25,11 @@ class SecondViewController: UIViewController {
     private let routineModel = Routine()
     
     var selectedID = ""
+    var routineID = ""
+    var unwrappedAllTimeInt = 0
     let realm = try! Realm()
+    
+    var allTimeCount:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,9 +39,11 @@ class SecondViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+        titleTextField.text = target?.routinetitle
+        unwrappedAllTimeInt = target?.totalTime ?? 0
+        allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
         taskCollectionView.reloadData()
-        //allTimeLabelの計算&表示
-        calcurateAllTime()
     }
     
     @IBAction func startButton(_ sender: Any) {
@@ -83,9 +89,6 @@ class SecondViewController: UIViewController {
         return true
     }
     
-    private func calcurateAllTime() {
-    }
-    
     private func setupView() {
         startButton.layer.cornerRadius = 12
         startButton.layer.shadowOpacity = 0.2
@@ -124,9 +127,6 @@ class SecondViewController: UIViewController {
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
-        
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        titleTextField.text = target?.routinetitle
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
 }

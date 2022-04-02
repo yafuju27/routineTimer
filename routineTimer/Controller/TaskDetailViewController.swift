@@ -73,8 +73,9 @@ class TaskDetailViewController: UIViewController {
         secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
         let time = minCount*60 + secCount
         routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
+        routineModel.calcTotalTime(routineID: selectedRoutineID, taskTime: time)
         dismiss(animated: true)
-        
+        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
 }
 
