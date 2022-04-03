@@ -15,15 +15,13 @@ class ViewController: UIViewController {
     private var cellHeight: CGFloat!
     private var cellOffset: CGFloat!
     private var navHeight: CGFloat!
-    private var routineItems: Results<Routine>!
     private var selectedImage : UIImage?
+    private var routineItems: Results<Routine>!
     private var selectedID = ""
     private var unwrappedAllTimeInt = 0
     
     private let dateModel = DateModel()
     private let realm = try! Realm()
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,7 +30,6 @@ class ViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         routinesCollectionView.reloadData()
     }
     
@@ -68,17 +65,6 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white
         ]
-        
-        routineItems = realm.objects(Routine.self)
-        
-        routinesCollectionView.reloadData()
-    }
-    
-    private func deleteRoutine(at index: Int) {
-        let realm = try! Realm()
-        try! realm.write {
-            realm.delete(routineItems[index])
-        }
     }
 }
 
@@ -103,7 +89,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         
         cell.cellTitle!.text = "\(routineItems[indexPath.row].routinetitle)"
         cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
-//        cell.cellTime!.text
         return cell
     }
     //セル同士の間隔
@@ -125,8 +110,6 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         let routineItems = realm.objects(Routine.self)
         secondVC.selectedID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(secondVC, animated: true)
-        
-        
         //ボタンの振動
         let generator = UINotificationFeedbackGenerator()
         generator.notificationOccurred(.success)
@@ -166,3 +149,4 @@ extension ViewController: UICollectionViewDragDelegate, UICollectionViewDropDele
         }
     }
 }
+

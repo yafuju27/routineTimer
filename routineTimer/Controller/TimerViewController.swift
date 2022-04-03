@@ -100,12 +100,12 @@ class TimerViewController: UIViewController {
         pulsatingLayer = createCircleShapeLayerA(strokeColor: .color3, fillColor: .color2)
         view.layer.addSublayer(pulsatingLayer)
         //animatePulsatingLayer()
-
+        
         let trackLayerA = createCircleShapeLayerA(strokeColor: .color2, fillColor: .color1)
         view.layer.addSublayer(trackLayerA)
         let trackLayerB = createCircleShapeLayerB(strokeColor: .color2, fillColor: .color1)
         view.layer.addSublayer(trackLayerB)
-
+        
         shapeLayerA = createCircleShapeLayerA(strokeColor: .color3, fillColor: .clear)
         shapeLayerA.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
         shapeLayerA.strokeEnd = 0
@@ -162,10 +162,10 @@ class TimerViewController: UIViewController {
         } else {
             timerCounting = true
             //水面アニメーション
-//            let pulse = PulsingAnimation(numberOfPulses: 1, radius: 100, position: startStopButton.center)
-//            pulse.animationDuration = 1.0
-//            pulse.backgroundColor = CGColor.init(red: 0, green: 173, blue: 181, alpha: 20)
-//            self.view.layer.insertSublayer(pulse, below: self.view.layer)
+            //            let pulse = PulsingAnimation(numberOfPulses: 1, radius: 100, position: startStopButton.center)
+            //            pulse.animationDuration = 1.0
+            //            pulse.backgroundColor = CGColor.init(red: 0, green: 173, blue: 181, alpha: 20)
+            //            self.view.layer.insertSublayer(pulse, below: self.view.layer)
             
             startStopButton.setTitle("STOP", for: .normal)
             startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
@@ -184,9 +184,9 @@ class TimerViewController: UIViewController {
         //ボタンの振動
         Feedbacker.impact(style: .medium)
         
-        }
-        
-
+    }
+    
+    
     @IBAction func minusButton(_ sender: Any) {
         
         timeRemainingA -= 5

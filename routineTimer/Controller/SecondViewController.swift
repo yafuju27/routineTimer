@@ -83,7 +83,6 @@ class SecondViewController: UIViewController {
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
-    
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.titleTextField.resignFirstResponder()
         return true
@@ -122,7 +121,6 @@ class SecondViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white
         ]
-        
         //画面がタップされたらキーボード閉じるための処理準備
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
@@ -210,5 +208,8 @@ extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDr
             })
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
+    }
+    func swipeCellDelete(){
+        
     }
 }

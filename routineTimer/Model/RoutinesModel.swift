@@ -67,7 +67,8 @@ extension Routine {
         try! realm.write {
             target?.totalTime = sum
         }
-        
+
     }
+    
 }
 

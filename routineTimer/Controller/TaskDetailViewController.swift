@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TaskDetailViewController: UIViewController {
+class TaskDetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taskTitleView: UIView!
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskTimeTextView: UITextView!
@@ -27,13 +27,14 @@ class TaskDetailViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        taskTextField.delegate = self
         //ScondViewControllerの値を反映
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
         taskTextField.text = task?.taskTitle
         //🟥🟥🟥🟥🟥
         if let unwrappedTime = task?.taskTime {
-//            taskTimeTextView.text = "\(String(describing: unwrappedTime))"
+            //            taskTimeTextView.text = "\(String(describing: unwrappedTime))"
             taskTimeTextView.text = "\(unwrappedTime)"
         } else {
             print("taskTimeはnil")
@@ -42,10 +43,21 @@ class TaskDetailViewController: UIViewController {
         createPickerLabels()
         createShape()
         getTimeCount()
+        //画面がタップされたらキーボード閉じるための処理準備
+        let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGR.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGR)
+        //キーボードが上下する処理
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
     
     func getTimeCount() {
@@ -76,6 +88,31 @@ class TaskDetailViewController: UIViewController {
         routineModel.calcTotalTime(routineID: selectedRoutineID, taskTime: time)
         dismiss(animated: true)
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+    }
+    
+    //キーボード閉じる処理
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
+    }
+    
+    internal func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.taskTextField.resignFirstResponder()
+        return true
+    }
+    @objc func keyboardWillShow(notification: NSNotification) {
+        if !taskTextField.isFirstResponder {
+            return
+        }
+        if self.view.frame.origin.y == 0 {
+            if let keyboardRect = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+                self.view.frame.origin.y -= keyboardRect.height
+            }
+        }
+    }
+    @objc func keyboardWillHide(notification: NSNotification) {
+        if self.view.frame.origin.y != 0 {
+            self.view.frame.origin.y = 0
+        }
     }
 }
 
