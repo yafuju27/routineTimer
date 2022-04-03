@@ -7,6 +7,7 @@ import RealmSwift
 class ViewController: UIViewController {
     @IBOutlet weak var routinesCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var todayDateLabel: UILabel!
     
     private var viewWidth: CGFloat!
@@ -17,11 +18,26 @@ class ViewController: UIViewController {
     private var navHeight: CGFloat!
     private var selectedImage : UIImage?
     private var routineItems: Results<Routine>!
-    private var selectedID = ""
+    private let routineModel = Routine()
+    var selectedID = ""
+    var routineID = ""
+    let realm = try! Realm()
     private var unwrappedAllTimeInt = 0
     
     private let dateModel = DateModel()
-    private let realm = try! Realm()
+    
+    /// UICollectionViewが編集中かどうか
+    var isEditMode = false {
+        didSet {
+            self.routinesCollectionView.reloadData()
+        }
+    }
+    
+    var layout: UICollectionViewFlowLayout {
+        let layout = UICollectionViewFlowLayout()
+        // ...今回は省略
+        return layout
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,11 +47,22 @@ class ViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         routinesCollectionView.reloadData()
+        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
     @IBAction func addButton(_ sender: Any) {
+        routineModel.createRoutine(routineTitle: "")
         //ボタンの振動
         Feedbacker.impact(style: .medium)
+    }
+    
+    @IBAction func editButton(_ sender: Any) {
+        self.isEditMode = !self.isEditMode
+                let title = self.isEditMode ? "完了" : "編集"
+        (sender as AnyObject).setTitle(title, for: .normal)
+        
+//        let searchBarButtonItem = UIBarButtonItem(image: UIImage(named: "ico_search")!, style: .plain, target: self, action: #selector(didTapSearch))
+                //navigationItem.rightBarButtonItem = searchBarButtonItem
     }
     
     private func setupView() {
@@ -65,6 +92,11 @@ class ViewController: UIViewController {
         self.navigationController?.navigationBar.titleTextAttributes = [
             .foregroundColor: UIColor.white
         ]
+        //カタカタ用
+        let nibQ = UINib(nibName: "CustomCollectionViewCell", bundle: nil)
+                self.routinesCollectionView.register(nibQ, forCellWithReuseIdentifier: "CollectionViewCell")
+                self.routinesCollectionView.dataSource = self
+                self.routinesCollectionView.collectionViewLayout = self.layout
     }
 }
 
@@ -87,8 +119,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         cell.layer.shadowOffset = CGSize(width: 1, height: 1)
         cell.layer.masksToBounds = false
         
-        cell.cellTitle!.text = "\(routineItems[indexPath.row].routinetitle)"
+        cell.cellTitle!.text = "\(routineItems[indexPath.row].routineTitle)"
         cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
+        
+        if self.isEditMode {
+                    cell.startVibrateAnimation(range: 1.0)
+                } else {
+                    cell.stopVibrateAnimation()
+                }
         return cell
     }
     //セル同士の間隔
@@ -149,4 +187,38 @@ extension ViewController: UICollectionViewDragDelegate, UICollectionViewDropDele
         }
     }
 }
-
+extension UIView {
+    /**
+     震えるアニメーションを再生します
+     - parameters:
+        - range: 震える振れ幅
+        - speed: 震える速さ
+        - isSync: 複数対象とする場合,同時にアニメーションするかどうか
+     */
+    func startVibrateAnimation(range: Double = 2.0, speed: Double = 0.15, isSync: Bool = false) {
+        if self.layer.animation(forKey: "VibrateAnimationKey") != nil {
+            return
+        }
+        let animation: CABasicAnimation
+        animation = CABasicAnimation(keyPath: "transform.rotation")
+        animation.beginTime = isSync ? 0.0 : Double((Int(arc4random_uniform(UInt32(9))) + 1)) * 0.1
+        animation.isRemovedOnCompletion = false
+        animation.duration = speed
+        animation.fromValue = range.toRadian
+        animation.toValue = -range.toRadian
+        animation.repeatCount = Float.infinity
+        animation.autoreverses = true
+        self.layer.add(animation, forKey: "VibrateAnimationKey")
+    }
+    /// 震えるアニメーションを停止します
+    func stopVibrateAnimation() {
+        self.layer.removeAnimation(forKey: "VibrateAnimationKey")
+    }
+}
+ 
+extension Double {
+    /// ラジアンに変換します
+    var toRadian: Double {
+        return .pi * self / 180
+    }
+}

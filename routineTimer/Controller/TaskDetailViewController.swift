@@ -17,6 +17,7 @@ class TaskDetailViewController: UIViewController, UITextFieldDelegate {
     private let routineModel = Routine()
     
     private var timer:Timer = Timer()
+    private var alertController: UIAlertController!
     let timeList = [[Int](0...60), [Int](0...60)]
     var minCount:Int = 0
     var secCount:Int = 0
@@ -31,7 +32,11 @@ class TaskDetailViewController: UIViewController, UITextFieldDelegate {
         //ScondViewControllerの値を反映
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
         let task = target?.task.filter("taskID == %@", selectedTaskID).first
-        taskTextField.text = task?.taskTitle
+        if task?.taskTitle != "新規タスク" {
+            taskTextField.text = task?.taskTitle
+        } else {
+            taskTextField.text = ""
+        }
         //🟥🟥🟥🟥🟥
         if let unwrappedTime = task?.taskTime {
             //            taskTimeTextView.text = "\(String(describing: unwrappedTime))"
@@ -60,13 +65,13 @@ class TaskDetailViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    func getTimeCount() {
+    private func getTimeCount() {
         minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
         secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
         taskTimeTextView.text = " \(minCount) 分 \(secCount) 秒"
     }
     
-    func createShape() {
+    private func createShape() {
         taskTitleView.layer.cornerRadius = 5.0
         taskTimeTextView.layer.masksToBounds = true
         taskTextField.layer.cornerRadius = 5.0
@@ -75,19 +80,34 @@ class TaskDetailViewController: UIViewController, UITextFieldDelegate {
         taskTimeTextView.layer.masksToBounds = true
     }
     
+    private func alert(title:String, message:String) {
+            alertController = UIAlertController(title: title,
+                                       message: message,
+                                       preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK",
+                                           style: .default,
+                                           handler: nil))
+            present(alertController, animated: true)
+        }
+    
     @IBAction func cancelBarButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
     
     @IBAction func doneBarButtonAction(_ sender: Any) {
-        let title = taskTextField.text ?? ""
-        minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
-        secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
-        let time = minCount*60 + secCount
-        routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
-        routineModel.calcTotalTime(routineID: selectedRoutineID, taskTime: time)
-        dismiss(animated: true)
-        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+        if taskTextField.text == "" {
+            alert(title: "タスク名がありません",
+                          message: "タスク名の欄に文字を入力してください")
+        } else {
+            let title = taskTextField.text ?? ""
+            minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
+            secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
+            let time = minCount*60 + secCount
+            routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
+            routineModel.calcTotalTime(routineID: selectedRoutineID, taskTime: time)
+            dismiss(animated: true)
+        }
+        
     }
     
     //キーボード閉じる処理

@@ -22,6 +22,7 @@ class SecondViewController: UIViewController {
     private var cellHeight: CGFloat!
     private var cellOffset: CGFloat!
     private var navHeight: CGFloat!
+    private var alertController: UIAlertController!
     private let routineModel = Routine()
     
     var selectedID = ""
@@ -34,16 +35,26 @@ class SecondViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        titleTextField.text = target?.routinetitle
-        unwrappedAllTimeInt = target?.totalTime ?? 0
-        allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
+        if selectedID == "" {
+            let targetNew = realm.objects(Routine.self).filter("routineTitle == %@", "").first
+            selectedID = targetNew?.routineID ?? ""
+            unwrappedAllTimeInt = 0
+            allTimeLabel.text = "合計0分0秒"
+            routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
+            print("🟦ターゲットのID:\(targetNew?.routineID ?? "")")
+        } else {
+            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+            titleTextField.text = target?.routineTitle
+            unwrappedAllTimeInt = target?.totalTime ?? 0
+            allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
+        }
         taskCollectionView.reloadData()
+        print("🟦selectedID:\(selectedID)")
+        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
     @IBAction func startButton(_ sender: Any) {
@@ -52,20 +63,26 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func saveButton(_ sender: Any) {
-        guard let routineTitle = titleTextField.text else {
-            // TDOO: - ここにアラートを入れる
-            return
-        }
-        if selectedID == "" {
-            routineModel.createRoutine(routineTitle: routineTitle)
-        } else {
-            routineModel.updateRoutine(routineID: selectedID, routineTitle: routineTitle)
-        }
         
-        //ViewControllerへ戻る処理
-        self.navigationController?.popViewController(animated: true)
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
+        if titleTextField.text == "" {
+            alert(title: "タイトルがありません",
+                          message: "タイトルの欄に文字を入力してください")
+        } else {
+            guard let routineTitle = titleTextField.text else {
+                // TDOO: - ここにアラートを入れる
+                return
+            }
+            //新しいRoutineの登録
+            if selectedID == "" {
+                routineModel.createRoutine(routineTitle: routineTitle)
+            } else {
+                routineModel.updateRoutine(routineID: selectedID, routineTitle: routineTitle)
+            }
+            //ViewControllerへ戻る処理
+            self.navigationController?.popViewController(animated: true)
+            //ボタンの振動
+            Feedbacker.impact(style: .medium)
+        }
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
@@ -74,10 +91,7 @@ class SecondViewController: UIViewController {
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
-    @IBAction func bellButtonAction(_ sender: Any) {
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
-    }
+    
     
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
@@ -87,6 +101,16 @@ class SecondViewController: UIViewController {
         self.titleTextField.resignFirstResponder()
         return true
     }
+    
+    private func alert(title:String, message:String) {
+            alertController = UIAlertController(title: title,
+                                       message: message,
+                                       preferredStyle: .alert)
+            alertController.addAction(UIAlertAction(title: "OK",
+                                           style: .default,
+                                           handler: nil))
+            present(alertController, animated: true)
+        }
     
     private func setupView() {
         startButton.layer.cornerRadius = 12
@@ -125,7 +149,6 @@ class SecondViewController: UIViewController {
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
-        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
 }
 
@@ -148,6 +171,14 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
             taskCell.taskTime.text = "\(Int(unwrappedTime/60))分\(Int(unwrappedTime%60))秒"
         } else {
             print("taskTimeはnil")
+        }
+        
+        if taskCell.taskName.text == "新規タスク" {
+            taskCell.taskName.textColor = .systemGray2
+            taskCell.taskTime.textColor = .systemGray2
+        } else {
+            taskCell.taskName.textColor = .black
+            taskCell.taskTime.textColor = .black
         }
         return taskCell
     }

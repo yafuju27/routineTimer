@@ -2,7 +2,7 @@ import Foundation
 import RealmSwift
 
 class Routine: Object {
-    @objc dynamic var routinetitle = ""
+    @objc dynamic var routineTitle = ""
     @objc dynamic var totalTime = 0
     @objc dynamic var routineID = UUID().uuidString
     var task = List<Task>()
@@ -24,7 +24,7 @@ extension Routine {
     func createRoutine(routineTitle: String) {
         let realm = try! Realm()
         let routine = Routine()
-        routine.routinetitle = routineTitle
+        routine.routineTitle = routineTitle
         try! realm.write {
             realm.add(routine)
         }
@@ -34,7 +34,7 @@ extension Routine {
         let realm = try! Realm()
         let target = realm.object(ofType: Routine.self, forPrimaryKey: routineTitle)
         try! realm.write {
-            target?.routinetitle = routineTitle
+            target?.routineTitle = routineTitle
         }
     }
     
@@ -48,7 +48,7 @@ extension Routine {
             target?.task.append(task)
         }
     }
-
+    
     func updateTask(taskTitle: String, taskTime: Int, routineID: String, taskID: String) {
         let realm = try! Realm()
         let target = realm.object(ofType: Task.self, forPrimaryKey: taskID)

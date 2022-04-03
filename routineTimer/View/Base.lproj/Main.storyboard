@@ -90,9 +90,22 @@
                             <constraint firstAttribute="bottom" secondItem="lai-iU-DaA" secondAttribute="bottom" id="vR2-Db-TjH"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="2Fa-HR-dCX"/>
+                    <navigationItem key="navigationItem" id="2Fa-HR-dCX">
+                        <barButtonItem key="rightBarButtonItem" image="edit" style="plain" id="ivO-ab-hVB">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="uYb-f8-92U">
+                                <rect key="frame" x="335" y="5" width="59" height="34.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="編集"/>
+                                <connections>
+                                    <action selector="editButton:" destination="BYZ-38-t0r" eventType="touchUpInside" id="u59-29-fel"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="addButton" destination="cFe-h6-EcW" id="K5Z-h5-rRe"/>
+                        <outlet property="editButton" destination="uYb-f8-92U" id="VDK-fh-GNe"/>
                         <outlet property="routinesCollectionView" destination="lai-iU-DaA" id="kQD-d7-frg"/>
                         <outlet property="todayDateLabel" destination="tRV-pq-0PN" id="5as-Ja-0zT"/>
                     </connections>
@@ -392,6 +405,7 @@
     </scenes>
     <resources>
         <image name="add" width="1536" height="1536"/>
+        <image name="edit" width="1536" height="1536"/>
         <image name="表むき" width="1000" height="1000"/>
         <image name="逆むき" width="1007" height="960"/>
         <systemColor name="systemBackgroundColor">
