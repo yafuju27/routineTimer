@@ -4,7 +4,7 @@
 import UIKit
 import RealmSwift
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var routinesCollectionView: UICollectionView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
@@ -25,7 +25,6 @@ class ViewController: UIViewController {
     private var unwrappedAllTimeInt = 0
     
     private let dateModel = DateModel()
-    
     /// UICollectionViewが編集中かどうか
     var isEditMode = false {
         didSet {
@@ -51,18 +50,49 @@ class ViewController: UIViewController {
     }
     
     @IBAction func addButton(_ sender: Any) {
-        routineModel.createRoutine(routineTitle: "")
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
+        var alertTextField: UITextField?
+        let alert = UIAlertController(title: "新しいルーティーン",
+                                      message: "ルーティーンのタイトルを\n入力してください",
+                                      preferredStyle: .alert)
+        let cancelAction = UIAlertAction(title: "キャンセル",
+                                         style: .default) { (action: UIAlertAction!) -> Void in
+        }
+        let saveAction = UIAlertAction(title: "保存",
+                                       style: .default) { (action: UIAlertAction!) -> Void in
+            let newTitle: String = alertTextField?.text ?? ""
+            self.routineModel.createRoutine(routineTitle: "\(newTitle)")
+            self.routinesCollectionView.reloadData()
+            print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
+            
+        }
+        saveAction.isEnabled = false
+        alert.addTextField { (textField) in
+            alertTextField = textField
+            textField.placeholder = "例：朝の準備"
+            NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
+                                                    {_ in
+                let textCount = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).count ?? 0
+                let textIsNotEmpty = textCount > 0
+                saveAction.isEnabled = textIsNotEmpty
+            })
+            
+            alert.addAction(cancelAction)
+            alert.addAction(saveAction)
+            self.present(alert,
+                         animated: true,
+                         completion: nil)
+            
+            Feedbacker.impact(style: .medium)
+        }
     }
     
     @IBAction func editButton(_ sender: Any) {
         self.isEditMode = !self.isEditMode
-                let title = self.isEditMode ? "完了" : "編集"
+        let title = self.isEditMode ? "完了" : "編集"
         (sender as AnyObject).setTitle(title, for: .normal)
         
-//        let searchBarButtonItem = UIBarButtonItem(image: UIImage(named: "ico_search")!, style: .plain, target: self, action: #selector(didTapSearch))
-                //navigationItem.rightBarButtonItem = searchBarButtonItem
+        //        let searchBarButtonItem = UIBarButtonItem(image: UIImage(named: "ico_search")!, style: .plain, target: self, action: #selector(didTapSearch))
+        //navigationItem.rightBarButtonItem = searchBarButtonItem
     }
     
     private func setupView() {
@@ -94,9 +124,9 @@ class ViewController: UIViewController {
         ]
         //カタカタ用
         let nibQ = UINib(nibName: "CustomCollectionViewCell", bundle: nil)
-                self.routinesCollectionView.register(nibQ, forCellWithReuseIdentifier: "CollectionViewCell")
-                self.routinesCollectionView.dataSource = self
-                self.routinesCollectionView.collectionViewLayout = self.layout
+        self.routinesCollectionView.register(nibQ, forCellWithReuseIdentifier: "CollectionViewCell")
+        self.routinesCollectionView.dataSource = self
+        self.routinesCollectionView.collectionViewLayout = self.layout
     }
 }
 
@@ -123,10 +153,10 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
         
         if self.isEditMode {
-                    cell.startVibrateAnimation(range: 1.0)
-                } else {
-                    cell.stopVibrateAnimation()
-                }
+            cell.startVibrateAnimation(range: 1.0)
+        } else {
+            cell.stopVibrateAnimation()
+        }
         return cell
     }
     //セル同士の間隔
@@ -176,24 +206,39 @@ extension ViewController: UICollectionViewDragDelegate, UICollectionViewDropDele
             }
             
             collectionView.performBatchUpdates({
-                //// データソースの更新
-                //let n = dataList.remove(at: sourceIndexPath.item)
-                //dataList.insert(n, at: destinationIndexPath.item)
-                //セルの移動
+//                let routineItems = realm.objects(Routine.self)
+//                try! realm.write {
+//                    let listItem = routineItems[sourceIndexPath.row]
+//                    routineItems.remove(at: sourceIndexPath.row)
+//                    routineItems.insert(listItem, at: destinationIndexPath.row)
+//                        }
                 collectionView.deleteItems(at: [sourceIndexPath])
                 collectionView.insertItems(at: [destinationIndexPath])
             })
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
     }
+    // 並び替えを可とする
+        func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+            return true
+        }
+    //並び替えの内容
+//    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        let routineItems = realm.objects(Routine.self)
+//        try! realm.write {
+//            let listItem = routineItems[sourceIndexPath.row]
+//            routineItems.remove(at: sourceIndexPath.row)
+//            routineItems.insert(listItem, at: destinationIndexPath.row)
+//                }
+//        }
 }
 extension UIView {
     /**
      震えるアニメーションを再生します
      - parameters:
-        - range: 震える振れ幅
-        - speed: 震える速さ
-        - isSync: 複数対象とする場合,同時にアニメーションするかどうか
+     - range: 震える振れ幅
+     - speed: 震える速さ
+     - isSync: 複数対象とする場合,同時にアニメーションするかどうか
      */
     func startVibrateAnimation(range: Double = 2.0, speed: Double = 0.15, isSync: Bool = false) {
         if self.layer.animation(forKey: "VibrateAnimationKey") != nil {
@@ -215,7 +260,7 @@ extension UIView {
         self.layer.removeAnimation(forKey: "VibrateAnimationKey")
     }
 }
- 
+
 extension Double {
     /// ラジアンに変換します
     var toRadian: Double {
