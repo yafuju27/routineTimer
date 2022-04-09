@@ -58,7 +58,6 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func startButton(_ sender: Any) {
-        //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
     
@@ -71,10 +70,7 @@ class SecondViewController: UIViewController {
             let updateTitle = titleTextField.text ?? ""
             routineModel.updateRoutine(routineID: selectedID, routineTitle: updateTitle)
         }
-        
-        //ボタンの振動
         Feedbacker.impact(style: .medium)
-        //ViewControllerへ戻る処理
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -106,12 +102,6 @@ class SecondViewController: UIViewController {
         present(alertController, animated: true)
     }
     
-    //    private func showCrossDissolve(sender: AnyObject){
-    //            let modalView = ModalViewController()
-    //            modalView.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
-    //            self.presentViewController(modalView, animated: true, completion: nil)
-    //        }
-    
     private func setupView() {
         startButton.layer.cornerRadius = 12
         startButton.layer.shadowOpacity = 0.2
@@ -123,7 +113,6 @@ class SecondViewController: UIViewController {
         saveButton.layer.cornerRadius = 12
         saveButton.backgroundColor = .color3
         
-        //テキストフィールドのカスタマイズ
         titleTextField.setCustomeLine()
         
         viewWidth = view.frame.width

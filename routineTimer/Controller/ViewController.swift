@@ -16,7 +16,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     private var cellHeight: CGFloat!
     private var cellOffset: CGFloat!
     private var navHeight: CGFloat!
-    private var selectedImage : UIImage?
     private var routineItems: Results<Routine>!
     private let routineModel = Routine()
     var selectedID = ""
@@ -50,6 +49,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func addButton(_ sender: Any) {
+        Feedbacker.impact(style: .medium)
         var alertTextField: UITextField?
         let alert = UIAlertController(title: "新しいルーティーン",
                                       message: "ルーティーンのタイトルを\n入力してください",
@@ -68,6 +68,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         saveAction.isEnabled = false
         alert.addTextField { (textField) in
             alertTextField = textField
+            
             textField.placeholder = "例：朝の準備"
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
                                                     {_ in
@@ -81,8 +82,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
             self.present(alert,
                          animated: true,
                          completion: nil)
-            
-            Feedbacker.impact(style: .medium)
         }
     }
     
@@ -142,7 +141,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! CollectionViewCell
         let routineItems = realm.objects(Routine.self)
         cell.backgroundColor = .color3
-        cell.layer.cornerRadius = 15
+        cell.layer.cornerRadius = 0.05*viewWidth
         cell.layer.shadowOpacity = 0.2
         cell.layer.shadowRadius = 6
         cell.layer.shadowColor = UIColor.black.cgColor
@@ -179,8 +178,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         secondVC.selectedID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(secondVC, animated: true)
         //ボタンの振動
-        let generator = UINotificationFeedbackGenerator()
-        generator.notificationOccurred(.success)
+        Feedbacker.impact(style: .medium)
     }
 }
 

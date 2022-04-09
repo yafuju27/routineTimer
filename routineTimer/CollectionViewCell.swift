@@ -9,8 +9,8 @@ import UIKit
 
 class CollectionViewCell: UICollectionViewCell {
 
-    @IBOutlet weak var cellTime: UILabel!
     @IBOutlet weak var cellTitle: UILabel!
+    @IBOutlet weak var cellTime: UILabel!
     
     
     override func awakeFromNib() {

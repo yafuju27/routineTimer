@@ -11,6 +11,10 @@ class Routine: Object {
     }
 }
 
+class RoutineList: Object {
+    let list = List<Routine>()
+}
+
 class Task: Object {
     @objc dynamic var taskTitle = ""
     @objc dynamic var taskTime = 0
@@ -29,14 +33,6 @@ extension Routine {
             realm.add(routine)
         }
     }
-    
-//    func updateRoutine(routineID: String, routineTitle: String) {
-//        let realm = try! Realm()
-//        let target = realm.object(ofType: Routine.self, forPrimaryKey: routineTitle)
-//        try! realm.write {
-//            target?.routineTitle = routineTitle
-//        }
-//    }
     
     func updateRoutine(routineID: String, routineTitle: String) {
         let realm = try! Realm()
