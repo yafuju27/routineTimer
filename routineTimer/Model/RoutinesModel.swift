@@ -30,9 +30,17 @@ extension Routine {
         }
     }
     
+//    func updateRoutine(routineID: String, routineTitle: String) {
+//        let realm = try! Realm()
+//        let target = realm.object(ofType: Routine.self, forPrimaryKey: routineTitle)
+//        try! realm.write {
+//            target?.routineTitle = routineTitle
+//        }
+//    }
+    
     func updateRoutine(routineID: String, routineTitle: String) {
         let realm = try! Realm()
-        let target = realm.object(ofType: Routine.self, forPrimaryKey: routineTitle)
+        let target = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
         try! realm.write {
             target?.routineTitle = routineTitle
         }
@@ -63,12 +71,10 @@ extension Routine {
     func calcTotalTime(routineID: String, taskTime: Int) {
         let realm = try! Realm()
         let target = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
-        let sum: Int = realm.objects(Task.self).sum(ofProperty: "taskTime")
+        let sumValue: Int = realm.objects(Task.self).sum(ofProperty: "taskTime")
         try! realm.write {
-            target?.totalTime = sum
+            target?.totalTime = sumValue
         }
-
     }
-    
 }
 

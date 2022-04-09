@@ -66,24 +66,18 @@ class SecondViewController: UIViewController {
         
         if titleTextField.text == "" {
             alert(title: "タイトルがありません",
-                          message: "タイトルの欄に文字を入力してください")
+                  message: "タイトルの欄に文字を入力してください")
         } else {
-            guard let routineTitle = titleTextField.text else {
-                // TDOO: - ここにアラートを入れる
-                return
-            }
-            //新しいRoutineの登録
-            if selectedID == "" {
-                routineModel.createRoutine(routineTitle: routineTitle)
-            } else {
-                routineModel.updateRoutine(routineID: selectedID, routineTitle: routineTitle)
-            }
-            //ViewControllerへ戻る処理
-            self.navigationController?.popViewController(animated: true)
-            //ボタンの振動
-            Feedbacker.impact(style: .medium)
+            let updateTitle = titleTextField.text ?? ""
+            routineModel.updateRoutine(routineID: selectedID, routineTitle: updateTitle)
         }
+        
+        //ボタンの振動
+        Feedbacker.impact(style: .medium)
+        //ViewControllerへ戻る処理
+        self.navigationController?.popViewController(animated: true)
     }
+    
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
         routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
@@ -103,14 +97,20 @@ class SecondViewController: UIViewController {
     }
     
     private func alert(title:String, message:String) {
-            alertController = UIAlertController(title: title,
-                                       message: message,
-                                       preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK",
-                                           style: .default,
-                                           handler: nil))
-            present(alertController, animated: true)
-        }
+        alertController = UIAlertController(title: title,
+                                            message: message,
+                                            preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK",
+                                                style: .default,
+                                                handler: nil))
+        present(alertController, animated: true)
+    }
+    
+    //    private func showCrossDissolve(sender: AnyObject){
+    //            let modalView = ModalViewController()
+    //            modalView.modalTransitionStyle = UIModalTransitionStyle.CrossDissolve
+    //            self.presentViewController(modalView, animated: true, completion: nil)
+    //        }
     
     private func setupView() {
         startButton.layer.cornerRadius = 12
