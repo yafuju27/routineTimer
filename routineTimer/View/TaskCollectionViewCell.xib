@@ -29,23 +29,33 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="circle" translatesAutoresizingMaskIntoConstraints="NO" id="2ia-mr-OM6">
-                        <rect key="frame" x="14" y="-743" width="20" height="1536"/>
-                    </imageView>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iiY-XF-ZEY">
+                        <rect key="frame" x="14" y="15" width="20" height="20"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="20" id="VAy-Jf-BTa"/>
+                            <constraint firstAttribute="width" constant="20" id="dDu-Im-Ktn"/>
+                        </constraints>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" image="circle"/>
+                        <connections>
+                            <action selector="statusButtonAction:" destination="gTV-IL-0wX" eventType="touchUpInside" id="ztT-cL-x7K"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
             <constraints>
-                <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="2ia-mr-OM6" secondAttribute="trailing" constant="10" id="6Ym-dP-6H2"/>
+                <constraint firstItem="iiY-XF-ZEY" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="7vq-xe-etS"/>
+                <constraint firstItem="iiY-XF-ZEY" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="14" id="AYE-or-hT1"/>
                 <constraint firstItem="mJU-cY-ler" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="KuO-LI-dc1"/>
-                <constraint firstItem="2ia-mr-OM6" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="a94-CB-lU8"/>
+                <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="iiY-XF-ZEY" secondAttribute="trailing" constant="10" id="l1W-Lr-92B"/>
                 <constraint firstItem="9cd-Xy-mAi" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="44" id="mHV-C8-gd8"/>
-                <constraint firstItem="2ia-mr-OM6" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" constant="14" id="qqD-Oq-CtJ"/>
                 <constraint firstAttribute="trailing" secondItem="mJU-cY-ler" secondAttribute="trailing" constant="20" id="x2u-iS-gah"/>
                 <constraint firstItem="9cd-Xy-mAi" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="xRk-43-il4"/>
             </constraints>
             <size key="customSize" width="340" height="51"/>
             <connections>
+                <outlet property="statusButton" destination="iiY-XF-ZEY" id="33H-9p-76s"/>
                 <outlet property="taskName" destination="9cd-Xy-mAi" id="5eo-Hc-WBq"/>
                 <outlet property="taskTime" destination="mJU-cY-ler" id="nPf-Qf-LFk"/>
             </connections>

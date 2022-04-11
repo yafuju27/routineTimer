@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TimerViewController: UIViewController {
+class ThirdViewController: UIViewController {
     
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -174,7 +174,7 @@ class TimerViewController: UIViewController {
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.1,
                                          target: self,
-                                         selector: #selector(TimerViewController.timerClass),
+                                         selector: #selector(ThirdViewController.timerClass),
                                          userInfo: nil,
                                          repeats: true)
             animateCircle()

@@ -8,11 +8,13 @@
 
 import UIKit
 import RealmSwift
+import SwiftUI
 
 class SecondViewController: UIViewController {
     @IBOutlet weak var taskCollectionView: UICollectionView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
+    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var allTimeLabel: UILabel!
     
@@ -28,9 +30,8 @@ class SecondViewController: UIViewController {
     var selectedID = ""
     var routineID = ""
     var unwrappedAllTimeInt = 0
+    var allTimeCount = 0
     let realm = try! Realm()
-    
-    var allTimeCount:Int = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,7 +63,6 @@ class SecondViewController: UIViewController {
     }
     
     @IBAction func saveButton(_ sender: Any) {
-        
         if titleTextField.text == "" {
             alert(title: "タイトルがありません",
                   message: "タイトルの欄に文字を入力してください")
@@ -74,14 +74,14 @@ class SecondViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
+    @IBAction func editButtonAction(_ sender: Any) {
+    }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
         routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
         taskCollectionView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
-    
-    
     
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
@@ -141,8 +141,7 @@ class SecondViewController: UIViewController {
     }
 }
 
-extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
+extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
     //セルの個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
@@ -182,21 +181,16 @@ extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSo
         cellOffset = viewWidth - cellWidth
         return CGSize(width: cellWidth, height: cellHeight)
     }
-    
     // Cell が選択された場合
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         let storyboard = UIStoryboard(name: "TaskDetail", bundle: nil)
-        let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! TaskDetailViewController
+        let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! CustomizeTaskController
         taskDetailVC.selectedRoutineID = selectedID
         taskDetailVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
         taskDetailVC.modalPresentationStyle = .fullScreen
         self.present(taskDetailVC, animated: true)
     }
-}
-
-extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
-    
     //セルのドラッグ
     func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
         let itemIdentifier = indexPath.item.description
@@ -204,7 +198,6 @@ extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDr
         let dragItem = UIDragItem(itemProvider: itemProvider)
         return [dragItem]
     }
-    
     //謎
     func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
         return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
@@ -217,7 +210,6 @@ extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDr
                   let sourceIndexPath = item.sourceIndexPath else {
                 return
             }
-            
             collectionView.performBatchUpdates({
                 // データソースの更新
                 // let n = dataList.remove(at: sourceIndexPath.item)
@@ -228,8 +220,5 @@ extension SecondViewController: UICollectionViewDragDelegate, UICollectionViewDr
             })
             coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
         }
-    }
-    func swipeCellDelete(){
-        
     }
 }

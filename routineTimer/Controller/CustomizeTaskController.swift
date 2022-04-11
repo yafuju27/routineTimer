@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class TaskDetailViewController: UIViewController, UITextFieldDelegate {
+class CustomizeTaskController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taskTitleView: UIView!
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskTimeTextView: UITextView!
@@ -136,7 +136,7 @@ class TaskDetailViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-extension TaskDetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
+extension CustomizeTaskController: UIPickerViewDelegate, UIPickerViewDataSource {
     //コンポーネントの個数
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return timeList.count
