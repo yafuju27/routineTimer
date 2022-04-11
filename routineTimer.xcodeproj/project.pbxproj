@@ -22,6 +22,8 @@
 		986E4F482801EDD7009C01BE /* RoutineTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986E4F462801EDD7009C01BE /* RoutineTableViewCell.swift */; };
 		986E4F492801EDD7009C01BE /* RoutineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 986E4F472801EDD7009C01BE /* RoutineTableViewCell.xib */; };
 		986E4F4B2801F3B2009C01BE /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986E4F4A2801F3B2009C01BE /* ShadowView.swift */; };
+		986E4FB62803F2E7009C01BE /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986E4FB42803F2E7009C01BE /* TaskTableViewCell.swift */; };
+		986E4FB72803F2E7009C01BE /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 986E4FB52803F2E7009C01BE /* TaskTableViewCell.xib */; };
 		98BA191B27CA214E0045E0C0 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA191A27CA214E0045E0C0 /* SecondViewController.swift */; };
 		98BA191E27CB24350045E0C0 /* TaskCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA191C27CB24350045E0C0 /* TaskCollectionViewCell.swift */; };
 		98BA191F27CB24350045E0C0 /* TaskCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 98BA191D27CB24350045E0C0 /* TaskCollectionViewCell.xib */; };
@@ -47,6 +49,8 @@
 		986E4F462801EDD7009C01BE /* RoutineTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineTableViewCell.swift; sourceTree = "<group>"; };
 		986E4F472801EDD7009C01BE /* RoutineTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RoutineTableViewCell.xib; sourceTree = "<group>"; };
 		986E4F4A2801F3B2009C01BE /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
+		986E4FB42803F2E7009C01BE /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
+		986E4FB52803F2E7009C01BE /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
 		98BA191A27CA214E0045E0C0 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
 		98BA191C27CB24350045E0C0 /* TaskCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskCollectionViewCell.swift; sourceTree = "<group>"; };
 		98BA191D27CB24350045E0C0 /* TaskCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskCollectionViewCell.xib; sourceTree = "<group>"; };
@@ -100,6 +104,7 @@
 				9847C33827C7CAEF004C5BDE /* Main.storyboard */,
 				9864154627EC7541007BF090 /* TaskDetail.storyboard */,
 				986E4F472801EDD7009C01BE /* RoutineTableViewCell.xib */,
+				986E4FB52803F2E7009C01BE /* TaskTableViewCell.xib */,
 				98BA191D27CB24350045E0C0 /* TaskCollectionViewCell.xib */,
 			);
 			path = View;
@@ -112,6 +117,7 @@
 				98BA191A27CA214E0045E0C0 /* SecondViewController.swift */,
 				98BA192027CB58260045E0C0 /* ThirdViewController.swift */,
 				986E4F462801EDD7009C01BE /* RoutineTableViewCell.swift */,
+				986E4FB42803F2E7009C01BE /* TaskTableViewCell.swift */,
 				98BA191C27CB24350045E0C0 /* TaskCollectionViewCell.swift */,
 				9864154827EC75C0007BF090 /* CustomizeTaskController.swift */,
 			);
@@ -220,6 +226,7 @@
 				9847C33C27C7CAF0004C5BDE /* Assets.xcassets in Resources */,
 				9847C33A27C7CAEF004C5BDE /* Main.storyboard in Resources */,
 				986E4F492801EDD7009C01BE /* RoutineTableViewCell.xib in Resources */,
+				986E4FB72803F2E7009C01BE /* TaskTableViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -272,6 +279,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				986E4FB62803F2E7009C01BE /* TaskTableViewCell.swift in Sources */,
 				9847C33727C7CAEF004C5BDE /* FirstViewController.swift in Sources */,
 				9847C33327C7CAEF004C5BDE /* AppDelegate.swift in Sources */,
 				985DF91427E8B57C0081DC4A /* MyButton.swift in Sources */,
