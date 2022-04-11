@@ -1,10 +1,3 @@
-//
-//  RoutineViewCell.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/04/10.
-//
-
 import UIKit
 
 class RoutineTableViewCell: UITableViewCell {

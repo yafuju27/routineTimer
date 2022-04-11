@@ -1,14 +1,11 @@
-
-//セルの並べ替え&削除
-
 import UIKit
 import RealmSwift
 
 class FirstViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var routinesTableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
-    @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var todayDateLabel: UILabel!
+    @IBOutlet weak var message: UILabel!
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -49,6 +46,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         routinesTableView.reloadData()
+        
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
@@ -119,6 +117,11 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITab
         cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
         cell.mainBackground.layer.cornerRadius = 0.055*viewWidth
         cell.mainBackground.layer.masksToBounds = true
+        if routineItems.count == 0 {
+            message.isHidden = false
+        } else {
+            message.isHidden = true
+        }
         return cell
     }
     //セルの高さ

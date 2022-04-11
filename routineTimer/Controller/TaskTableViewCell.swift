@@ -1,13 +1,6 @@
-//
-//  TaskTableViewCell.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/04/11.
-//
-
 import UIKit
 
-class MainTaskViewCell: UITableViewCell {
+class TaskTableViewCell: UITableViewCell {
     @IBOutlet weak var taskName: UILabel!
     @IBOutlet weak var taskTime: UILabel!
     @IBOutlet weak var statusButton: UIButton!

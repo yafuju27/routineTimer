@@ -1,16 +1,9 @@
-//titleTextFieldのバグ
-//キーボード閉じ(returnキー)
-//タスクの合計時間反映
-//セル並び替え&削除
-//セルのタイトル変更
-//セルの時間変更
-//セルのbackgroundcolor選択
-
 import UIKit
 import RealmSwift
-import SwiftUI
 
-class SecondViewController: UIViewController {
+class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+    
+    
     @IBOutlet weak var taskTableView: UITableView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
@@ -25,6 +18,11 @@ class SecondViewController: UIViewController {
     private var navHeight: CGFloat!
     private var alertController: UIAlertController!
     private let routineModel = Routine()
+    
+    let timeList = [[Int](0...60), [Int](0...60)]
+    let screenWidth = UIScreen.main.bounds.width - 20
+    let screenHeight = UIScreen.main.bounds.height / 2
+    var selectedRow = 0
     
     var selectedID = ""
     var routineID = ""
@@ -83,10 +81,12 @@ class SecondViewController: UIViewController {
         self.navigationController?.popViewController(animated: true)
     }
     
-    @IBAction func editButtonAction(_ sender: Any) {
-    }
-    
     @IBAction func addTaskButtonAction(_ sender: Any) {
+        Feedbacker.impact(style: .medium)
+        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
+        taskVC.modalPresentationStyle = .overCurrentContext
+        taskVC.modalTransitionStyle = .crossDissolve
+        self.present(taskVC, animated: true)
         routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
         taskTableView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
@@ -128,10 +128,6 @@ class SecondViewController: UIViewController {
         viewHeight = view.frame.height
         navHeight = self.navigationController?.navigationBar.frame.size.height
         
-        //        // 画像のアスペクト比を維持しUIImageViewサイズに収まるように表示
-        //        let nib = UINib(nibName: "TaskTableViewCell", bundle: .main)
-        //        taskTableView.register(nib, forCellWithReuseIdentifier: "taskCell")
-        
         self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
         self.navigationController!.navigationBar.shadowImage = UIImage()
         //self.navigationController?.navigationBar.tintColor = .white
@@ -143,8 +139,27 @@ class SecondViewController: UIViewController {
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
     }
+    
+    //コンポーネントの個数
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return timeList.count
+    }
+    //コンポーネントのデータの個数
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return timeList[component].count
+    }
+    //データの中身
+    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
+        let pickerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 30))
+        pickerLabel.textAlignment = NSTextAlignment.left
+        pickerLabel.text = String(timeList[component][row])
+        pickerLabel.sizeToFit()
+        return pickerLabel
+    }
+    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 60
+    }
 }
-
 
 extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
     //セルの個数
@@ -154,7 +169,7 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     }
     //セルの中身
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! MainTaskViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         cell.taskName.text = target?.task[indexPath.row].taskTitle
         if let unwrappedTime = target?.task[indexPath.row].taskTime {
@@ -183,12 +198,13 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-                let storyboard = UIStoryboard(name: "TaskDetail", bundle: nil)
-                let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! CustomizeTaskController
-                taskDetailVC.selectedRoutineID = selectedID
-                taskDetailVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
-                taskDetailVC.modalPresentationStyle = .fullScreen
-                self.present(taskDetailVC, animated: true)
+        //画面遷移
+        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
+        taskVC.selectedRoutineID = selectedID
+        taskVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
+        taskVC.modalPresentationStyle = .overCurrentContext
+        taskVC.modalTransitionStyle = .crossDissolve
+        self.present(taskVC, animated: true)
     }
     //セルの編集許可
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
@@ -241,88 +257,3 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
 }
 
 
-
-
-
-
-//extension SecondViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UICollectionViewDragDelegate, UICollectionViewDropDelegate {
-//    //セルの個数
-//    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-//        return target?.task.count ?? 0
-//    }
-//    //セルの中身
-//    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-//        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-//        let taskCell = collectionView.dequeueReusableCell(withReuseIdentifier: "taskCell", for: indexPath) as! TaskCollectionViewCell
-//        taskCell.layer.cornerRadius = viewWidth / 18
-//        taskCell.backgroundColor = UIColor.white
-//        taskCell.layer.masksToBounds = false
-//        taskCell.taskName.text = target?.task[indexPath.row].taskTitle
-//        if let unwrappedTime = target?.task[indexPath.row].taskTime {
-//            taskCell.taskTime.text = "\(Int(unwrappedTime/60))分\(Int(unwrappedTime%60))秒"
-//        } else {
-//            print("taskTimeはnil")
-//        }
-//
-//        if taskCell.taskName.text == "新規タスク" {
-//            taskCell.taskName.textColor = .systemGray2
-//            taskCell.taskTime.textColor = .systemGray2
-//        } else {
-//            taskCell.taskName.textColor = .black
-//            taskCell.taskTime.textColor = .black
-//        }
-//        return taskCell
-//    }
-//    //セル同士の間隔
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-//        return 7
-//    }
-//    //セルのサイズ
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        cellWidth = viewWidth - 30
-//        cellHeight = 45
-//        cellOffset = viewWidth - cellWidth
-//        return CGSize(width: cellWidth, height: cellHeight)
-//    }
-//    // Cell が選択された場合
-//    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-//        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-//        let storyboard = UIStoryboard(name: "TaskDetail", bundle: nil)
-//        let taskDetailVC = storyboard.instantiateViewController(withIdentifier: "TaskDetail") as! CustomizeTaskController
-//        taskDetailVC.selectedRoutineID = selectedID
-//        taskDetailVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
-//        taskDetailVC.modalPresentationStyle = .fullScreen
-//        self.present(taskDetailVC, animated: true)
-//    }
-//    //セルのドラッグ
-//    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-//        let itemIdentifier = indexPath.item.description
-//        let itemProvider = NSItemProvider(object: itemIdentifier as NSItemProviderWriting)
-//        let dragItem = UIDragItem(itemProvider: itemProvider)
-//        return [dragItem]
-//    }
-//    //謎
-//    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-//        return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-//    }
-//    //セルのドロップ
-//    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-//        if coordinator.proposal.operation == .move {
-//            guard let item = coordinator.items.first,
-//                  let destinationIndexPath = coordinator.destinationIndexPath,
-//                  let sourceIndexPath = item.sourceIndexPath else {
-//                return
-//            }
-//            collectionView.performBatchUpdates({
-//                // データソースの更新
-//                // let n = dataList.remove(at: sourceIndexPath.item)
-//                // dataList.insert(n, at: destinationIndexPath.item)
-//                //セルの移動
-//                collectionView.deleteItems(at: [sourceIndexPath])
-//                collectionView.insertItems(at: [destinationIndexPath])
-//            })
-//            coordinator.drop(item.dragItem, toItemAt: destinationIndexPath)
-//        }
-//    }
-//}

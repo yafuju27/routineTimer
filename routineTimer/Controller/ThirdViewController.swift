@@ -1,11 +1,3 @@
-//taskTitle反映
-//残り時間反映
-//<>ボタンでタイマーを進めるようにする
-//タイマーが全部終了したら完了ラベル出現させる
-//音声や効果音を追加する
-//ボタンを押したときの軽いアニメーション
-//stackviewで真ん中に表示
-
 import UIKit
 
 class ThirdViewController: UIViewController {
