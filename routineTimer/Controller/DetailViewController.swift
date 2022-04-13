@@ -115,6 +115,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         dismiss(animated: true)
     }
     @IBAction func doneButtonAction(_ sender: Any) {
+        print("🟦selectedRoutineID", selectedRoutineID)
         if taskTextField.text == "" {
             alert(title: "タスク名がありません",
                           message: "タスク名の欄に文字を入力してください")
@@ -123,13 +124,17 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
             secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
             let time = minCount*60 + secCount
-            routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
+            
+            if selectedTaskID == "" {
+                routineModel.createTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID)
+            } else {
+                routineModel.updateTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID, taskID: selectedTaskID)
+            }
             routineModel.calcTotalTime(routineID: selectedRoutineID, taskTime: time)
             dismiss(animated: true)
+            
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
-        
-    
     }
     //キーボード閉じる処理
     @objc func dismissKeyboard() {

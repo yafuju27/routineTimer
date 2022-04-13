@@ -47,13 +47,14 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("🟦遷移前のselectedID:\(selectedID)")
         if selectedID == "" {
-            let targetNew = realm.objects(Routine.self).filter("routineTitle == %@", "").first
-            selectedID = targetNew?.routineID ?? ""
+            let targetRoutine = realm.objects(Routine.self).filter("routineTitle == %@", "").first
+            selectedID = targetRoutine?.routineID ?? ""
             unwrappedAllTimeInt = 0
             allTimeLabel.text = "合計0分0秒"
             routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
-            print("🟦ターゲットのID:\(targetNew?.routineID ?? "")")
+            print("🟦ターゲットのID:\(targetRoutine?.routineID ?? "")")
         } else {
             let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
             titleTextField.text = target?.routineTitle
@@ -61,7 +62,7 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
             allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
         }
         taskTableView.reloadData()
-        print("🟦selectedID:\(selectedID)")
+        print("🟦遷移後のselectedID:\(selectedID)")
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
@@ -87,8 +88,8 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         taskVC.modalPresentationStyle = .overCurrentContext
         taskVC.modalTransitionStyle = .crossDissolve
         self.present(taskVC, animated: true)
-        routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
-        taskTableView.reloadData()
+        
+        taskVC.selectedRoutineID = selectedID
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
@@ -213,12 +214,13 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     }
     //スワイプしたセルを削除
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
+            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+            let taskItems = target?.realm?.objects(Task.self)
             Feedbacker.impact(style: .medium)
+        if editingStyle == .delete {
             try! realm.write {
-                let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-                let item = target?.task[indexPath.row]
-                realm.delete(item!)
+                let item = taskItems?[indexPath.row]
+                self.realm.delete(item!)
             }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
         }
@@ -227,9 +229,17 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     //deleteボタンのカスタマイズ
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
+            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+            let taskItems = target?.realm?.objects(Task.self)
+        Feedbacker.impact(style: .medium)
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
-            
+            try! self.realm.write {
+                let item = taskItems?[indexPath.row]
+                self.realm.delete(item!)
+                print("🟦", item!)
+            }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            print ("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         deleteAction.image = UIImage(named: "delete")
         deleteAction.backgroundColor = .systemGray6
