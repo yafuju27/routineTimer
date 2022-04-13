@@ -65,7 +65,6 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
             self.routineModel.createRoutine(routineTitle: "\(newTitle)")
             self.routinesTableView.reloadData()
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
-            
         }
         saveAction.isEnabled = false
         alert.addTextField { (textField) in
@@ -78,7 +77,6 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
                 let textIsNotEmpty = textCount > 0
                 saveAction.isEnabled = textIsNotEmpty
             })
-            
             alert.addAction(cancelAction)
             alert.addAction(saveAction)
             self.present(alert,
@@ -88,9 +86,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func setupView() {
-        
         todayDateLabel.text = dateModel.getTodayDate()
-        
         addButton.tintColor = .darkGray
         addButton.layer.shadowOpacity = 0.2
         addButton.layer.shadowRadius = 8

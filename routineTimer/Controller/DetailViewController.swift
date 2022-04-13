@@ -6,8 +6,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskTimeTextView: UITextView!
     @IBOutlet weak var taskTimePickerView: UIPickerView!
-    @IBOutlet weak var frontView: UIView!
     @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var frontView: UIView!
     @IBOutlet weak var doneButton: UIButton!
     
     private let routineModel = Routine()
@@ -103,14 +103,14 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     }
     
     private func alert(title:String, message:String) {
-            alertController = UIAlertController(title: title,
-                                       message: message,
-                                       preferredStyle: .alert)
-            alertController.addAction(UIAlertAction(title: "OK",
-                                           style: .default,
-                                           handler: nil))
-            present(alertController, animated: true)
-        }
+        alertController = UIAlertController(title: title,
+                                            message: message,
+                                            preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK",
+                                                style: .default,
+                                                handler: nil))
+        present(alertController, animated: true)
+    }
     @IBAction func cancelButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
@@ -118,7 +118,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         print("🟦selectedRoutineID", selectedRoutineID)
         if taskTextField.text == "" {
             alert(title: "タスク名がありません",
-                          message: "タスク名の欄に文字を入力してください")
+                  message: "タスク名の欄に文字を入力してください")
         } else {
             let title = taskTextField.text ?? ""
             minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]

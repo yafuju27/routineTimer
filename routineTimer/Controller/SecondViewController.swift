@@ -65,43 +65,11 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         print("🟦遷移後のselectedID:\(selectedID)")
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
-    
-    @IBAction func startButton(_ sender: Any) {
-        Feedbacker.impact(style: .medium)
-        let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! ThirdViewController
-        thirdVC.taskArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
-        thirdVC.timerArray = [720, 60, 200, 220, 20, 600]
-        
-        self.navigationController?.pushViewController(thirdVC, animated: true)
-    }
-    
-    @IBAction func saveButton(_ sender: Any) {
-        if titleTextField.text == "" {
-            alert(title: "タイトルがありません",
-                  message: "タイトルの欄に文字を入力してください")
-        } else {
-            let updateTitle = titleTextField.text ?? ""
-            routineModel.updateRoutine(routineID: selectedID, routineTitle: updateTitle)
-        }
-        Feedbacker.impact(style: .medium)
-        self.navigationController?.popViewController(animated: true)
-    }
-    
-    @IBAction func addTaskButtonAction(_ sender: Any) {
-        Feedbacker.impact(style: .medium)
-        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
-        taskVC.modalPresentationStyle = .overCurrentContext
-        taskVC.modalTransitionStyle = .crossDissolve
-        self.present(taskVC, animated: true)
-        
-        taskVC.selectedRoutineID = selectedID
-        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
-    }
-    
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
     }
+    
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.titleTextField.resignFirstResponder()
         return true
@@ -144,6 +112,41 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
+    }
+    
+    @IBAction func saveButton(_ sender: Any) {
+        if titleTextField.text == "" {
+            alert(title: "タイトルがありません",
+                  message: "タイトルの欄に文字を入力してください")
+        } else {
+            let updateTitle = titleTextField.text ?? ""
+            routineModel.updateRoutine(routineID: selectedID, routineTitle: updateTitle)
+        }
+        Feedbacker.impact(style: .medium)
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    @IBAction func addTaskButtonAction(_ sender: Any) {
+        Feedbacker.impact(style: .medium)
+        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
+        taskVC.modalPresentationStyle = .overCurrentContext
+        taskVC.modalTransitionStyle = .crossDissolve
+        self.present(taskVC, animated: true)
+        
+        taskVC.selectedRoutineID = selectedID
+        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+    }
+    
+    @IBAction func startButton(_ sender: Any) {
+        Feedbacker.impact(style: .medium)
+        let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! ThirdViewController
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+        let taskTitleArray = Array(realm.objects(Task.self))
+        print("taskTitleArray", taskTitleArray)
+        thirdVC.taskArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
+        thirdVC.timerArray = [720, 60, 200, 220, 20, 600]
+        
+        self.navigationController?.pushViewController(thirdVC, animated: true)
     }
     
     //コンポーネントの個数
@@ -219,9 +222,9 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     }
     //スワイプしたセルを削除
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-            let taskItems = target?.realm?.objects(Task.self)
-            Feedbacker.impact(style: .medium)
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+        let taskItems = target?.realm?.objects(Task.self)
+        Feedbacker.impact(style: .medium)
         if editingStyle == .delete {
             try! realm.write {
                 let item = taskItems?[indexPath.row]
@@ -234,8 +237,8 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     //deleteボタンのカスタマイズ
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
-            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-            let taskItems = target?.realm?.objects(Task.self)
+        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
+        let taskItems = target?.realm?.objects(Task.self)
         Feedbacker.impact(style: .medium)
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             try! self.realm.write {

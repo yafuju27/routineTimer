@@ -23,8 +23,8 @@ class ThirdViewController: UIViewController {
     private let timeStartB:Int = 300
     var timerCounting: Bool = false
     
-    var taskArray = ["歯磨き","着替え","洗濯"]
-    var timerArray = [60, 30, 180]
+    var taskArray = ["A"]
+    var timerArray = [80]
     var finishTime: Int = 0
     
     override func viewDidLoad() {
@@ -64,6 +64,8 @@ class ThirdViewController: UIViewController {
         timerLabel.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         timerLabel.center = view.center
         
+        endTimeLabel.font = .boldSystemFont(ofSize: view.frame.width / 20)
+        
         setupCircleLayers()
         view.addSubview(timerLabel)
         view.addSubview(endTimeLabel)
@@ -86,6 +88,7 @@ class ThirdViewController: UIViewController {
         layer.position = view.center
         return layer
     }
+    
     private func createCircleShapeLayerB(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
         let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 15, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
@@ -97,6 +100,7 @@ class ThirdViewController: UIViewController {
         layer.position = view.center
         return layer
     }
+    
     private func setupCircleLayers() {
         
         pulsatingLayer = createCircleShapeLayerA(strokeColor: .color3, fillColor: .color2)
@@ -153,14 +157,12 @@ class ThirdViewController: UIViewController {
     }
     
     @IBAction func startStopButton(_ sender: UIButton) {
-        
         if(timerCounting){
             timerCounting = false
             startStopButton.setTitle("START", for: .normal)
             startStopButton.backgroundColor = .color3
             //STOPボタンの役割
             timer.invalidate()
-            
         } else {
             timerCounting = true
             //水面アニメーション
@@ -168,10 +170,8 @@ class ThirdViewController: UIViewController {
             //            pulse.animationDuration = 1.0
             //            pulse.backgroundColor = CGColor.init(red: 0, green: 173, blue: 181, alpha: 20)
             //            self.view.layer.insertSublayer(pulse, below: self.view.layer)
-            
             startStopButton.setTitle("STOP", for: .normal)
             startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
-            
             //STARTボタンの役割
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.1,
@@ -180,23 +180,17 @@ class ThirdViewController: UIViewController {
                                          userInfo: nil,
                                          repeats: true)
             animateCircle()
-            
         }
-        
         //ボタンの振動
         Feedbacker.impact(style: .medium)
-        
     }
     
-    
     @IBAction func minusButton(_ sender: Any) {
-        
         timeRemainingA -= 5
         timeRemainingB -= 5
         //timerLabel.text = "残り \n\(Int(timeRemainingA))"
         makeTimerLabel()
         animateCircle()
-        
         //ボタンの振動
         Feedbacker.impact(style: .medium)
         
@@ -207,14 +201,11 @@ class ThirdViewController: UIViewController {
         //timerLabel.text = "残り \n\(Int(timeRemainingA))"
         makeTimerLabel()
         animateCircle()
-        
         //ボタンの振動
         Feedbacker.impact(style: .medium)
-        
     }
     
     @objc func timerClass() {
-        
         if timeRemainingA > 0 {
             timeRemainingA -= 0.1
             timeRemainingB -= 0.1
@@ -223,15 +214,12 @@ class ThirdViewController: UIViewController {
             timeRemainingA = 80
             timeRemainingB = 300
         }
-        
         let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
         let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
         self.shapeLayerA.strokeEnd = percentageA
         self.shapeLayerB.strokeEnd = percentageB
-        
         //timerLabel.text = "残り \n\(Int(timeRemainingA))"
         makeTimerLabel()
         print("割合は\(percentageA)")
-        
     }
 }
