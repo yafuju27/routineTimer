@@ -68,6 +68,11 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     @IBAction func startButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
+        let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! ThirdViewController
+        thirdVC.taskArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
+        thirdVC.timerArray = [720, 60, 200, 220, 20, 600]
+        
+        self.navigationController?.pushViewController(thirdVC, animated: true)
     }
     
     @IBAction func saveButton(_ sender: Any) {

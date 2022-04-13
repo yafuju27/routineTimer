@@ -66,10 +66,10 @@ extension Routine {
     
     func calcTotalTime(routineID: String, taskTime: Int) {
         let realm = try! Realm()
-        let target = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
-        let sumValue: Int = realm.objects(Task.self).sum(ofProperty: "taskTime")
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        let totalValue:Int = realm.objects(Task.self).sum(ofProperty: "taskTime")
         try! realm.write {
-            target?.totalTime = sumValue
+            targetRoutine?.totalTime = totalValue
         }
     }
 }

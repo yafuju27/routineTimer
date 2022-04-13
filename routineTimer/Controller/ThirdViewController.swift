@@ -23,11 +23,21 @@ class ThirdViewController: UIViewController {
     private let timeStartB:Int = 300
     var timerCounting: Bool = false
     
+    var taskArray = ["歯磨き","着替え","洗濯"]
+    var timerArray = [60, 30, 180]
+    var finishTime: Int = 0
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        setupView()
+        print("taskArray", taskArray)
+        print("timerArray", timerArray)
+    }
+    
+    private func setupView() {
         //タイトルの色
         taskTitle.textColor = .color4
+        taskTitle.text = "\(taskArray.first ?? "")"
         //ボタンの丸み
         startStopButton.layer.cornerRadius = 50
         minusButton.layer.cornerRadius = 25
@@ -49,7 +59,7 @@ class ThirdViewController: UIViewController {
         //残り時間表示ラベル
         makeTimerLabel()
         timerLabel.textAlignment = .center
-        timerLabel.font = .boldSystemFont(ofSize: 40)
+        timerLabel.font = .boldSystemFont(ofSize: view.frame.width / 8)
         timerLabel.textColor = .color4
         timerLabel.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         timerLabel.center = view.center
@@ -60,9 +70,9 @@ class ThirdViewController: UIViewController {
     }
     
     func makeTimerLabel() {
-        let min = Int(timeRemainingA / 60)
-        let sec = Int(timeRemainingA) % 60
-        self.timerLabel.text = String(format: "%02d:%02d", min, sec)
+        let min = Int((timerArray.first ?? 0) / 60)
+        let sec = Int((timerArray.first ?? 0) % 60)
+        self.timerLabel.text = String(format: "%02d：%02d", min, sec)
     }
     
     private func createCircleShapeLayerA(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
@@ -203,8 +213,6 @@ class ThirdViewController: UIViewController {
         
     }
     
-    //------------------------------------------------------
-    
     @objc func timerClass() {
         
         if timeRemainingA > 0 {
@@ -226,6 +234,4 @@ class ThirdViewController: UIViewController {
         print("割合は\(percentageA)")
         
     }
-    
-    
 }
