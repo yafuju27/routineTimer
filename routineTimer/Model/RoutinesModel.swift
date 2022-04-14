@@ -5,6 +5,7 @@ class Routine: Object {
     @objc dynamic var routineTitle = ""
     @objc dynamic var totalTime = 0
     @objc dynamic var routineID = UUID().uuidString
+    @objc dynamic var routineOrder = 0
     var task = List<Task>()
     override class func primaryKey() -> String? {
         return "routineID"
@@ -19,6 +20,7 @@ class Task: Object {
     @objc dynamic var taskTitle = ""
     @objc dynamic var taskTime = 0
     @objc dynamic var taskID = UUID().uuidString
+    @objc dynamic var taskOrder = 0
     override class func primaryKey() -> String? {
         return "taskID"
     }
@@ -28,7 +30,9 @@ extension Routine {
     func createRoutine(routineTitle: String) {
         let realm = try! Realm()
         let routine = Routine()
+        //let orderNumber = realm.objects(Routine.self).count
         routine.routineTitle = routineTitle
+        //routine.routineOrder = orderNumber
         try! realm.write {
             realm.add(routine)
         }

@@ -15,8 +15,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     private var navHeight: CGFloat!
     
     let realm = try! Realm()
-    private var routineItems: Results<Routine>!
-    private var list: List<Routine>!
+    var list: List<Routine>!
     
     private let routineModel = Routine()
     private let dateModel = DateModel()
@@ -24,18 +23,16 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     private var unwrappedAllTimeInt = 0
     var selectedID = ""
     var routineID = ""
+    var routineOrder = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(Realm.Configuration.defaultConfiguration.fileURL!)
-        list = realm.objects(RoutineList.self).first?.list
         
         routinesTableView.delegate = self
         routinesTableView.dataSource = self
         routinesTableView.dragDelegate = self
         routinesTableView.dropDelegate = self
         routinesTableView.dragInteractionEnabled = true
-        
         routinesTableView.register(UINib(nibName: "RoutineTableViewCell", bundle: nil), forCellReuseIdentifier: "routineCell")
         routinesTableView.separatorStyle = .none
         routinesTableView.showsVerticalScrollIndicator = false
@@ -46,12 +43,10 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         routinesTableView.reloadData()
-        
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
     @IBAction func addButton(_ sender: Any) {
-        Feedbacker.impact(style: .medium)
         var alertTextField: UITextField?
         let alert = UIAlertController(title: "新しいルーティーン",
                                       message: "ルーティーンのタイトルを\n入力してください",
@@ -64,12 +59,12 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
             let newTitle: String = alertTextField?.text ?? ""
             self.routineModel.createRoutine(routineTitle: "\(newTitle)")
             self.routinesTableView.reloadData()
+            Feedbacker.impact(style: .medium)
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         saveAction.isEnabled = false
         alert.addTextField { (textField) in
             alertTextField = textField
-            
             textField.placeholder = "例：朝の準備"
             NotificationCenter.default.addObserver(forName: UITextField.textDidChangeNotification, object: textField, queue: OperationQueue.main, using:
                                                     {_ in
@@ -170,13 +165,12 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITab
     }
     //セルの並び替え
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        Feedbacker.impact(style: .medium)
-        //        try! realm.write {
-        //            let routineItems = self.realm.objects(Routine.self)
-        //            let listItem = routineItems[sourceIndexPath.row]
-        //            routineItems.remove(at: sourceIndexPath.row)
-        //            routineItems.insert(listItem, at: destinationIndexPath.row)
-        //        }
+        try! realm.write {
+            let listItem = list[sourceIndexPath.row]
+            list.remove(at: sourceIndexPath.row)
+            list.insert(listItem, at: destinationIndexPath.row)
+        }
+        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     //ドラッグ
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
