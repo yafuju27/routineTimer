@@ -71,15 +71,15 @@ extension UITextField {
     func setCustomeLine() {
         // 枠線を非表示にする
         borderStyle = .none
-        let underline = UIView()
+        //let underline = UIView()
         // heightにはアンダーラインの高さを入れる❓
-        underline.frame = CGRect(x: 0, y: frame.height - 4, width: frame.width, height: 3)
+        //underline.frame = CGRect(x: 0, y: frame.height - 4, width: frame.width, height: 3)
         // 枠線の色
-        underline.backgroundColor = .darkGray
-        underline.layer.cornerRadius = 2
-        addSubview(underline)
+        //underline.backgroundColor = .darkGray
+        //underline.layer.cornerRadius = 2
+        //addSubview(underline)
         // 枠線を最前面に
-        bringSubviewToFront(underline)
+        //bringSubviewToFront(underline)
     }
 }
 

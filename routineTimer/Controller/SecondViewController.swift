@@ -5,6 +5,7 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     
     @IBOutlet weak var taskTableView: UITableView!
+    @IBOutlet weak var titleBackView: UIView!
     @IBOutlet weak var startButton: UIButton!
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
@@ -24,11 +25,11 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     let screenHeight = UIScreen.main.bounds.height / 2
     var selectedRow = 0
     
-    var selectedID = ""
     var routineID = ""
     var unwrappedAllTimeInt = 0
     var allTimeCount = 0
     let realm = try! Realm()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,22 +48,11 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("🟦遷移前のselectedID:\(selectedID)")
-        if selectedID == "" {
-            let targetRoutine = realm.objects(Routine.self).filter("routineTitle == %@", "").first
-            selectedID = targetRoutine?.routineID ?? ""
-            unwrappedAllTimeInt = 0
-            allTimeLabel.text = "合計0分0秒"
-            routineModel.createTask(taskTitle: "新規タスク", taskTime: 0, routineID: selectedID)
-            print("🟦ターゲットのID:\(targetRoutine?.routineID ?? "")")
-        } else {
-            let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-            titleTextField.text = target?.routineTitle
-            unwrappedAllTimeInt = target?.totalTime ?? 0
-            allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
-        }
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        titleTextField.text = targetRoutine?.routineTitle
+        updateTotalTimeLabel()
         taskTableView.reloadData()
-        print("🟦遷移後のselectedID:\(selectedID)")
+        print("🟦遷移後のselectedID:\(routineID)")
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     //キーボード閉じる処理
@@ -96,22 +86,28 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         saveButton.layer.cornerRadius = 12
         saveButton.backgroundColor = .color3
         
+        titleBackView.layer.cornerRadius = 15
+        
         titleTextField.setCustomeLine()
         
         viewWidth = view.frame.width
         viewHeight = view.frame.height
         navHeight = self.navigationController?.navigationBar.frame.size.height
         
-        self.navigationController!.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        self.navigationController!.navigationBar.shadowImage = UIImage()
-        //self.navigationController?.navigationBar.tintColor = .white
-        self.navigationController?.navigationBar.titleTextAttributes = [
-            .foregroundColor: UIColor.white
-        ]
+        titleBackView.layer.borderWidth = 3.0
+        titleBackView.layer.borderColor = UIColor.darkGray.cgColor
+        
+        
         //画面がタップされたらキーボード閉じるための処理準備
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
+    }
+    
+    private func updateTotalTimeLabel() {
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        unwrappedAllTimeInt = targetRoutine?.totalTime ?? 0
+        allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
     }
     
     @IBAction func saveButton(_ sender: Any) {
@@ -120,7 +116,7 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
                   message: "タイトルの欄に文字を入力してください")
         } else {
             let updateTitle = titleTextField.text ?? ""
-            routineModel.updateRoutine(routineID: selectedID, routineTitle: updateTitle)
+            routineModel.updateRoutine(routineID: routineID, routineTitle: updateTitle)
         }
         Feedbacker.impact(style: .medium)
         self.navigationController?.popViewController(animated: true)
@@ -133,14 +129,13 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
         taskVC.modalTransitionStyle = .crossDissolve
         self.present(taskVC, animated: true)
         
-        taskVC.selectedRoutineID = selectedID
+        taskVC.selectedRoutineID = routineID
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
     @IBAction func startButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
         let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! ThirdViewController
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         let taskTitleArray = Array(realm.objects(Task.self))
         print("taskTitleArray", taskTitleArray)
         thirdVC.taskArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
@@ -173,15 +168,15 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
 extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
     //セルの個数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        return target?.task.count ?? 0
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        return targetRoutine?.task.count ?? 0
     }
     //セルの中身
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        cell.taskName.text = target?.task[indexPath.row].taskTitle
-        if let unwrappedTime = target?.task[indexPath.row].taskTime {
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        cell.taskName.text = targetRoutine?.task[indexPath.row].taskTitle
+        if let unwrappedTime = targetRoutine?.task[indexPath.row].taskTime {
             cell.taskTime.text = "\(Int(unwrappedTime/60))分\(Int(unwrappedTime%60))秒"
         } else {
             print("taskTimeはnil")
@@ -206,11 +201,11 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     }
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
         //画面遷移
         let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
-        taskVC.selectedRoutineID = selectedID
-        taskVC.selectedTaskID = target?.task[indexPath.row].taskID ?? ""
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        taskVC.selectedRoutineID = routineID
+        taskVC.selectedTaskID = targetRoutine?.task[indexPath.row].taskID ?? ""
         taskVC.modalPresentationStyle = .overCurrentContext
         taskVC.modalTransitionStyle = .crossDissolve
         self.present(taskVC, animated: true)
@@ -222,31 +217,34 @@ extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITa
     }
     //スワイプしたセルを削除
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        let taskItems = target?.realm?.objects(Task.self)
-        Feedbacker.impact(style: .medium)
         if editingStyle == .delete {
             try! realm.write {
-                let item = taskItems?[indexPath.row]
+                let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+                let item = targetRoutine?.task[indexPath.row]
+                targetRoutine?.totalTime -= item?.taskTime ?? 0
                 self.realm.delete(item!)
             }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            updateTotalTimeLabel()
+            Feedbacker.impact(style: .medium)
+            print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
-        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+        
     }
     //deleteボタンのカスタマイズ
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
     -> UISwipeActionsConfiguration? {
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedID).first
-        let taskItems = target?.realm?.objects(Task.self)
-        Feedbacker.impact(style: .medium)
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             try! self.realm.write {
-                let item = taskItems?[indexPath.row]
+                let item = targetRoutine?.task[indexPath.row]
+                targetRoutine?.totalTime -= item?.taskTime ?? 0
                 self.realm.delete(item!)
-                print("🟦", item!)
             }
-            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
+            self.updateTotalTimeLabel()
+            Feedbacker.impact(style: .medium)
+            completionHandler(true)
             print ("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         deleteAction.image = UIImage(named: "delete")

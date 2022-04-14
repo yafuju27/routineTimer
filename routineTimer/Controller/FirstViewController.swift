@@ -129,7 +129,7 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITab
         //画面遷移
         let secondVC = self.storyboard?.instantiateViewController(withIdentifier: "Second") as! SecondViewController
         let routineItems = realm.objects(Routine.self)
-        secondVC.selectedID = routineItems[indexPath.row].routineID
+        secondVC.routineID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(secondVC, animated: true)
         
         Feedbacker.impact(style: .medium)

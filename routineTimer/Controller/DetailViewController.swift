@@ -26,21 +26,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         taskTextField.delegate = self
         //ScondViewControllerの値を反映
-        let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
-        let task = target?.task.filter("taskID == %@", selectedTaskID).first
-        if task?.taskTitle != "新規タスク" {
-            taskTextField.text = task?.taskTitle
-        } else {
-            taskTextField.text = ""
-        }
-        //🟥🟥🟥🟥🟥
-        if let unwrappedTime = task?.taskTime {
+//        let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
+//        let task = target?.task.filter("taskID == %@", selectedTaskID).first
+        let target = realm.object(ofType: Task.self, forPrimaryKey: selectedTaskID)
+        if let unwrappedTime = target?.taskTime {
             //            taskTimeTextView.text = "\(String(describing: unwrappedTime))"
             taskTimeTextView.text = "\(unwrappedTime)"
         } else {
             print("taskTimeはnil")
         }
-        //🟥🟥🟥🟥🟥
         createPickerLabels()
         createShape()
         getTimeCount()
@@ -49,8 +43,8 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
         //キーボードが上下する処理
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
         frontView.layer.cornerRadius = 15
         frontView.layer.shadowOpacity = 0.2
@@ -132,7 +126,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             }
             routineModel.calcTotalTime(routineID: selectedRoutineID, taskTime: time)
             dismiss(animated: true)
-            
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
     }
@@ -161,7 +154,6 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         }
     }
 }
-
 extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     //コンポーネントの個数
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
