@@ -15,7 +15,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     private var navHeight: CGFloat!
     
     let realm = try! Realm()
-    var list: List<Routine>!
+    //var list: List<Routine>!
     
     private let routineModel = Routine()
     private let dateModel = DateModel()
@@ -57,7 +57,8 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
         let saveAction = UIAlertAction(title: "保存",
                                        style: .default) { (action: UIAlertAction!) -> Void in
             let newTitle: String = alertTextField?.text ?? ""
-            self.routineModel.createRoutine(routineTitle: "\(newTitle)")
+            let routineItems = self.realm.objects(Routine.self)
+            self.routineModel.createRoutine(routineTitle: "\(newTitle)", routineOrder: routineItems.count)
             self.routinesTableView.reloadData()
             Feedbacker.impact(style: .medium)
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
@@ -165,12 +166,36 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITab
     }
     //セルの並び替え
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+//        try! realm.write {
+//            let listItem = list[sourceIndexPath.row]
+//            list.remove(at: sourceIndexPath.row)
+//            list.insert(listItem, at: destinationIndexPath.row)
+//        }
+        
         try! realm.write {
-            let listItem = list[sourceIndexPath.row]
-            list.remove(at: sourceIndexPath.row)
-            list.insert(listItem, at: destinationIndexPath.row)
-        }
-        print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+                let routineItems = self.realm.objects(Routine.self)
+                let sourceObject = routineItems[sourceIndexPath.row]
+                let destinationObject = routineItems[destinationIndexPath.row]
+
+                let destinationObjectOrder = destinationObject.routineOrder
+
+                if sourceIndexPath.row < destinationIndexPath.row {
+                    // 上から下に移動した場合、間の項目を上にシフト
+                    for index in sourceIndexPath.row...destinationIndexPath.row {
+                        let object = routineItems[index]
+                        object.routineOrder -= 1
+                    }
+                } else {
+                    // 下から上に移動した場合、間の項目を下にシフト
+                    for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed() {
+                        let object = routineItems[index]
+                        object.routineOrder += 1
+                    }
+                }
+                // 移動したセルの並びを移動先に更新
+                sourceObject.routineOrder = destinationObjectOrder
+                print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+            }
     }
     //ドラッグ
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {

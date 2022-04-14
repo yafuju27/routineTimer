@@ -27,12 +27,12 @@ class Task: Object {
 }
 
 extension Routine {
-    func createRoutine(routineTitle: String) {
+    func createRoutine(routineTitle: String, routineOrder: Int) {
         let realm = try! Realm()
         let routine = Routine()
-        //let orderNumber = realm.objects(Routine.self).count
+        let orderNumber = realm.objects(Routine.self).count
         routine.routineTitle = routineTitle
-        //routine.routineOrder = orderNumber
+        routine.routineOrder = orderNumber
         try! realm.write {
             realm.add(routine)
         }
