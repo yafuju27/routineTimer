@@ -39,13 +39,15 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
-        timeStartA = timeArray[arrayCount]
         timeRemainingB = Float(timeArray.reduce(0, +))
+        timeStartA = timeArray[arrayCount]
         timeStartB = timeArray.reduce(0, +)
         
         makeTimerLabel()
         
         self.synthesizer.delegate = self
+        
+        endTimeLabel.isHidden = true
     }
     
     private func setupView() {
@@ -219,8 +221,6 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
     fileprivate func animateCircle(){
         //アニメーションに関してはここで完結している
         let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        //basicAnimation.toValue = 1
-        //basicAnimation.duration = 2
         basicAnimation.fillMode = .forwards
         basicAnimation.isRemovedOnCompletion = false
         shapeLayerA.add(basicAnimation, forKey: "urSoBasic")
@@ -231,6 +231,12 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         arrayCount -= 1
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
+        if arrayCount > 0 {
+            timeRemainingB = Float(timeArray.reduce(0, +))
+            for i in 0...arrayCount-1 {
+                timeRemainingB -= Float(timeArray[i])
+            }
+        }
         timeStartA = timeArray[arrayCount]
         makeTimerLabel()
         forNextBack()
@@ -243,6 +249,10 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         arrayCount += 1
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
+        timeRemainingB = Float(timeArray.reduce(0, +))
+        for i in 0...arrayCount-1 {
+            timeRemainingB -= Float(timeArray[i])
+        }
         timeStartA = timeArray[arrayCount]
         makeTimerLabel()
         forNextBack()
@@ -334,13 +344,13 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
                 makeTimerLabel()
                 forNextBack()
                 alertSound()
+                speechTitle()
             }
         }
         let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
         let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
         self.shapeLayerA.strokeEnd = percentageA
         self.shapeLayerB.strokeEnd = percentageB
-        //timerLabel.text = "残り \n\(Int(timeRemainingA))"
         makeTimerLabel()
         print("割合は\(percentageA)")
     }

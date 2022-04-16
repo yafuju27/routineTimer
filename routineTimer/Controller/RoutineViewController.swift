@@ -57,7 +57,7 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
         let saveAction = UIAlertAction(title: "保存",
                                        style: .default) { (action: UIAlertAction!) -> Void in
             let newTitle: String = alertTextField?.text ?? ""
-            let routineItems = self.realm.objects(Routine.self)
+            let routineItems = self.realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
             self.routineModel.createRoutine(routineTitle: "\(newTitle)", routineOrder: routineItems.count)
             self.routinesTableView.reloadData()
             Feedbacker.impact(style: .medium)
@@ -104,7 +104,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     //セルの中身
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "routineCell", for: indexPath) as! RoutineTableViewCell
-        let routineItems = self.realm.objects(Routine.self)
+        let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
         cell.cellTitle!.text = "\(routineItems[indexPath.row].routineTitle)"
         cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
         cell.mainBackground.layer.cornerRadius = 0.055*viewWidth
@@ -139,12 +139,20 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
-            try! realm.write {
-                let routineItems = self.realm.objects(Routine.self)
+            try! self.realm.write {
+                let routineItems = self.realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
                 let item = routineItems[indexPath.row]
-                realm.delete(item)
+                let nextOrder:Int = item.routineOrder + 1
+                let lastOrder:Int = routineItems.count - 1
+                for index in nextOrder...lastOrder {
+                    let object = routineItems[index]
+                    object.routineOrder -= 1
+                    print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
+                }
+                self.realm.delete(item)
             }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
     }
     //deleteボタンのカスタマイズ
@@ -153,11 +161,19 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
-                let routineItems = self.realm.objects(Routine.self)
+                let routineItems = self.realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
                 let item = routineItems[indexPath.row]
+                let nextOrder:Int = item.routineOrder + 1
+                let lastOrder:Int = routineItems.count - 1
+                for index in nextOrder...lastOrder {
+                    let object = routineItems[index]
+                    object.routineOrder -= 1
+                    print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
+                }
                 self.realm.delete(item)
             }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         deleteAction.image = UIImage(named: "delete")
         deleteAction.backgroundColor = .white
@@ -168,29 +184,30 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         try! realm.write {
-                let routineItems = self.realm.objects(Routine.self)
-                let sourceObject = routineItems[sourceIndexPath.row]
-                let destinationObject = routineItems[destinationIndexPath.row]
-
-                let destinationObjectOrder = destinationObject.routineOrder
-
-                if sourceIndexPath.row < destinationIndexPath.row {
-                    // 上から下に移動した場合、間の項目を上にシフト
-                    for index in sourceIndexPath.row...destinationIndexPath.row {
-                        let object = routineItems[index]
-                        object.routineOrder -= 1
-                    }
-                } else {
-                    // 下から上に移動した場合、間の項目を下にシフト
-                    for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed() {
-                        let object = routineItems[index]
-                        object.routineOrder += 1
-                    }
+            //let routineItems = self.realm.objects(Routine.self)
+            let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
+            let sourceObject = routineItems[sourceIndexPath.row]
+            let destinationObject = routineItems[destinationIndexPath.row]
+            
+            let destinationObjectOrder = destinationObject.routineOrder
+            
+            if sourceIndexPath.row < destinationIndexPath.row {
+                // 上から下に移動した場合、間の項目を上にシフト
+                for index in sourceIndexPath.row...destinationIndexPath.row {
+                    let object = routineItems[index]
+                    object.routineOrder -= 1
                 }
-                // 移動したセルの並びを移動先に更新
-                sourceObject.routineOrder = destinationObjectOrder
-                print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+            } else {
+                // 下から上に移動した場合、間の項目を下にシフト
+                for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed() {
+                    let object = routineItems[index]
+                    object.routineOrder += 1
+                }
             }
+            // 移動したセルの並びを移動先に更新
+            sourceObject.routineOrder = destinationObjectOrder
+            print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
+        }
     }
     //ドラッグ
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
