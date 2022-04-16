@@ -12,7 +12,7 @@
 		98313EC527D5AAB30023E69C /* DateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC427D5AAB30023E69C /* DateModel.swift */; };
 		9847C33327C7CAEF004C5BDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33227C7CAEF004C5BDE /* AppDelegate.swift */; };
 		9847C33527C7CAEF004C5BDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33427C7CAEF004C5BDE /* SceneDelegate.swift */; };
-		9847C33727C7CAEF004C5BDE /* FirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33627C7CAEF004C5BDE /* FirstViewController.swift */; };
+		9847C33727C7CAEF004C5BDE /* RoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33627C7CAEF004C5BDE /* RoutineViewController.swift */; };
 		9847C33A27C7CAEF004C5BDE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9847C33827C7CAEF004C5BDE /* Main.storyboard */; };
 		9847C33C27C7CAF0004C5BDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9847C33B27C7CAF0004C5BDE /* Assets.xcassets */; };
 		9847C33F27C7CAF0004C5BDE /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9847C33D27C7CAF0004C5BDE /* LaunchScreen.storyboard */; };
@@ -23,8 +23,11 @@
 		986E4F4B2801F3B2009C01BE /* ShadowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986E4F4A2801F3B2009C01BE /* ShadowView.swift */; };
 		986E4FB62803F2E7009C01BE /* TaskTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 986E4FB42803F2E7009C01BE /* TaskTableViewCell.swift */; };
 		986E4FB72803F2E7009C01BE /* TaskTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 986E4FB52803F2E7009C01BE /* TaskTableViewCell.xib */; };
-		98BA191B27CA214E0045E0C0 /* SecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA191A27CA214E0045E0C0 /* SecondViewController.swift */; };
-		98BA192127CB58260045E0C0 /* ThirdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA192027CB58260045E0C0 /* ThirdViewController.swift */; };
+		9896A7CC280A79180006F1CC /* ポカッ.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9896A7C9280A79180006F1CC /* ポカッ.mp3 */; };
+		9896A7CD280A79180006F1CC /* トゥルルーン.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9896A7CA280A79180006F1CC /* トゥルルーン.mp3 */; };
+		9896A7CE280A79180006F1CC /* ポーン.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9896A7CB280A79180006F1CC /* ポーン.mp3 */; };
+		98BA191B27CA214E0045E0C0 /* TaskViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA191A27CA214E0045E0C0 /* TaskViewController.swift */; };
+		98BA192127CB58260045E0C0 /* TimerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA192027CB58260045E0C0 /* TimerViewController.swift */; };
 		98BA192327CC55860045E0C0 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BA192227CC55860045E0C0 /* Extensions.swift */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +38,7 @@
 		9847C32F27C7CAEF004C5BDE /* routineTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = routineTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9847C33227C7CAEF004C5BDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9847C33427C7CAEF004C5BDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		9847C33627C7CAEF004C5BDE /* FirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstViewController.swift; sourceTree = "<group>"; };
+		9847C33627C7CAEF004C5BDE /* RoutineViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutineViewController.swift; sourceTree = "<group>"; };
 		9847C33927C7CAEF004C5BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9847C33B27C7CAF0004C5BDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		9847C33E27C7CAF0004C5BDE /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -47,8 +50,11 @@
 		986E4F4A2801F3B2009C01BE /* ShadowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowView.swift; sourceTree = "<group>"; };
 		986E4FB42803F2E7009C01BE /* TaskTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskTableViewCell.swift; sourceTree = "<group>"; };
 		986E4FB52803F2E7009C01BE /* TaskTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = TaskTableViewCell.xib; sourceTree = "<group>"; };
-		98BA191A27CA214E0045E0C0 /* SecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondViewController.swift; sourceTree = "<group>"; };
-		98BA192027CB58260045E0C0 /* ThirdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThirdViewController.swift; sourceTree = "<group>"; };
+		9896A7C9280A79180006F1CC /* ポカッ.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ポカッ.mp3"; sourceTree = "<group>"; };
+		9896A7CA280A79180006F1CC /* トゥルルーン.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "トゥルルーン.mp3"; sourceTree = "<group>"; };
+		9896A7CB280A79180006F1CC /* ポーン.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "ポーン.mp3"; sourceTree = "<group>"; };
+		98BA191A27CA214E0045E0C0 /* TaskViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskViewController.swift; sourceTree = "<group>"; };
+		98BA192027CB58260045E0C0 /* TimerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerViewController.swift; sourceTree = "<group>"; };
 		98BA192227CC55860045E0C0 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E89B19DAB53D601880F7CEF8 /* Pods-routineTimer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routineTimer.debug.xcconfig"; path = "Target Support Files/Pods-routineTimer/Pods-routineTimer.debug.xcconfig"; sourceTree = "<group>"; };
 		FDF6AE9FC33DC0DB07FA191E /* Pods-routineTimer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-routineTimer.release.xcconfig"; path = "Target Support Files/Pods-routineTimer/Pods-routineTimer.release.xcconfig"; sourceTree = "<group>"; };
@@ -105,9 +111,9 @@
 		98313EBF27D59CD50023E69C /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				9847C33627C7CAEF004C5BDE /* FirstViewController.swift */,
-				98BA191A27CA214E0045E0C0 /* SecondViewController.swift */,
-				98BA192027CB58260045E0C0 /* ThirdViewController.swift */,
+				9847C33627C7CAEF004C5BDE /* RoutineViewController.swift */,
+				98BA191A27CA214E0045E0C0 /* TaskViewController.swift */,
+				98BA192027CB58260045E0C0 /* TimerViewController.swift */,
 				9864154827EC75C0007BF090 /* DetailViewController.swift */,
 				986E4F462801EDD7009C01BE /* RoutineTableViewCell.swift */,
 				986E4FB42803F2E7009C01BE /* TaskTableViewCell.swift */,
@@ -145,6 +151,9 @@
 				986E4F4A2801F3B2009C01BE /* ShadowView.swift */,
 				98313EBD27D59C9D0023E69C /* View */,
 				9847C33B27C7CAF0004C5BDE /* Assets.xcassets */,
+				9896A7CA280A79180006F1CC /* トゥルルーン.mp3 */,
+				9896A7CB280A79180006F1CC /* ポーン.mp3 */,
+				9896A7C9280A79180006F1CC /* ポカッ.mp3 */,
 				9847C33D27C7CAF0004C5BDE /* LaunchScreen.storyboard */,
 				9847C34027C7CAF0004C5BDE /* Info.plist */,
 			);
@@ -211,7 +220,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9896A7CD280A79180006F1CC /* トゥルルーン.mp3 in Resources */,
 				9847C33F27C7CAF0004C5BDE /* LaunchScreen.storyboard in Resources */,
+				9896A7CE280A79180006F1CC /* ポーン.mp3 in Resources */,
+				9896A7CC280A79180006F1CC /* ポカッ.mp3 in Resources */,
 				9847C33C27C7CAF0004C5BDE /* Assets.xcassets in Resources */,
 				9847C33A27C7CAEF004C5BDE /* Main.storyboard in Resources */,
 				986E4F492801EDD7009C01BE /* RoutineTableViewCell.xib in Resources */,
@@ -269,13 +281,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				986E4FB62803F2E7009C01BE /* TaskTableViewCell.swift in Sources */,
-				9847C33727C7CAEF004C5BDE /* FirstViewController.swift in Sources */,
+				9847C33727C7CAEF004C5BDE /* RoutineViewController.swift in Sources */,
 				9847C33327C7CAEF004C5BDE /* AppDelegate.swift in Sources */,
 				985DF91427E8B57C0081DC4A /* MyButton.swift in Sources */,
-				98BA191B27CA214E0045E0C0 /* SecondViewController.swift in Sources */,
+				98BA191B27CA214E0045E0C0 /* TaskViewController.swift in Sources */,
 				98BA192327CC55860045E0C0 /* Extensions.swift in Sources */,
 				986E4F482801EDD7009C01BE /* RoutineTableViewCell.swift in Sources */,
-				98BA192127CB58260045E0C0 /* ThirdViewController.swift in Sources */,
+				98BA192127CB58260045E0C0 /* TimerViewController.swift in Sources */,
 				98313EC527D5AAB30023E69C /* DateModel.swift in Sources */,
 				986E4F4B2801F3B2009C01BE /* ShadowView.swift in Sources */,
 				98313EC127D5A9130023E69C /* RoutinesModel.swift in Sources */,

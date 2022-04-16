@@ -9,10 +9,10 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--First View Controller-->
+        <!--Routine View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="FirstViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BYZ-38-t0r" customClass="RoutineViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -98,10 +98,10 @@
             </objects>
             <point key="canvasLocation" x="1015.9420289855074" y="137.94642857142856"/>
         </scene>
-        <!--Second View Controller-->
+        <!--Task View Controller-->
         <scene sceneID="qux-PI-eJv">
             <objects>
-                <viewController storyboardIdentifier="Second" id="evd-mc-JpS" customClass="SecondViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Second" id="evd-mc-JpS" customClass="TaskViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="1dr-jH-Kvl">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -204,10 +204,10 @@
             </objects>
             <point key="canvasLocation" x="1782.608695652174" y="137.94642857142856"/>
         </scene>
-        <!--Third View Controller-->
+        <!--Timer View Controller-->
         <scene sceneID="NlO-ft-eog">
             <objects>
-                <viewController storyboardIdentifier="thirdVC" id="Xp2-FX-xsx" customClass="ThirdViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="thirdVC" id="Xp2-FX-xsx" customClass="TimerViewController" customModule="routineTimer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="F2S-4T-Uso">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -258,35 +258,35 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="AeN-q9-pLj">
-                                <rect key="frame" x="30" y="64" width="354" height="50"/>
+                                <rect key="frame" x="30" y="64" width="354" height="40"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="naD-7n-pns">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="40" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="8jJ-cC-Vjo"/>
-                                            <constraint firstAttribute="width" constant="50" id="iMp-EL-VNl"/>
+                                            <constraint firstAttribute="height" constant="40" id="8jJ-cC-Vjo"/>
+                                            <constraint firstAttribute="width" constant="40" id="iMp-EL-VNl"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="逆むき"/>
+                                        <state key="normal" image="back"/>
                                         <connections>
                                             <action selector="backButton:" destination="Xp2-FX-xsx" eventType="touchUpInside" id="643-Pg-gUv"/>
                                             <action selector="backButton:" destination="YAy-KZ-JDa" eventType="touchUpInside" id="QqG-P4-fIU"/>
                                         </connections>
                                     </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="taskTitle" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="v38-AF-uSD">
-                                        <rect key="frame" x="70" y="0.0" width="214" height="50"/>
+                                        <rect key="frame" x="60" y="0.0" width="234" height="40"/>
                                         <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="32"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Sp5-ze-5rb">
-                                        <rect key="frame" x="304" y="0.0" width="50" height="50"/>
+                                        <rect key="frame" x="314" y="0.0" width="40" height="40"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="50" id="ZRn-UT-BR0"/>
-                                            <constraint firstAttribute="width" constant="50" id="z3S-QX-sXp"/>
+                                            <constraint firstAttribute="height" constant="40" id="ZRn-UT-BR0"/>
+                                            <constraint firstAttribute="width" constant="40" id="z3S-QX-sXp"/>
                                         </constraints>
                                         <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                        <state key="normal" image="表むき"/>
+                                        <state key="normal" image="next"/>
                                         <connections>
                                             <action selector="nextButton:" destination="Xp2-FX-xsx" eventType="touchUpInside" id="zNt-FI-yKu"/>
                                         </connections>
@@ -464,8 +464,8 @@
     </scenes>
     <resources>
         <image name="add" width="1536" height="1536"/>
-        <image name="表むき" width="1000" height="1000"/>
-        <image name="逆むき" width="1007" height="960"/>
+        <image name="back" width="256" height="256"/>
+        <image name="next" width="256" height="256"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

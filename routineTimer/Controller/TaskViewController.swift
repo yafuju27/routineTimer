@@ -1,7 +1,7 @@
 import UIKit
 import RealmSwift
 
-class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     
     @IBOutlet weak var taskTableView: UITableView!
@@ -135,12 +135,9 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     
     @IBAction func startButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
-        let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! ThirdViewController
-        let taskTitleArray = Array(realm.objects(Task.self))
-        print("taskTitleArray", taskTitleArray)
-        thirdVC.taskArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
-        thirdVC.timerArray = [720, 60, 200, 220, 20, 600]
-        
+        let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! TimerViewController
+        thirdVC.titleArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
+        thirdVC.timeArray = [80, 60, 200, 220, 20, 600]
         self.navigationController?.pushViewController(thirdVC, animated: true)
     }
     
@@ -165,7 +162,7 @@ class SecondViewController: UIViewController, UIPickerViewDelegate, UIPickerView
     }
 }
 
-extension SecondViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
+extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
     //セルの個数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)

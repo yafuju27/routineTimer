@@ -1,6 +1,7 @@
 import UIKit
+import AVFoundation
 
-class ThirdViewController: UIViewController {
+class TimerViewController: UIViewController {
     
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -15,29 +16,38 @@ class ThirdViewController: UIViewController {
     private var shapeLayerB = CAShapeLayer()
     private var pulsatingLayer: CAShapeLayer!
     private var timer = Timer()
+    private var statusTimer = Timer()
     //残り時間
     private var timeRemainingA:Float = 80
     private var timeRemainingB:Float = 300
     //スタート時点の残り時間
-    private let timeStartA:Int = 80
-    private let timeStartB:Int = 300
+    private var timeStartA:Int = 80
+    private var timeStartB:Int = 300
     var timerCounting: Bool = false
     
-    var taskArray = ["A"]
-    var timerArray = [80]
+    var titleArray = ["A"]
+    var timeArray = [80]
+    var arrayCount = 0
     var finishTime: Int = 0
+    
+    var player: AVAudioPlayer?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        print("taskArray", taskArray)
-        print("timerArray", timerArray)
+        
+        timeRemainingA = Float(timeArray[arrayCount])
+        timeStartA = timeArray[arrayCount]
+        timeRemainingB = Float(timeArray.reduce(0, +))
+        timeStartB = timeArray.reduce(0, +)
+        
+        makeTimerLabel()
     }
     
     private func setupView() {
         //タイトルの色
         taskTitle.textColor = .color4
-        taskTitle.text = "\(taskArray.first ?? "")"
+        taskTitle.text = "\(titleArray[arrayCount])"
         //ボタンの丸み
         startStopButton.layer.cornerRadius = 50
         minusButton.layer.cornerRadius = 25
@@ -57,7 +67,6 @@ class ThirdViewController: UIViewController {
         minusButton.setTitleColor(UIColor.rgb(r: 0, g: 173, b: 181), for: .normal)
         plusButton.setTitleColor(UIColor.rgb(r: 234, g: 84, b: 85), for: .normal)
         //残り時間表示ラベル
-        makeTimerLabel()
         timerLabel.textAlignment = .center
         timerLabel.font = .boldSystemFont(ofSize: view.frame.width / 8)
         timerLabel.textColor = .color4
@@ -69,11 +78,65 @@ class ThirdViewController: UIViewController {
         setupCircleLayers()
         view.addSubview(timerLabel)
         view.addSubview(endTimeLabel)
+        forNextBack()
+        
+        statusTimer = Timer.scheduledTimer(
+            timeInterval: 1,
+            target: self,
+            selector: #selector(self.forPlusMinus),
+            userInfo: nil,
+            repeats: true )
+    }
+    
+    @objc func forPlusMinus(_ sender: Timer) {
+        if (timeStartA-Int(timeRemainingA)) < 5 {
+            plusButton.isEnabled = false
+            print("プラスボタン無効")
+        } else if Int(timeRemainingA) < 5 {
+            minusButton.isEnabled = false
+            print("マイナスボタン無効")
+        } else {
+            minusButton.isEnabled = true
+            plusButton.isEnabled = true
+        }
+    }
+    
+    func alertSound() {
+        if let soundURL = Bundle.main.url(forResource: "ポーン", withExtension: "mp3") {
+            do {
+                player = try AVAudioPlayer(contentsOf: soundURL)
+                player?.play()
+            } catch {
+                print("ポーンのエラー")
+            }
+        }
+    }
+    
+    func buttonSound() {
+        if let soundURL = Bundle.main.url(forResource: "ポカッ", withExtension: "mp3") {
+            do {
+                player = try AVAudioPlayer(contentsOf: soundURL)
+                player?.play()
+            } catch {
+                print("ポカッのエラー")
+            }
+        }
+    }
+    
+    func forNextBack() {
+        if arrayCount == 0 {
+            backButton.isEnabled = false
+        } else if arrayCount == (titleArray.count)-1 {
+            nextButton.isEnabled = false
+        } else {
+            backButton.isEnabled = true
+            nextButton.isEnabled = true
+        }
     }
     
     func makeTimerLabel() {
-        let min = Int((timerArray.first ?? 0) / 60)
-        let sec = Int((timerArray.first ?? 0) % 60)
+        let min = Int(Int(timeRemainingA) / 60)
+        let sec = Int(Int(timeRemainingA) % 60)
         self.timerLabel.text = String(format: "%02d：%02d", min, sec)
     }
     
@@ -148,10 +211,24 @@ class ThirdViewController: UIViewController {
     }
     
     @IBAction func backButton(_ sender: Any) {
+        arrayCount -= 1
+        taskTitle.text = "\(titleArray[arrayCount])"
+        timeRemainingA = Float(timeArray[arrayCount])
+        timeStartA = timeArray[arrayCount]
+        makeTimerLabel()
+        forNextBack()
+        alertSound()
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
     @IBAction func nextButton(_ sender: Any) {
+        arrayCount += 1
+        taskTitle.text = "\(titleArray[arrayCount])"
+        timeRemainingA = Float(timeArray[arrayCount])
+        timeStartA = timeArray[arrayCount]
+        makeTimerLabel()
+        forNextBack()
+        alertSound()
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
@@ -162,24 +239,35 @@ class ThirdViewController: UIViewController {
             startStopButton.setTitle("START", for: .normal)
             startStopButton.backgroundColor = .color3
             //STOPボタンの役割
+            buttonSound()
             timer.invalidate()
         } else {
             timerCounting = true
-            //水面アニメーション
-            //            let pulse = PulsingAnimation(numberOfPulses: 1, radius: 100, position: startStopButton.center)
-            //            pulse.animationDuration = 1.0
-            //            pulse.backgroundColor = CGColor.init(red: 0, green: 173, blue: 181, alpha: 20)
-            //            self.view.layer.insertSublayer(pulse, below: self.view.layer)
             startStopButton.setTitle("STOP", for: .normal)
             startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
             //STARTボタンの役割
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.1,
                                          target: self,
-                                         selector: #selector(ThirdViewController.timerClass),
+                                         selector: #selector(TimerViewController.timerClass),
                                          userInfo: nil,
                                          repeats: true)
+            alertSound()
             animateCircle()
+        }
+        
+        // アプリ初期化時等
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback,
+                                                            options: [AVAudioSession.CategoryOptions.duckOthers])
+        } catch _ {
+            NSLog("audio session set category failure")
+        }
+        // 音声、動画再生時
+        do {
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch _ {
+            NSLog("audio session active failure")
         }
         //ボタンの振動
         Feedbacker.impact(style: .medium)
@@ -193,7 +281,8 @@ class ThirdViewController: UIViewController {
         animateCircle()
         //ボタンの振動
         Feedbacker.impact(style: .medium)
-        
+        buttonSound()
+        //animateCircle()
     }
     @IBAction func plusButton(_ sender: Any) {
         timeRemainingA += 5
@@ -203,6 +292,8 @@ class ThirdViewController: UIViewController {
         animateCircle()
         //ボタンの振動
         Feedbacker.impact(style: .medium)
+        buttonSound()
+        //animateCircle()
     }
     
     @objc func timerClass() {
@@ -210,9 +301,16 @@ class ThirdViewController: UIViewController {
             timeRemainingA -= 0.1
             timeRemainingB -= 0.1
         } else {
-            timer.invalidate()
-            timeRemainingA = 80
-            timeRemainingB = 300
+//            timer.invalidate()
+//            timeRemainingA = 80
+//            timeRemainingB = 300
+            arrayCount += 1
+            taskTitle.text = "\(titleArray[arrayCount])"
+            timeRemainingA = Float(timeArray[arrayCount])
+            timeStartA = timeArray[arrayCount]
+            makeTimerLabel()
+            forNextBack()
+            alertSound()
         }
         let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
         let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
@@ -223,3 +321,4 @@ class ThirdViewController: UIViewController {
         print("割合は\(percentageA)")
     }
 }
+

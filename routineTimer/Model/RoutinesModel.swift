@@ -49,9 +49,11 @@ extension Routine {
     func createTask(taskTitle: String, taskTime: Int, routineID: String) {
         let realm = try! Realm()
         let target = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        let orderNumber:Int = target?.task.count ?? 0
         let task = Task(value: ["taskTitle": taskTitle, "taskTime": taskTime])
         task.taskTitle = taskTitle
         task.taskTime = taskTime
+        task.taskOrder = orderNumber
         try! realm.write {
             target?.task.append(task)
         }

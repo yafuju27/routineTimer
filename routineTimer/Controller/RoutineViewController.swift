@@ -1,7 +1,7 @@
 import UIKit
 import RealmSwift
 
-class FirstViewController: UIViewController, UITextFieldDelegate {
+class RoutineViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var routinesTableView: UITableView!
     @IBOutlet weak var addButton: UIButton!
     @IBOutlet weak var todayDateLabel: UILabel!
@@ -95,7 +95,7 @@ class FirstViewController: UIViewController, UITextFieldDelegate {
     }
 }
 
-extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
+extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UITableViewDragDelegate, UITableViewDropDelegate {
     //セルの個数
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let routineItems = self.realm.objects(Routine.self)
@@ -123,7 +123,7 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITab
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //画面遷移
-        let secondVC = self.storyboard?.instantiateViewController(withIdentifier: "Second") as! SecondViewController
+        let secondVC = self.storyboard?.instantiateViewController(withIdentifier: "Second") as! TaskViewController
         let routineItems = realm.objects(Routine.self)
         secondVC.routineID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(secondVC, animated: true)
@@ -166,11 +166,6 @@ extension FirstViewController: UITableViewDelegate, UITableViewDataSource, UITab
     }
     //セルの並び替え
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-//        try! realm.write {
-//            let listItem = list[sourceIndexPath.row]
-//            list.remove(at: sourceIndexPath.row)
-//            list.insert(listItem, at: destinationIndexPath.row)
-//        }
         
         try! realm.write {
                 let routineItems = self.realm.objects(Routine.self)
