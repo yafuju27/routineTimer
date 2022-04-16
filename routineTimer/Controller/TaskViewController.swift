@@ -137,7 +137,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         Feedbacker.impact(style: .medium)
         let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! TimerViewController
         thirdVC.titleArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
-        thirdVC.timeArray = [80, 60, 200, 220, 20, 600]
+        thirdVC.timeArray = [80, 60, 40, 90, 20, 120]
         self.navigationController?.pushViewController(thirdVC, animated: true)
     }
     

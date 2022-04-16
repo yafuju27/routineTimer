@@ -1,7 +1,7 @@
 import UIKit
 import AVFoundation
 
-class TimerViewController: UIViewController {
+class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
     
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -31,23 +31,27 @@ class TimerViewController: UIViewController {
     var finishTime: Int = 0
     
     var player: AVAudioPlayer?
+    let synthesizer = AVSpeechSynthesizer()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
         
+        taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
         timeStartA = timeArray[arrayCount]
         timeRemainingB = Float(timeArray.reduce(0, +))
         timeStartB = timeArray.reduce(0, +)
         
         makeTimerLabel()
+        
+        self.synthesizer.delegate = self
     }
     
     private func setupView() {
         //タイトルの色
         taskTitle.textColor = .color4
-        taskTitle.text = "\(titleArray[arrayCount])"
+        
         //ボタンの丸み
         startStopButton.layer.cornerRadius = 50
         minusButton.layer.cornerRadius = 25
@@ -121,6 +125,19 @@ class TimerViewController: UIViewController {
                 print("ポカッのエラー")
             }
         }
+    }
+    
+    func speechTitle() {
+        //しゃべる内容
+        let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(Int(Int(timeRemainingA) / 60))分\(Int(Int(timeRemainingA) % 60))秒です")
+        //言語
+        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        //スピード
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        //声の高さ
+        utterance.pitchMultiplier = 1.2
+        
+        synthesizer.speak(utterance)
     }
     
     func forNextBack() {
@@ -218,6 +235,7 @@ class TimerViewController: UIViewController {
         makeTimerLabel()
         forNextBack()
         alertSound()
+        speechTitle()
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
@@ -229,6 +247,7 @@ class TimerViewController: UIViewController {
         makeTimerLabel()
         forNextBack()
         alertSound()
+        speechTitle()
         //ボタンの振動
         Feedbacker.impact(style: .medium)
     }
@@ -305,12 +324,17 @@ class TimerViewController: UIViewController {
 //            timeRemainingA = 80
 //            timeRemainingB = 300
             arrayCount += 1
-            taskTitle.text = "\(titleArray[arrayCount])"
-            timeRemainingA = Float(timeArray[arrayCount])
-            timeStartA = timeArray[arrayCount]
-            makeTimerLabel()
-            forNextBack()
-            alertSound()
+            if arrayCount == titleArray.count {
+                //全てのタイマーが終了した時の処理
+                timer.invalidate()
+            } else {
+                taskTitle.text = "\(titleArray[arrayCount])"
+                timeRemainingA = Float(timeArray[arrayCount])
+                timeStartA = timeArray[arrayCount]
+                makeTimerLabel()
+                forNextBack()
+                alertSound()
+            }
         }
         let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
         let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
