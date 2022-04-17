@@ -45,6 +45,15 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
+    @IBAction func unwindSegue(for unwindSegue: UIStoryboardSegue, towards subsequentVC: UIViewController) {}
+    
     @IBAction func addButton(_ sender: Any) {
         var alertTextField: UITextField?
         let alert = UIAlertController(title: "新しいルーティーン",
@@ -122,10 +131,10 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //画面遷移
-        let secondVC = self.storyboard?.instantiateViewController(withIdentifier: "Second") as! TaskViewController
+        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
         let routineItems = realm.objects(Routine.self)
-        secondVC.routineID = routineItems[indexPath.row].routineID
-        self.navigationController?.pushViewController(secondVC, animated: true)
+        taskVC.routineID = routineItems[indexPath.row].routineID
+        self.navigationController?.pushViewController(taskVC, animated: true)
         
         Feedbacker.impact(style: .medium)
     }

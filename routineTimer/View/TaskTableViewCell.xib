@@ -74,7 +74,7 @@
                 <outlet property="taskName" destination="xHb-Bv-ohG" id="OgE-SB-csM"/>
                 <outlet property="taskTime" destination="HvO-Za-HNa" id="Ge2-qP-KYP"/>
             </connections>
-            <point key="canvasLocation" x="-36" y="-14"/>
+            <point key="canvasLocation" x="-36.231884057971016" y="-14.397321428571427"/>
         </tableViewCell>
     </objects>
     <resources>

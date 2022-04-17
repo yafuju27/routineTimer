@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
  
- 
 struct Feedbacker {
  
   static func notice(type: UINotificationFeedbackGenerator.FeedbackType) {
@@ -36,9 +35,6 @@ struct Feedbacker {
   }
  
 }
-
-
-
 //使い方(ボタンの記述にこの１行追加するだけ)
  
 // notice

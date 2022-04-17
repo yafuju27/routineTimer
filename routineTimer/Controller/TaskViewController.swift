@@ -55,6 +55,14 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         print("🟦遷移後のselectedID:\(routineID)")
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
@@ -81,7 +89,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         startButton.layer.shadowRadius = 12
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-        startButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
+        startButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
         
         saveButton.layer.cornerRadius = 12
         saveButton.backgroundColor = .color3
@@ -124,7 +132,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
         Feedbacker.impact(style: .medium)
-        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
+        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailView") as! DetailViewController
         taskVC.modalPresentationStyle = .overCurrentContext
         taskVC.modalTransitionStyle = .crossDissolve
         self.present(taskVC, animated: true)
@@ -135,10 +143,10 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     
     @IBAction func startButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
-        let thirdVC = self.storyboard?.instantiateViewController(withIdentifier: "thirdVC") as! TimerViewController
-        thirdVC.titleArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
-        thirdVC.timeArray = [80, 60, 40, 90, 20, 120]
-        self.navigationController?.pushViewController(thirdVC, animated: true)
+        let timerVC = self.storyboard?.instantiateViewController(withIdentifier: "TimerView") as! TimerViewController
+        timerVC.titleArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
+        timerVC.timeArray = [80, 60, 40, 90, 20, 120]
+        self.navigationController?.pushViewController(timerVC, animated: true)
     }
     
     //コンポーネントの個数
@@ -199,13 +207,13 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //画面遷移
-        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! DetailViewController
+        let detailVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailView") as! DetailViewController
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
-        taskVC.selectedRoutineID = routineID
-        taskVC.selectedTaskID = targetRoutine?.task[indexPath.row].taskID ?? ""
-        taskVC.modalPresentationStyle = .overCurrentContext
-        taskVC.modalTransitionStyle = .crossDissolve
-        self.present(taskVC, animated: true)
+        detailVC.selectedRoutineID = routineID
+        detailVC.selectedTaskID = targetRoutine?.task[indexPath.row].taskID ?? ""
+        detailVC.modalPresentationStyle = .overCurrentContext
+        detailVC.modalTransitionStyle = .crossDissolve
+        self.present(detailVC, animated: true)
     }
     //セルの編集許可
     func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool

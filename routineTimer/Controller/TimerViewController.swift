@@ -1,7 +1,7 @@
 import UIKit
 import AVFoundation
 
-class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
+class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
@@ -15,8 +15,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
     private var shapeLayerA = CAShapeLayer()
     private var shapeLayerB = CAShapeLayer()
     private var pulsatingLayer: CAShapeLayer!
-    private var timer = Timer()
-    private var statusTimer = Timer()
+    var timer = Timer()
     //残り時間
     private var timeRemainingA:Float = 80
     private var timeRemainingB:Float = 300
@@ -46,8 +45,19 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         makeTimerLabel()
         
         self.synthesizer.delegate = self
-        
+        navigationController?.delegate = self
         endTimeLabel.isHidden = true
+    }
+    
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+    }
+    
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
     }
     
     private func setupView() {
@@ -55,9 +65,9 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         taskTitle.textColor = .color4
         
         //ボタンの丸み
-        startStopButton.layer.cornerRadius = 50
-        minusButton.layer.cornerRadius = 25
-        plusButton.layer.cornerRadius = 25
+        startStopButton.layer.cornerRadius = 10
+        minusButton.layer.cornerRadius = 10
+        plusButton.layer.cornerRadius = 10
         //ボタンの背景色
         startStopButton.backgroundColor = .color3
         minusButton.backgroundColor = .color1
@@ -66,12 +76,12 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         self.minusButton.layer.borderWidth = 5.0    // 枠線の幅
         self.minusButton.layer.borderColor = UIColor.rgb(r: 0, g: 173, b: 181).cgColor    // 枠線の色
         self.plusButton.layer.borderWidth = 5.0    // 枠線の幅
-        self.plusButton.layer.borderColor = UIColor.rgb(r: 234, g: 84, b: 85).cgColor    // 枠線の色
+        self.plusButton.layer.borderColor = UIColor.rgb(r: 234, g: 130, b: 54).cgColor    // 枠線の色
         //背景の色
         view.backgroundColor = .color1
         //ボタンのテキストの色
         minusButton.setTitleColor(UIColor.rgb(r: 0, g: 173, b: 181), for: .normal)
-        plusButton.setTitleColor(UIColor.rgb(r: 234, g: 84, b: 85), for: .normal)
+        plusButton.setTitleColor(UIColor.rgb(r: 234, g: 130, b: 54), for: .normal)
         //残り時間表示ラベル
         timerLabel.textAlignment = .center
         timerLabel.font = .boldSystemFont(ofSize: view.frame.width / 8)
@@ -84,26 +94,29 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         setupCircleLayers()
         view.addSubview(timerLabel)
         view.addSubview(endTimeLabel)
-        forNextBack()
-        
-        statusTimer = Timer.scheduledTimer(
-            timeInterval: 1,
-            target: self,
-            selector: #selector(self.forPlusMinus),
-            userInfo: nil,
-            repeats: true )
     }
     
-    @objc func forPlusMinus(_ sender: Timer) {
-        if (timeStartA-Int(timeRemainingA)) < 5 {
+    func forPlusMinus() {
+        if (timeStartA-Int(timeRemainingA)) < 10 {
             plusButton.isEnabled = false
             print("プラスボタン無効")
-        } else if Int(timeRemainingA) < 5 {
+        } else if Int(timeRemainingA) < 10 {
             minusButton.isEnabled = false
             print("マイナスボタン無効")
         } else {
             minusButton.isEnabled = true
             plusButton.isEnabled = true
+        }
+    }
+    
+    func missSound() {
+        if let soundURL = Bundle.main.url(forResource: "カコ", withExtension: "mp3") {
+            do {
+                player = try AVAudioPlayer(contentsOf: soundURL)
+                player?.play()
+            } catch {
+                print("カコのエラー")
+            }
         }
     }
     
@@ -130,26 +143,52 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
     }
     
     func speechTitle() {
-        //しゃべる内容
-        let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(Int(Int(timeRemainingA) / 60))分\(Int(Int(timeRemainingA) % 60))秒です")
-        //言語
-        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-        //スピード
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-        //声の高さ
-        utterance.pitchMultiplier = 1.2
-        
-        synthesizer.speak(utterance)
+        let nowCount = arrayCount
+        //1秒後の処理
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+            synthesizer.stopSpeaking(at: .immediate)
+            if (timeArray[arrayCount] / 60) >= 1 && (timeArray[arrayCount] % 60) != 0 {
+                let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] / 60))ふん\(timeArray[arrayCount] % 60))秒です")
+                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+                utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+                utterance.pitchMultiplier = 1.2
+                if nowCount == arrayCount {
+                    self.synthesizer.speak(utterance)
+                } else {
+                    return
+                }
+            } else if (timeArray[arrayCount] / 60) < 1 && (timeArray[arrayCount] % 60) != 0 {
+                let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] % 60))秒です")
+                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+                utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+                utterance.pitchMultiplier = 1.2
+                if nowCount == arrayCount {
+                    self.synthesizer.speak(utterance)
+                } else {
+                    return
+                }
+            } else if (timeArray[arrayCount] / 60) >= 1 && (timeArray[arrayCount] % 60) == 0 {
+                let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] / 60))ふんです")
+                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+                utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+                utterance.pitchMultiplier = 1.2
+                if nowCount == arrayCount {
+                    self.synthesizer.speak(utterance)
+                } else {
+                    return
+                }
+            }
+        }
     }
     
-    func forNextBack() {
-        if arrayCount == 0 {
-            backButton.isEnabled = false
-        } else if arrayCount == (titleArray.count)-1 {
-            nextButton.isEnabled = false
-        } else {
-            backButton.isEnabled = true
-            nextButton.isEnabled = true
+    func speechFinish() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
+        //しゃべる内容
+        let utterance = AVSpeechUtterance(string: "お疲れ様でした")
+        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.pitchMultiplier = 1.2
+        synthesizer.speak(utterance)
         }
     }
     
@@ -164,7 +203,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 2.5, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
-        layer.lineWidth = 10
+        layer.lineWidth = 20
         layer.fillColor = fillColor.cgColor
         layer.lineCap = CAShapeLayerLineCap.round
         layer.position = view.center
@@ -173,7 +212,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
     
     private func createCircleShapeLayerB(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 15, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 20, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
         layer.lineWidth = 10
@@ -198,7 +237,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         shapeLayerA.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
         shapeLayerA.strokeEnd = 0
         
-        shapeLayerB = createCircleShapeLayerB(strokeColor: .systemOrange, fillColor: .clear)
+        shapeLayerB = createCircleShapeLayerB(strokeColor: UIColor.rgb(r: 234, g: 130, b: 54), fillColor: .clear)
         shapeLayerB.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
         shapeLayerB.strokeEnd = 0
         
@@ -227,42 +266,59 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         shapeLayerB.add(basicAnimation, forKey: "urSoBasic")
     }
     
-    @IBAction func backButton(_ sender: Any) {
-        arrayCount -= 1
-        taskTitle.text = "\(titleArray[arrayCount])"
-        timeRemainingA = Float(timeArray[arrayCount])
-        if arrayCount > 0 {
-            timeRemainingB = Float(timeArray.reduce(0, +))
-            for i in 0...arrayCount-1 {
-                timeRemainingB -= Float(timeArray[i])
-            }
-        }
-        timeStartA = timeArray[arrayCount]
-        makeTimerLabel()
-        forNextBack()
-        alertSound()
-        speechTitle()
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
-    }
     @IBAction func nextButton(_ sender: Any) {
-        arrayCount += 1
+        Feedbacker.impact(style: .medium)
+        synthesizer.stopSpeaking(at: .immediate)
+        if arrayCount != (titleArray.count)-1 {
+            arrayCount += 1
+        } else {
+            self.missSound()
+        }
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
         timeRemainingB = Float(timeArray.reduce(0, +))
         for i in 0...arrayCount-1 {
+            timeRemainingA = Float(timeArray[arrayCount])
             timeRemainingB -= Float(timeArray[i])
         }
         timeStartA = timeArray[arrayCount]
         makeTimerLabel()
-        forNextBack()
-        alertSound()
-        speechTitle()
-        //ボタンの振動
+        if timer.isValid == true {
+            alertSound()
+            speechTitle()
+        }
+    }
+    
+    @IBAction func backButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
+        synthesizer.stopSpeaking(at: .immediate)
+        if arrayCount > 0 {
+            arrayCount -= 1
+        } else {
+            self.missSound()
+        }
+        taskTitle.text = "\(titleArray[arrayCount])"
+        timeRemainingA = Float(timeArray[arrayCount])
+        timeRemainingB = Float(timeArray.reduce(0, +))
+        if arrayCount != 0 {
+            for i in 0...arrayCount-1 {
+                timeRemainingA = Float(timeArray[arrayCount])
+                timeRemainingB -= Float(timeArray[i])
+            }
+        } else if arrayCount == 0 {
+            timeRemainingA = Float(timeArray[arrayCount])
+            timeRemainingB = Float(timeArray.reduce(0, +))
+        }
+        timeStartA = timeArray[arrayCount]
+        makeTimerLabel()
+        if timer.isValid == true {
+            alertSound()
+            speechTitle()
+        }
     }
     
     @IBAction func startStopButton(_ sender: UIButton) {
+        Feedbacker.impact(style: .medium)
         if(timerCounting){
             timerCounting = false
             startStopButton.setTitle("START", for: .normal)
@@ -270,10 +326,11 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
             //STOPボタンの役割
             buttonSound()
             timer.invalidate()
+            synthesizer.stopSpeaking(at: .immediate)
         } else {
             timerCounting = true
             startStopButton.setTitle("STOP", for: .normal)
-            startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 84, b: 85)
+            startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
             //STARTボタンの役割
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.1,
@@ -282,9 +339,11 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
                                          userInfo: nil,
                                          repeats: true)
             alertSound()
+            if arrayCount == 0 && Int(timeRemainingA) == timeArray[0] {
+                speechTitle()
+            }
             animateCircle()
         }
-        
         // アプリ初期化時等
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback,
@@ -298,31 +357,45 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
         } catch _ {
             NSLog("audio session active failure")
         }
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
     }
     
     @IBAction func minusButton(_ sender: Any) {
-        timeRemainingA -= 5
-        timeRemainingB -= 5
-        //timerLabel.text = "残り \n\(Int(timeRemainingA))"
-        makeTimerLabel()
-        animateCircle()
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
-        buttonSound()
-        //animateCircle()
+        if Int(timeRemainingA) < 6 {
+            missSound()
+        } else {
+            minusButton.isEnabled = true
+            forPlusMinus()
+            Feedbacker.impact(style: .medium)
+            timeRemainingA -= 5
+            timeRemainingB -= 5
+            makeTimerLabel()
+            animateCircle()
+            buttonSound()
+            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
+            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
+            self.shapeLayerA.strokeEnd = percentageA
+            self.shapeLayerB.strokeEnd = percentageB
+            minusButton.isEnabled = true
+        }
     }
+    
     @IBAction func plusButton(_ sender: Any) {
-        timeRemainingA += 5
-        timeRemainingB += 5
-        //timerLabel.text = "残り \n\(Int(timeRemainingA))"
-        makeTimerLabel()
-        animateCircle()
-        //ボタンの振動
-        Feedbacker.impact(style: .medium)
-        buttonSound()
-        //animateCircle()
+        if (timeStartA-Int(timeRemainingA)) < 6 {
+            missSound()
+        } else {
+            plusButton.isEnabled = true
+            timeRemainingA += 5
+            timeRemainingB += 5
+            makeTimerLabel()
+            animateCircle()
+            Feedbacker.impact(style: .medium)
+            buttonSound()
+            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
+            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
+            self.shapeLayerA.strokeEnd = percentageA
+            self.shapeLayerB.strokeEnd = percentageB
+        }
+        
     }
     
     @objc func timerClass() {
@@ -330,23 +403,28 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate {
             timeRemainingA -= 0.1
             timeRemainingB -= 0.1
         } else {
-//            timer.invalidate()
-//            timeRemainingA = 80
-//            timeRemainingB = 300
             arrayCount += 1
             if arrayCount == titleArray.count {
                 //全てのタイマーが終了した時の処理
                 timer.invalidate()
+                speechFinish()
+                let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishView") as! FinishViewController
+                finishVC.modalPresentationStyle = .overCurrentContext
+                finishVC.modalTransitionStyle = .crossDissolve
+                self.present(finishVC, animated: true)
+                return
             } else {
+                //次のタスクに切り替わった時
                 taskTitle.text = "\(titleArray[arrayCount])"
                 timeRemainingA = Float(timeArray[arrayCount])
                 timeStartA = timeArray[arrayCount]
                 makeTimerLabel()
-                forNextBack()
+                synthesizer.stopSpeaking(at: .immediate)
                 alertSound()
                 speechTitle()
             }
         }
+        
         let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
         let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
         self.shapeLayerA.strokeEnd = percentageA

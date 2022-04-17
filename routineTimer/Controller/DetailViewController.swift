@@ -15,46 +15,26 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     private var timer:Timer = Timer()
     private var alertController: UIAlertController!
     let timeList = [[Int](0...60), [Int](0...60)]
-    var minCount:Int = 0
-    var secCount:Int = 0
     
     var selectedRoutineID = ""
     var selectedTaskID = ""
     let realm = try! Realm()
+    var targetTitle = ""
+    var targetTime = 0
+    var targetMin = 0
+    var targetSec = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        taskTextField.delegate = self
-        //ScondViewControllerの値を反映
-//        let target = realm.objects(Routine.self).filter("routineID == %@", selectedRoutineID).first
-//        let task = target?.task.filter("taskID == %@", selectedTaskID).first
-        let target = realm.object(ofType: Task.self, forPrimaryKey: selectedTaskID)
-        if let unwrappedTime = target?.taskTime {
-            //            taskTimeTextView.text = "\(String(describing: unwrappedTime))"
-            taskTimeTextView.text = "\(unwrappedTime)"
-        } else {
-            print("taskTimeはnil")
-        }
-        createPickerLabels()
-        createShape()
-        getTimeCount()
-        //画面がタップされたらキーボード閉じるための処理準備
-        let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        tapGR.cancelsTouchesInView = false
-        self.view.addGestureRecognizer(tapGR)
-        //キーボードが上下する処理
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
         
-        frontView.layer.cornerRadius = 15
-        frontView.layer.shadowOpacity = 0.2
-        frontView.layer.shadowRadius = 12
-        frontView.layer.shadowColor = UIColor.black.cgColor
-        frontView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        doneButton.backgroundColor = UIColor(red: 0/255, green: 173/255, blue: 181/255, alpha: 1)
-        doneButton.layer.cornerRadius = 8
-        cancelButton.layer.cornerRadius = 8
-        navigationItem.hidesBackButton = true
+        taskTextField.delegate = self
+        taskTimePickerView.dataSource = self
+        taskTimePickerView.delegate = self
+        
+        setStatus()
+        //createPickerLabels()
+        createShape()
+        forKeyBoard()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -81,10 +61,34 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
     }
     
-    private func getTimeCount() {
-        minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
-        secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
-        taskTimeTextView.text = " \(minCount) 分 \(secCount) 秒"
+    override var shouldAutorotate: Bool {
+        return false
+    }
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+    
+    func forKeyBoard() {
+        //画面がタップされたらキーボード閉じるための処理準備
+        let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tapGR.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tapGR)
+        //キーボードが上下する処理
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setStatus() {
+        //ScondViewControllerの値を反映
+        let targetTask = realm.object(ofType: Task.self, forPrimaryKey: selectedTaskID)
+        targetTitle = targetTask?.taskTitle ?? ""
+        targetTime = targetTask?.taskTime ?? 0
+        targetMin = targetTime / 60
+        targetSec = targetTime % 60
+        taskTextField.text = "\(targetTitle)"
+        taskTimePickerView.selectRow(targetMin, inComponent: 0, animated: true) // 初期値
+        taskTimePickerView.selectRow(targetSec, inComponent: 1, animated: true) // 初期値
+        taskTimeTextView.text = " \(targetMin) 分 \(targetSec) 秒"
     }
     
     private func createShape() {
@@ -94,6 +98,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         taskTextField.layer.masksToBounds = true
         taskTimeTextView.layer.cornerRadius = 5.0
         taskTimeTextView.layer.masksToBounds = true
+        
+        frontView.layer.cornerRadius = 15
+        frontView.layer.shadowOpacity = 0.2
+        frontView.layer.shadowRadius = 12
+        frontView.layer.shadowColor = UIColor.black.cgColor
+        frontView.layer.shadowOffset = CGSize(width: 1, height: 1)
+        doneButton.backgroundColor = UIColor(red: 0/255, green: 173/255, blue: 181/255, alpha: 1)
+        doneButton.layer.cornerRadius = 8
+        cancelButton.layer.cornerRadius = 8
+        navigationItem.hidesBackButton = true
     }
     
     private func alert(title:String, message:String) {
@@ -115,9 +129,9 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
                   message: "タスク名の欄に文字を入力してください")
         } else {
             let title = taskTextField.text ?? ""
-            minCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
-            secCount = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
-            let time = minCount*60 + secCount
+            targetMin = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
+            targetSec = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
+            let time = targetMin*60 + targetSec
             
             if selectedTaskID == "" {
                 routineModel.createTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID)
@@ -170,33 +184,36 @@ extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         pickerLabel.text = String(timeList[component][row])
         return pickerLabel
     }
+    
     //データ選択時
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        getTimeCount()
+        targetMin = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
+        targetSec = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
+        taskTimeTextView.text = " \(targetMin) 分 \(targetSec) 秒"
     }
     //サイズ
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         return taskTimePickerView.bounds.width * 1/3
     }
     
-    func createPickerLabels() {
-        //「分」のラベルを追加
-        var mStr = UILabel()
-        mStr.text = "分"
-        mStr.sizeToFit()
-        mStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width/3 - mStr.bounds.width/2,
-                                     y: taskTimePickerView.bounds.height/2 - (mStr.bounds.height/2),
-                                     width: mStr.bounds.width,
-                                     height: mStr.bounds.height))
-        taskTimePickerView.addSubview(mStr)
-        //「秒」のラベルを追加
-        var sStr = UILabel()
-        sStr.text = "秒"
-        sStr.sizeToFit()
-        sStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width*2/3 - sStr.bounds.width/2,
-                                     y: taskTimePickerView.bounds.height/2 - (sStr.bounds.height/2),
-                                     width: sStr.bounds.width,
-                                     height: sStr.bounds.height))
-        taskTimePickerView.addSubview(sStr)
-    }
+    //    func createPickerLabels() {
+    //        //「分」のラベルを追加
+    //        var mStr = UILabel()
+    //        mStr.text = "分"
+    //        mStr.sizeToFit()
+    //        mStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width/3 - mStr.bounds.width/2,
+    //                                     y: taskTimePickerView.bounds.height/2 - (mStr.bounds.height/2),
+    //                                     width: mStr.bounds.width,
+    //                                     height: mStr.bounds.height))
+    //        taskTimePickerView.addSubview(mStr)
+    //        //「秒」のラベルを追加
+    //        var sStr = UILabel()
+    //        sStr.text = "秒"
+    //        sStr.sizeToFit()
+    //        sStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width*2/3 - sStr.bounds.width/2,
+    //                                     y: taskTimePickerView.bounds.height/2 - (sStr.bounds.height/2),
+    //                                     width: sStr.bounds.width,
+    //                                     height: sStr.bounds.height))
+    //        taskTimePickerView.addSubview(sStr)
+    //    }
 }
