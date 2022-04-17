@@ -15,7 +15,6 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
     private var navHeight: CGFloat!
     
     let realm = try! Realm()
-    //var list: List<Routine>!
     
     private let routineModel = Routine()
     private let dateModel = DateModel()
@@ -144,10 +143,12 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
                 let item = routineItems[indexPath.row]
                 let nextOrder:Int = item.routineOrder + 1
                 let lastOrder:Int = routineItems.count - 1
-                for index in nextOrder...lastOrder {
-                    let object = routineItems[index]
-                    object.routineOrder -= 1
-                    print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
+                if (lastOrder == 0) || (nextOrder == routineItems.count) {
+                    } else {
+                        for index in nextOrder...lastOrder {
+                            let object = routineItems[index]
+                            object.routineOrder -= 1
+                    }
                 }
                 self.realm.delete(item)
             }
@@ -165,10 +166,12 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
                 let item = routineItems[indexPath.row]
                 let nextOrder:Int = item.routineOrder + 1
                 let lastOrder:Int = routineItems.count - 1
-                for index in nextOrder...lastOrder {
-                    let object = routineItems[index]
-                    object.routineOrder -= 1
-                    print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
+                if (lastOrder == 0) || (nextOrder == routineItems.count) {
+                    } else {
+                        for index in nextOrder...lastOrder {
+                            let object = routineItems[index]
+                            object.routineOrder -= 1
+                    }
                 }
                 self.realm.delete(item)
             }
@@ -184,7 +187,6 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         
         try! realm.write {
-            //let routineItems = self.realm.objects(Routine.self)
             let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
             let sourceObject = routineItems[sourceIndexPath.row]
             let destinationObject = routineItems[destinationIndexPath.row]
