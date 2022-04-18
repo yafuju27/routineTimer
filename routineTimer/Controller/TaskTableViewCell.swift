@@ -5,6 +5,8 @@ class TaskTableViewCell: UITableViewCell {
     @IBOutlet weak var taskTime: UILabel!
     @IBOutlet weak var statusButton: UIButton!
     @IBOutlet weak var backView: UIView!
+    @IBOutlet weak var chain1: UIImageView!
+    @IBOutlet weak var chain2: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()

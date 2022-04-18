@@ -45,6 +45,14 @@
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chain1" translatesAutoresizingMaskIntoConstraints="NO" id="aU9-83-Dah">
+                                <rect key="frame" x="15" y="-3" width="17" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="chain2" translatesAutoresizingMaskIntoConstraints="NO" id="RTO-2w-qqA">
+                                <rect key="frame" x="15" y="34" width="17" height="17"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
@@ -70,6 +78,8 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <connections>
                 <outlet property="backView" destination="dHe-qv-KkU" id="yfB-HM-4LQ"/>
+                <outlet property="chain1" destination="aU9-83-Dah" id="eU6-rq-1OV"/>
+                <outlet property="chain2" destination="RTO-2w-qqA" id="2MI-JG-uMj"/>
                 <outlet property="statusButton" destination="bje-c3-OGL" id="LRy-sn-eKX"/>
                 <outlet property="taskName" destination="xHb-Bv-ohG" id="OgE-SB-csM"/>
                 <outlet property="taskTime" destination="HvO-Za-HNa" id="Ge2-qP-KYP"/>
@@ -78,6 +88,8 @@
         </tableViewCell>
     </objects>
     <resources>
+        <image name="chain1" width="1536" height="1536"/>
+        <image name="chain2" width="1536" height="1536"/>
         <image name="circle" width="1536" height="1536"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

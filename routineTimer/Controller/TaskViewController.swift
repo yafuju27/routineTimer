@@ -30,7 +30,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     var allTimeCount = 0
     let realm = try! Realm()
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
@@ -180,8 +179,9 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "taskCell", for: indexPath) as! TaskTableViewCell
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
-        cell.taskName.text = targetRoutine?.task[indexPath.row].taskTitle
-        if let unwrappedTime = targetRoutine?.task[indexPath.row].taskTime {
+        let targetTask = targetRoutine?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+        cell.taskName.text = targetTask?[indexPath.row].taskTitle
+        if let unwrappedTime = targetTask?[indexPath.row].taskTime {
             cell.taskTime.text = "\(Int(unwrappedTime/60))分\(Int(unwrappedTime%60))秒"
         } else {
             print("taskTimeはnil")
@@ -198,11 +198,21 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         cell.backView.layer.cornerRadius = viewWidth / 18
         cell.backgroundColor = .clear
         cell.layer.masksToBounds = false
+        //チェーンデザイン
+        if indexPath.row == 0 && targetTask?.count != 1 {
+            cell.chain1.isHidden = true
+        } else if indexPath.row == Int(targetTask?.count ?? 0) - 1 {
+            cell.chain2.isHidden = true
+        } else if indexPath.row == 0 && targetTask?.count != 1 {
+            cell.chain1.isHidden = true
+            cell.chain2.isHidden = true
+        }
         return cell
     }
+    
     //セルの高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return viewWidth*0.13
+        return viewWidth*0.12
     }
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -225,22 +235,22 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
-                let taskItems = self.realm.objects(Task.self).sorted(byKeyPath: "taskOrder", ascending: true)
-                let item = taskItems[indexPath.row]
-                let nextOrder:Int = item.taskOrder + 1
-                let lastOrder:Int = taskItems.count - 1
-                if (lastOrder == 0) || (nextOrder == taskItems.count) {
+                let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+                let item = taskItems?[indexPath.row]
+                let nextOrder:Int = (item?.taskOrder ?? 0) + 1
+                let lastOrder:Int = (taskItems?.count ?? 0) - 1
+                if (lastOrder == 0) || (nextOrder == taskItems?.count) {
                     } else {
                         for index in nextOrder...lastOrder {
-                            let object = taskItems[index]
-                            object.taskOrder -= 1
+                            let object = taskItems?[index]
+                            object?.taskOrder -= 1
                     }
                 }
-                self.realm.delete(item)
+                self.realm.delete(item!)
             }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
             updateTotalTimeLabel()
-            
+            tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
         
@@ -251,21 +261,22 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
-                let taskItems = self.realm.objects(Task.self).sorted(byKeyPath: "taskOrder", ascending: true)
-                let item = taskItems[indexPath.row]
-                let nextOrder:Int = item.taskOrder + 1
-                let lastOrder:Int = taskItems.count - 1
-                if (lastOrder == 0) || (nextOrder == taskItems.count) {
+                let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+                let item = taskItems?[indexPath.row]
+                let nextOrder:Int = (item?.taskOrder ?? 0) + 1
+                let lastOrder:Int = (taskItems?.count ?? 0) - 1
+                if (lastOrder == 0) || (nextOrder == taskItems?.count) {
                     } else {
                         for index in nextOrder...lastOrder {
-                            let object = taskItems[index]
-                            object.taskOrder -= 1
+                            let object = taskItems?[index]
+                            object?.taskOrder -= 1
                     }
                 }
-                self.realm.delete(item)
+                self.realm.delete(item!)
             }
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             self.updateTotalTimeLabel()
+            tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         deleteAction.image = UIImage(named: "delete")
@@ -276,27 +287,28 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     //セルの並び替え
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         try! realm.write {
-            let taskItems = realm.objects(Task.self).sorted(byKeyPath: "taskOrder", ascending: true)
-            let sourceObject = taskItems[sourceIndexPath.row]
-            let destinationObject = taskItems[destinationIndexPath.row]
+            let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+            let sourceObject = taskItems?[sourceIndexPath.row]
+            let destinationObject = taskItems?[destinationIndexPath.row]
             
-            let destinationObjectOrder = destinationObject.taskOrder
+            let destinationObjectOrder = destinationObject?.taskOrder
             
             if sourceIndexPath.row < destinationIndexPath.row {
                 // 上から下に移動した場合、間の項目を上にシフト
                 for index in sourceIndexPath.row...destinationIndexPath.row {
-                    let object = taskItems[index]
-                    object.taskOrder -= 1
+                    let object = taskItems?[index]
+                    object?.taskOrder -= 1
                 }
             } else {
                 // 下から上に移動した場合、間の項目を下にシフト
                 for index in (destinationIndexPath.row..<sourceIndexPath.row).reversed() {
-                    let object = taskItems[index]
-                    object.taskOrder += 1
+                    let object = taskItems?[index]
+                    object?.taskOrder += 1
                 }
             }
             // 移動したセルの並びを移動先に更新
-            sourceObject.taskOrder = destinationObjectOrder
+            sourceObject?.taskOrder = destinationObjectOrder ?? 0
+            tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
     }
