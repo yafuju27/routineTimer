@@ -29,6 +29,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     var unwrappedAllTimeInt = 0
     var allTimeCount = 0
     let realm = try! Realm()
+    var taskTitleArray = [""]
+    var taskTimeArray = [0]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -43,6 +45,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "taskCell")
         taskTableView.separatorStyle = .none
         taskTableView.showsVerticalScrollIndicator = false
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -65,6 +68,17 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
+    }
+    
+    private func convertTaskArray() {
+//        let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+//        let taskNumber = taskItems?.count ?? 0
+//        taskTitleArray = [""]
+//        taskTimeArray = [0]
+//        for i in 0...taskNumber {
+//            taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
+//            taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
+//        }
     }
     
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -143,8 +157,16 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     @IBAction func startButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
         let timerVC = self.storyboard?.instantiateViewController(withIdentifier: "TimerView") as! TimerViewController
-        timerVC.titleArray = ["トイレに行く","ヘアセット","マウスウォッシュ","歯磨き","着替え","洗濯"]
-        timerVC.timeArray = [80, 60, 40, 90, 20, 120]
+        let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+        let taskNumber = (taskItems?.count ?? 0) - 1
+        taskTitleArray = []
+        taskTimeArray = []
+        for i in 0...taskNumber {
+            taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
+            taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
+        }
+        timerVC.titleArray = taskTitleArray
+        timerVC.timeArray = taskTimeArray
         self.navigationController?.pushViewController(timerVC, animated: true)
     }
     
@@ -235,7 +257,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
-                let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+                let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
                 let nextOrder:Int = (item?.taskOrder ?? 0) + 1
                 let lastOrder:Int = (taskItems?.count ?? 0) - 1
@@ -287,7 +309,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     //セルの並び替え
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         try! realm.write {
-            let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+            let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
             let sourceObject = taskItems?[sourceIndexPath.row]
             let destinationObject = taskItems?[destinationIndexPath.row]
             

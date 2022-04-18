@@ -65,9 +65,9 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         taskTitle.textColor = .color4
         
         //ボタンの丸み
-        startStopButton.layer.cornerRadius = 10
-        minusButton.layer.cornerRadius = 10
-        plusButton.layer.cornerRadius = 10
+        startStopButton.layer.cornerRadius = 15
+        minusButton.layer.cornerRadius = 15
+        plusButton.layer.cornerRadius = 15
         //ボタンの背景色
         startStopButton.backgroundColor = .color3
         minusButton.backgroundColor = .color1
@@ -272,7 +272,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         if arrayCount != (titleArray.count)-1 {
             arrayCount += 1
         } else {
-            self.missSound()
+            missSound()
         }
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
