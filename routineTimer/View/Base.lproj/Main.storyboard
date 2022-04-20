@@ -48,10 +48,10 @@
                                 </prototypes>
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cFe-h6-EcW">
-                                <rect key="frame" x="314" y="682" width="80" height="80"/>
+                                <rect key="frame" x="314" y="757" width="60" height="60"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="80" id="Q1P-uW-ZT0"/>
-                                    <constraint firstAttribute="width" constant="80" id="jSZ-wU-OqB"/>
+                                    <constraint firstAttribute="height" constant="60" id="Q1P-uW-ZT0"/>
+                                    <constraint firstAttribute="width" constant="60" id="jSZ-wU-OqB"/>
                                 </constraints>
                                 <color key="tintColor" red="0.0" green="0.56904578210000001" blue="0.57461684940000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -76,14 +76,14 @@
                             <constraint firstItem="p7z-i0-dGb" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="80Y-dB-ZCM"/>
                             <constraint firstItem="2Yy-TM-SEZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="E8m-kd-L2g"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="2Yy-TM-SEZ" secondAttribute="trailing" constant="70" id="Hem-9h-FjW"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cFe-h6-EcW" secondAttribute="trailing" constant="20" id="Lex-Fr-Usw"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="cFe-h6-EcW" secondAttribute="trailing" constant="40" id="Lex-Fr-Usw"/>
                             <constraint firstItem="HEl-NX-Ebw" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="OFX-KX-p55"/>
                             <constraint firstItem="p7z-i0-dGb" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" constant="45" id="Qff-kQ-UDU"/>
                             <constraint firstItem="2Yy-TM-SEZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="70" id="SaO-DX-zFQ"/>
                             <constraint firstItem="HEl-NX-Ebw" firstAttribute="top" secondItem="tRV-pq-0PN" secondAttribute="bottom" constant="20" id="Tx9-bK-Aq4"/>
                             <constraint firstItem="HEl-NX-Ebw" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="cu8-9A-vtE"/>
                             <constraint firstItem="HEl-NX-Ebw" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="gd2-MZ-UIn"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="cFe-h6-EcW" secondAttribute="bottom" constant="100" id="lIh-f4-WpK"/>
+                            <constraint firstAttribute="bottomMargin" secondItem="cFe-h6-EcW" secondAttribute="bottom" constant="45" id="lIh-f4-WpK"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2Fa-HR-dCX"/>
@@ -141,7 +141,14 @@
                                 </prototypes>
                             </tableView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ルーティーン名" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DA4-Bp-wf8">
-                                <rect key="frame" x="20" y="108" width="121.5" height="20.5"/>
+                                <rect key="frame" x="20" y="107" width="121.5" height="20.5"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                                <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="タスクリスト" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jcn-BM-Qd6">
+                                <rect key="frame" x="20" y="194" width="104" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
                                 <color key="textColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -169,19 +176,8 @@
                                 </subviews>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaC-2d-m7Y">
-                                <rect key="frame" x="147" y="806" width="120" height="45"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <color key="backgroundColor" red="1" green="0.49327188729999999" blue="0.47399842739999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
-                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                                <state key="normal" title="始める"/>
-                                <connections>
-                                    <action selector="startButton:" destination="BHP-zc-UBd" eventType="touchUpInside" id="mcJ-aZ-dJu"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" alpha="0.80000001192092896" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sbv-jJ-GO2">
-                                <rect key="frame" x="304" y="682" width="80" height="80"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sbv-jJ-GO2">
+                                <rect key="frame" x="334" y="717" width="60" height="60"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -190,18 +186,29 @@
                                     <action selector="addTaskButtonAction:" destination="BHP-zc-UBd" eventType="touchUpInside" id="cWj-cd-wnO"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="dHU-nK-McA">
-                                <rect key="frame" x="294" y="88" width="90" height="40"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jaC-2d-m7Y">
+                                <rect key="frame" x="172" y="775" width="70" height="70"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                                <state key="normal" title="始める" image="skip"/>
+                                <connections>
+                                    <action selector="startButton:" destination="BHP-zc-UBd" eventType="touchUpInside" id="mcJ-aZ-dJu"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="4Kn-n6-4uy">
+                                <rect key="frame" x="334" y="99" width="60" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.46202266219999999" green="0.83828371759999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="15"/>
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                 <state key="normal" title="保存">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
-                                    <action selector="saveButton:" destination="BHP-zc-UBd" eventType="touchUpInside" id="Tcc-w2-wC6"/>
+                                    <action selector="saveButton:" destination="BHP-zc-UBd" eventType="touchUpInside" id="tPW-95-6Cc"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -209,8 +216,9 @@
                         <color key="backgroundColor" systemColor="systemGray6Color"/>
                     </view>
                     <connections>
+                        <outlet property="addButton" destination="sbv-jJ-GO2" id="5uD-Hp-uZa"/>
                         <outlet property="allTimeLabel" destination="xsr-TB-gUA" id="Oao-pj-hOo"/>
-                        <outlet property="saveButton" destination="dHU-nK-McA" id="1Db-C0-j3N"/>
+                        <outlet property="saveButton" destination="4Kn-n6-4uy" id="MI0-xg-KlF"/>
                         <outlet property="startButton" destination="jaC-2d-m7Y" id="ayh-0u-1YK"/>
                         <outlet property="taskTableView" destination="n5n-Om-BbQ" id="nZg-Xi-nZm"/>
                         <outlet property="titleBackView" destination="eUy-WQ-kzy" id="aPq-1L-tcW"/>
@@ -219,7 +227,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="J5Q-xE-aqx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1791" y="138"/>
+            <point key="canvasLocation" x="1789.8550724637682" y="137.94642857142856"/>
         </scene>
         <!--Timer View Controller-->
         <scene sceneID="fuA-IS-EVQ">
@@ -539,6 +547,7 @@
         <image name="next" width="256" height="256"/>
         <image name="playTimer" width="1153" height="1182"/>
         <image name="plus5" width="1153" height="1182"/>
+        <image name="skip" width="512" height="512"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

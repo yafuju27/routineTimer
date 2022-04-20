@@ -36,6 +36,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         //createPickerLabels()
         createShape()
         forKeyBoard()
+        
+        //トップに戻るボタンを作成
+        let leftButton = UIBarButtonItem(title: "戻る", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.back))
+        let rightButton = UIBarButtonItem(title: "保存", style: UIBarButtonItem.Style.plain, target: self, action: #selector(self.back))
+        self.navigationItem.leftBarButtonItem = leftButton
+        self.navigationItem.rightBarButtonItem = rightButton
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -68,6 +74,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
+    
+    @objc func back() {
+        //トップに戻る
+        self.navigationController?.popToRootViewController(animated: true)
+        }
+    @objc func save() {
+        //保存する
+        self.navigationController?.popToRootViewController(animated: true)
+    }
+    
     
     func forKeyBoard() {
         //画面がタップされたらキーボード閉じるための処理準備
@@ -131,16 +147,19 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func doneButtonAction(_ sender: Any) {
-        print("🟦selectedRoutineID", selectedRoutineID)
+        let title = taskTextField.text ?? ""
+        targetMin = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
+        targetSec = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
+        let time = targetMin*60 + targetSec
+        
         if taskTextField.text == "" {
             alert(title: "タスク名がありません",
                   message: "タスク名の欄に文字を入力してください")
-        } else {
-            let title = taskTextField.text ?? ""
-            targetMin = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
-            targetSec = timeList[0][taskTimePickerView.selectedRow(inComponent: 1)]
-            let time = targetMin*60 + targetSec
-            
+        } else if time == 0 {
+            alert(title: "所要時間が０秒です",
+                  message: "所要時間を選択してください")
+        }
+        else {
             if selectedTaskID == "" {
                 routineModel.createTask(taskTitle: title, taskTime: time, routineID: selectedRoutineID)
             } else {

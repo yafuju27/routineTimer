@@ -10,6 +10,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var allTimeLabel: UILabel!
+    @IBOutlet weak var addButton: UIButton!
+    
     
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
@@ -45,8 +47,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "taskCell")
         taskTableView.separatorStyle = .none
         taskTableView.showsVerticalScrollIndicator = false
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -90,14 +90,14 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     }
     
     private func setupView() {
-        startButton.layer.cornerRadius = 12
+//        startButton.layer.cornerRadius = 12
         startButton.layer.shadowOpacity = 0.2
         startButton.layer.shadowRadius = 12
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-        startButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
+//        startButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
         
-        saveButton.layer.cornerRadius = 12
+        saveButton.layer.cornerRadius = 10
         saveButton.backgroundColor = .color3
         
         titleBackView.layer.cornerRadius = 15
@@ -111,11 +111,14 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         titleBackView.layer.borderWidth = 3.0
         titleBackView.layer.borderColor = UIColor.darkGray.cgColor
         
-        
         //画面がタップされたらキーボード閉じるための処理準備
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
+        
+        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        navigationItem.title = "\(targetRoutine?.routineTitle ?? "")"
+        self.navigationController?.navigationBar.barTintColor = .clear
     }
     
     private func updateTotalTimeLabel() {
@@ -221,21 +224,26 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         cell.backgroundColor = .clear
         cell.layer.masksToBounds = false
         //チェーンデザイン
-//        if indexPath.row == 0 && targetTask?.count != 1 {
-//            cell.chain1.isHidden = true
-//        } else if indexPath.row == Int(targetTask?.count ?? 0) - 1 {
-//            cell.chain2.isHidden = true
-//        } else if indexPath.row == 0 && targetTask?.count != 1 {
-//            cell.chain1.isHidden = true
-//            cell.chain2.isHidden = true
-//        }
+        if (indexPath.row == 0) && (targetTask?.count == 1) {
+            cell.chain1.isHidden = true
+            cell.chain2.isHidden = true
+        } else if (indexPath.row == 0) && (targetTask?.count != 1) {
+            cell.chain1.isHidden = true
+            cell.chain2.isHidden = false
+        } else if (indexPath.row != 0) && (targetTask?.count != 1) && (indexPath.row != Int(targetTask?.count ?? 0)-1) {
+            cell.chain1.isHidden = false
+            cell.chain2.isHidden = false
+        } else if (indexPath.row == Int(targetTask?.count ?? 0)-1) && (targetTask?.count != 1) {
+            cell.chain1.isHidden = false
+            cell.chain2.isHidden = true
+        }
         
         return cell
     }
     
     //セルの高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return viewWidth*0.12
+        return 50
     }
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -341,7 +349,6 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
             tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
-        updateTotalTimeLabel()
     }
     //ドラッグ
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {

@@ -115,7 +115,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
         let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
         cell.cellTitle!.text = "\(routineItems[indexPath.row].routineTitle)"
         cell.cellTime!.text = "合計\(routineItems[indexPath.row].totalTime/60)分\(routineItems[indexPath.row].totalTime%60)秒"
-        cell.mainBackground.layer.cornerRadius = 0.055*viewWidth
+        cell.mainBackground.layer.cornerRadius = 0.035*viewWidth
         cell.mainBackground.layer.masksToBounds = true
         if routineItems.count == 0 {
             message.isHidden = false
@@ -126,7 +126,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     }
     //セルの高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 100
     }
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
