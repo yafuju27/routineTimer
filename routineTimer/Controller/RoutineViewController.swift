@@ -132,7 +132,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //画面遷移
         let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
-        let routineItems = realm.objects(Routine.self)
+        let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
         taskVC.routineID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(taskVC, animated: true)
         
@@ -148,7 +148,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
-                let routineItems = self.realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
+                let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
                 let item = routineItems[indexPath.row]
                 let nextOrder:Int = item.routineOrder + 1
                 let lastOrder:Int = routineItems.count - 1
@@ -188,7 +188,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         deleteAction.image = UIImage(named: "delete")
-        deleteAction.backgroundColor = .white
+        deleteAction.backgroundColor = .systemRed
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
     }

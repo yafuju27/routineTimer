@@ -6,9 +6,10 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var taskTextField: UITextField!
     @IBOutlet weak var taskTimeTextView: UITextView!
     @IBOutlet weak var taskTimePickerView: UIPickerView!
-    @IBOutlet weak var cancelButton: UIButton!
-    @IBOutlet weak var frontView: UIView!
     @IBOutlet weak var doneButton: UIButton!
+    @IBOutlet weak var cancelButton: UIButton!
+    @IBOutlet weak var backViewButton: UIButton!
+    @IBOutlet weak var frontView: UIView!
     
     private let routineModel = Routine()
     
@@ -107,6 +108,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         doneButton.backgroundColor = UIColor(red: 0/255, green: 173/255, blue: 181/255, alpha: 1)
         doneButton.layer.cornerRadius = 8
         cancelButton.layer.cornerRadius = 8
+        backViewButton.titleLabel?.text = ""
         navigationItem.hidesBackButton = true
     }
     
@@ -119,9 +121,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
                                                 handler: nil))
         present(alertController, animated: true)
     }
+    
+    @IBAction func backViewButtonAction(_ sender: Any) {
+        dismiss(animated: true)
+    }
+    
     @IBAction func cancelButtonAction(_ sender: Any) {
         dismiss(animated: true)
     }
+    
     @IBAction func doneButtonAction(_ sender: Any) {
         print("🟦selectedRoutineID", selectedRoutineID)
         if taskTextField.text == "" {

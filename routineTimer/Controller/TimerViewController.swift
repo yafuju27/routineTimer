@@ -4,6 +4,7 @@ import AVFoundation
 class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavigationControllerDelegate {
     
     @IBOutlet weak var taskTitle: UILabel!
+    @IBOutlet weak var comingTaskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
     @IBOutlet weak var endTimeLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
@@ -16,6 +17,10 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     private var shapeLayerB = CAShapeLayer()
     private var pulsatingLayer: CAShapeLayer!
     var timer = Timer()
+    
+    let playIcon = UIImage(named: "playTimer")
+    let stopIcon = UIImage(named: "stopTimer")
+    let state = UIControl.State.normal
     //残り時間
     private var timeRemainingA:Float = 80
     private var timeRemainingB:Float = 300
@@ -37,6 +42,11 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         setupView()
         
         taskTitle.text = "\(titleArray[arrayCount])"
+        if arrayCount != (titleArray.count)-1 {
+            comingTaskTitle.text = "次のタスク：\(titleArray[arrayCount+1])"
+        } else {
+            comingTaskTitle.text = "これが最後のタスクです"
+        }
         timeRemainingA = Float(timeArray[arrayCount])
         timeRemainingB = Float(timeArray.reduce(0, +))
         timeStartA = timeArray[arrayCount]
@@ -63,20 +73,16 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     private func setupView() {
         //タイトルの色
         taskTitle.textColor = .color4
+        comingTaskTitle.textColor = .systemGray4
         
         //ボタンの丸み
-        startStopButton.layer.cornerRadius = 15
-        minusButton.layer.cornerRadius = 15
-        plusButton.layer.cornerRadius = 15
+        startStopButton.layer.cornerRadius = 40
+        minusButton.layer.cornerRadius = 25
+        plusButton.layer.cornerRadius = 25
         //ボタンの背景色
-        startStopButton.backgroundColor = .color3
-        minusButton.backgroundColor = .color1
-        plusButton.backgroundColor = .color1
-        //ボタンの枠線
-        self.minusButton.layer.borderWidth = 5.0    // 枠線の幅
-        self.minusButton.layer.borderColor = UIColor.rgb(r: 0, g: 173, b: 181).cgColor    // 枠線の色
-        self.plusButton.layer.borderWidth = 5.0    // 枠線の幅
-        self.plusButton.layer.borderColor = UIColor.rgb(r: 234, g: 130, b: 54).cgColor    // 枠線の色
+        startStopButton.backgroundColor = .clear
+        minusButton.backgroundColor = .clear
+        plusButton.backgroundColor = .clear
         //背景の色
         view.backgroundColor = .color1
         //ボタンのテキストの色
@@ -85,11 +91,12 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         //残り時間表示ラベル
         timerLabel.textAlignment = .center
         timerLabel.font = .boldSystemFont(ofSize: view.frame.width / 8)
+        timerLabel.font = UIFont(name:"Helvetica Light", size: view.frame.width / 8)
         timerLabel.textColor = .color4
         timerLabel.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         timerLabel.center = view.center
         
-        endTimeLabel.font = .boldSystemFont(ofSize: view.frame.width / 20)
+        endTimeLabel.font = .systemFont(ofSize: view.frame.width / 20)
         
         setupCircleLayers()
         view.addSubview(timerLabel)
@@ -203,7 +210,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 2.5, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
-        layer.lineWidth = 20
+        layer.lineWidth = 15
         layer.fillColor = fillColor.cgColor
         layer.lineCap = CAShapeLayerLineCap.round
         layer.position = view.center
@@ -212,10 +219,10 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     
     private func createCircleShapeLayerB(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
         let layer = CAShapeLayer()
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 20, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 13, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
         layer.path = circularPath.cgPath
         layer.strokeColor = strokeColor.cgColor
-        layer.lineWidth = 10
+        layer.lineWidth = 5
         layer.fillColor = fillColor.cgColor
         layer.lineCap = CAShapeLayerLineCap.round
         layer.position = view.center
@@ -271,6 +278,11 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         synthesizer.stopSpeaking(at: .immediate)
         if arrayCount != (titleArray.count)-1 {
             arrayCount += 1
+            if arrayCount != (titleArray.count)-1 {
+                comingTaskTitle.text = "次のタスク：\(titleArray[arrayCount+1])"
+            } else {
+                comingTaskTitle.text = "最後のタスクです"
+            }
         } else {
             missSound()
         }
@@ -309,6 +321,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             timeRemainingA = Float(timeArray[arrayCount])
             timeRemainingB = Float(timeArray.reduce(0, +))
         }
+        comingTaskTitle.text = "次のタスク：\(titleArray[arrayCount+1])"
         timeStartA = timeArray[arrayCount]
         makeTimerLabel()
         if timer.isValid == true {
@@ -321,16 +334,14 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         Feedbacker.impact(style: .medium)
         if(timerCounting){
             timerCounting = false
-            startStopButton.setTitle("START", for: .normal)
-            startStopButton.backgroundColor = .color3
+            startStopButton.setImage(playIcon, for: state)
             //STOPボタンの役割
             buttonSound()
             timer.invalidate()
             synthesizer.stopSpeaking(at: .immediate)
         } else {
             timerCounting = true
-            startStopButton.setTitle("STOP", for: .normal)
-            startStopButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
+            startStopButton.setImage(stopIcon, for: state)
             //STARTボタンの役割
             timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.1,
@@ -416,6 +427,11 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             } else {
                 //次のタスクに切り替わった時
                 taskTitle.text = "\(titleArray[arrayCount])"
+                if arrayCount != (titleArray.count)-1 {
+                    comingTaskTitle.text = "次のタスク：\(titleArray[arrayCount+1])"
+                } else {
+                    comingTaskTitle.text = "最後のタスクです"
+                }
                 timeRemainingA = Float(timeArray[arrayCount])
                 timeStartA = timeArray[arrayCount]
                 makeTimerLabel()

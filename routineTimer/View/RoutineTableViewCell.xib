@@ -5,7 +5,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -38,12 +37,12 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBlueColor"/>
+                        <color key="backgroundColor" red="0.30196078431372547" green="0.66666666666666663" blue="0.70196078431372544" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="ils-Ux-g49" secondAttribute="bottom" constant="10" id="GFg-Ze-GcN"/>
                             <constraint firstItem="C9W-Wa-A4R" firstAttribute="leading" secondItem="f8Q-Kp-Ftt" secondAttribute="leading" constant="25" id="ZHh-93-ya8"/>
+                            <constraint firstItem="C9W-Wa-A4R" firstAttribute="centerY" secondItem="f8Q-Kp-Ftt" secondAttribute="centerY" id="gmc-DI-CHO"/>
                             <constraint firstAttribute="trailing" secondItem="ils-Ux-g49" secondAttribute="trailing" constant="15" id="lts-Rh-IIf"/>
-                            <constraint firstItem="C9W-Wa-A4R" firstAttribute="centerY" secondItem="f8Q-Kp-Ftt" secondAttribute="centerY" id="tiY-jT-KcV"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -67,12 +66,7 @@
                 <outlet property="mainBackground" destination="bUQ-6X-9lq" id="ifv-Lb-ymm"/>
                 <outlet property="shadowLayer" destination="f8Q-Kp-Ftt" id="4PV-LR-uJP"/>
             </connections>
-            <point key="canvasLocation" x="-165" y="74"/>
+            <point key="canvasLocation" x="-165.21739130434784" y="72.991071428571431"/>
         </tableViewCell>
     </objects>
-    <resources>
-        <systemColor name="systemBlueColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
-    </resources>
 </document>

@@ -11,10 +11,6 @@
 		98313EC127D5A9130023E69C /* RoutinesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC027D5A9120023E69C /* RoutinesModel.swift */; };
 		98313EC527D5AAB30023E69C /* DateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC427D5AAB30023E69C /* DateModel.swift */; };
 		9839688E280BCA1D008C5D2A /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839688D280BCA1D008C5D2A /* FinishViewController.swift */; };
-		98396890280BEDC9008C5D2A /* TaskView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9839688F280BEDC9008C5D2A /* TaskView.storyboard */; };
-		98396892280BEDFF008C5D2A /* TimerView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98396891280BEDFF008C5D2A /* TimerView.storyboard */; };
-		98396894280BEE19008C5D2A /* DetailView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98396893280BEE19008C5D2A /* DetailView.storyboard */; };
-		98396896280BEE44008C5D2A /* FinishView.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 98396895280BEE44008C5D2A /* FinishView.storyboard */; };
 		98396898280C048D008C5D2A /* カコ.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 98396897280C048D008C5D2A /* カコ.mp3 */; };
 		9847C33327C7CAEF004C5BDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33227C7CAEF004C5BDE /* AppDelegate.swift */; };
 		9847C33527C7CAEF004C5BDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33427C7CAEF004C5BDE /* SceneDelegate.swift */; };
@@ -41,10 +37,6 @@
 		98313EC027D5A9120023E69C /* RoutinesModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutinesModel.swift; sourceTree = "<group>"; };
 		98313EC427D5AAB30023E69C /* DateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateModel.swift; sourceTree = "<group>"; };
 		9839688D280BCA1D008C5D2A /* FinishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishViewController.swift; sourceTree = "<group>"; };
-		9839688F280BEDC9008C5D2A /* TaskView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TaskView.storyboard; sourceTree = "<group>"; };
-		98396891280BEDFF008C5D2A /* TimerView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = TimerView.storyboard; sourceTree = "<group>"; };
-		98396893280BEE19008C5D2A /* DetailView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = DetailView.storyboard; sourceTree = "<group>"; };
-		98396895280BEE44008C5D2A /* FinishView.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = FinishView.storyboard; sourceTree = "<group>"; };
 		98396897280C048D008C5D2A /* カコ.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "カコ.mp3"; sourceTree = "<group>"; };
 		9847C32F27C7CAEF004C5BDE /* routineTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = routineTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9847C33227C7CAEF004C5BDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -112,10 +104,6 @@
 			isa = PBXGroup;
 			children = (
 				9847C33827C7CAEF004C5BDE /* Main.storyboard */,
-				9839688F280BEDC9008C5D2A /* TaskView.storyboard */,
-				98396891280BEDFF008C5D2A /* TimerView.storyboard */,
-				98396893280BEE19008C5D2A /* DetailView.storyboard */,
-				98396895280BEE44008C5D2A /* FinishView.storyboard */,
 				986E4F472801EDD7009C01BE /* RoutineTableViewCell.xib */,
 				986E4FB52803F2E7009C01BE /* TaskTableViewCell.xib */,
 			);
@@ -236,15 +224,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				98396898280C048D008C5D2A /* カコ.mp3 in Resources */,
-				98396896280BEE44008C5D2A /* FinishView.storyboard in Resources */,
-				98396892280BEDFF008C5D2A /* TimerView.storyboard in Resources */,
 				9847C33F27C7CAF0004C5BDE /* LaunchScreen.storyboard in Resources */,
 				9896A7CE280A79180006F1CC /* ポーン.mp3 in Resources */,
 				9896A7CC280A79180006F1CC /* ポカッ.mp3 in Resources */,
 				9847C33C27C7CAF0004C5BDE /* Assets.xcassets in Resources */,
-				98396894280BEE19008C5D2A /* DetailView.storyboard in Resources */,
 				9847C33A27C7CAEF004C5BDE /* Main.storyboard in Resources */,
-				98396890280BEDC9008C5D2A /* TaskView.storyboard in Resources */,
 				986E4F492801EDD7009C01BE /* RoutineTableViewCell.xib in Resources */,
 				986E4FB72803F2E7009C01BE /* TaskTableViewCell.xib in Resources */,
 			);

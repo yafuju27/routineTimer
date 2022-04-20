@@ -46,6 +46,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         taskTableView.separatorStyle = .none
         taskTableView.showsVerticalScrollIndicator = false
         
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,6 +58,8 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         print("🟦遷移後のselectedID:\(routineID)")
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
+    
+    
     
     override var shouldAutorotate: Bool {
         return false
@@ -70,16 +73,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         self.view.endEditing(true)
     }
     
-    private func convertTaskArray() {
-//        let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
-//        let taskNumber = taskItems?.count ?? 0
-//        taskTitleArray = [""]
-//        taskTimeArray = [0]
-//        for i in 0...taskNumber {
-//            taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
-//            taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
-//        }
-    }
     
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.titleTextField.resignFirstResponder()
@@ -129,6 +122,7 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
         unwrappedAllTimeInt = targetRoutine?.totalTime ?? 0
         allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
+        
     }
     
     @IBAction func saveButton(_ sender: Any) {
@@ -158,16 +152,22 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         Feedbacker.impact(style: .medium)
         let timerVC = self.storyboard?.instantiateViewController(withIdentifier: "TimerView") as! TimerViewController
         let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
-        let taskNumber = (taskItems?.count ?? 0) - 1
-        taskTitleArray = []
-        taskTimeArray = []
-        for i in 0...taskNumber {
-            taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
-            taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
+        if taskItems?.count != 0 {
+            let taskNumber = (taskItems?.count ?? 0) - 1
+            taskTitleArray = []
+            taskTimeArray = []
+            for i in 0...taskNumber {
+                taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
+                taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
+            }
+            timerVC.titleArray = taskTitleArray
+            timerVC.timeArray = taskTimeArray
+            self.navigationController?.pushViewController(timerVC, animated: true)
+        } else {
+            alert(title: "タスクがありません",
+                  message: "タスクを追加してください")
         }
-        timerVC.titleArray = taskTitleArray
-        timerVC.timeArray = taskTimeArray
-        self.navigationController?.pushViewController(timerVC, animated: true)
+        
     }
     
     //コンポーネントの個数
@@ -221,14 +221,15 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         cell.backgroundColor = .clear
         cell.layer.masksToBounds = false
         //チェーンデザイン
-        if indexPath.row == 0 && targetTask?.count != 1 {
-            cell.chain1.isHidden = true
-        } else if indexPath.row == Int(targetTask?.count ?? 0) - 1 {
-            cell.chain2.isHidden = true
-        } else if indexPath.row == 0 && targetTask?.count != 1 {
-            cell.chain1.isHidden = true
-            cell.chain2.isHidden = true
-        }
+//        if indexPath.row == 0 && targetTask?.count != 1 {
+//            cell.chain1.isHidden = true
+//        } else if indexPath.row == Int(targetTask?.count ?? 0) - 1 {
+//            cell.chain2.isHidden = true
+//        } else if indexPath.row == 0 && targetTask?.count != 1 {
+//            cell.chain1.isHidden = true
+//            cell.chain2.isHidden = true
+//        }
+        
         return cell
     }
     
@@ -240,9 +241,10 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //画面遷移
         let detailVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailView") as! DetailViewController
-        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        //let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
         detailVC.selectedRoutineID = routineID
-        detailVC.selectedTaskID = targetRoutine?.task[indexPath.row].taskID ?? ""
+        detailVC.selectedTaskID = taskItems?[indexPath.row].taskID ?? ""
         detailVC.modalPresentationStyle = .overCurrentContext
         detailVC.modalTransitionStyle = .crossDissolve
         self.present(detailVC, animated: true)
@@ -257,12 +259,15 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
+                let targetRoutine = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
                 let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
                 let nextOrder:Int = (item?.taskOrder ?? 0) + 1
                 let lastOrder:Int = (taskItems?.count ?? 0) - 1
                 if (lastOrder == 0) || (nextOrder == taskItems?.count) {
+                    targetRoutine?.totalTime -= item?.taskTime ?? 0
                     } else {
+                        targetRoutine?.totalTime -= item?.taskTime ?? 0
                         for index in nextOrder...lastOrder {
                             let object = taskItems?[index]
                             object?.taskOrder -= 1
@@ -275,7 +280,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
             tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
-        
+        updateTotalTimeLabel()
     }
     //deleteボタンのカスタマイズ
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
@@ -283,12 +288,15 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
+                let targetRoutine = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
                 let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
                 let nextOrder:Int = (item?.taskOrder ?? 0) + 1
                 let lastOrder:Int = (taskItems?.count ?? 0) - 1
                 if (lastOrder == 0) || (nextOrder == taskItems?.count) {
+                    targetRoutine?.totalTime -= item?.taskTime ?? 0
                     } else {
+                        targetRoutine?.totalTime -= item?.taskTime ?? 0
                         for index in nextOrder...lastOrder {
                             let object = taskItems?[index]
                             object?.taskOrder -= 1
@@ -302,7 +310,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
             print ("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
         deleteAction.image = UIImage(named: "delete")
-        deleteAction.backgroundColor = .systemGray6
+        deleteAction.backgroundColor = .systemRed
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         return configuration
     }
@@ -333,6 +341,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
             tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
+        updateTotalTimeLabel()
     }
     //ドラッグ
     func tableView(_ tableView: UITableView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {

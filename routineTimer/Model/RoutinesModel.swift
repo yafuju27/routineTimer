@@ -79,7 +79,6 @@ extension Routine {
                 totalValue += task.taskTime
             }
         }
-        //let totalValue:Int = realm.objects(Task.self).sum(ofProperty: "taskTime")
         try! realm.write {
             targetRoutine?.totalTime = totalValue
         }
