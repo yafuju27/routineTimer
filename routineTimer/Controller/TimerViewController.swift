@@ -6,7 +6,6 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var comingTaskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!
-    @IBOutlet weak var endTimeLabel: UILabel!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
     @IBOutlet weak var startStopButton: UIButton!
@@ -56,7 +55,6 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         
         self.synthesizer.delegate = self
         navigationController?.delegate = self
-        endTimeLabel.isHidden = true
         
         //タイトルの色
         taskTitle.textColor = .color4
@@ -83,11 +81,8 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         timerLabel.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         timerLabel.center = view.center
         
-        endTimeLabel.font = .systemFont(ofSize: view.frame.width / 20)
-        
         setupCircleLayers()
         view.addSubview(timerLabel)
-        view.addSubview(endTimeLabel)
     }
     
     private func setupCircleLayers() {

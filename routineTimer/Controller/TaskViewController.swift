@@ -6,7 +6,6 @@ class TaskViewController: UIViewController {
     @IBOutlet weak var taskTableView: UITableView!
     @IBOutlet weak var titleBackView: UIView!
     @IBOutlet weak var startButton: UIButton!
-    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var titleTextField: UITextField!
     @IBOutlet weak var allTimeLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
@@ -80,9 +79,6 @@ class TaskViewController: UIViewController {
         addButton.layer.shadowColor = UIColor.black.cgColor
         addButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         
-        saveButton.layer.cornerRadius = 10
-        saveButton.backgroundColor = .color3
-        
         titleBackView.layer.cornerRadius = 15
         
         titleTextField.setCustomeLine()
@@ -110,12 +106,13 @@ class TaskViewController: UIViewController {
         allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
     }
     
-    @IBAction func saveButton(_ sender: Any) {
-        Feedbacker.impact(style: .medium)
+    @IBAction func titleTextfieldChanged(_ sender: Any) {
         if titleTextField.text == "" {
             alert(title: "タイトルがありません", message: "タイトルの欄に文字を入力してください")
             return
         }
+        
+        
         
         let updateTitle = titleTextField.text ?? ""
         routineModel.updateRoutine(routineID: routineID, routineTitle: updateTitle)
@@ -181,17 +178,17 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         cell.layer.masksToBounds = false
         //チェーンデザイン
         if (indexPath.row == 0) && (targetTask?.count == 1) {
-            cell.chain1.isHidden = true
-            cell.chain2.isHidden = true
+            cell.chain1.alpha = 0.0
+            cell.chain2.alpha = 0.0
         } else if (indexPath.row == 0) && (targetTask?.count != 1) {
-            cell.chain1.isHidden = true
-            cell.chain2.isHidden = false
+            cell.chain1.alpha = 0.0
+            cell.chain2.alpha = 1.0
         } else if (indexPath.row != 0) && (targetTask?.count != 1) && (indexPath.row != Int(targetTask?.count ?? 0)-1) {
-            cell.chain1.isHidden = false
-            cell.chain2.isHidden = false
+            cell.chain1.alpha = 1.0
+            cell.chain2.alpha = 1.0
         } else if (indexPath.row == Int(targetTask?.count ?? 0)-1) && (targetTask?.count != 1) {
-            cell.chain1.isHidden = false
-            cell.chain2.isHidden = true
+            cell.chain1.alpha = 1.0
+            cell.chain2.alpha = 0.0
         }
         
         return cell
