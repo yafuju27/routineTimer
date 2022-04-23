@@ -159,7 +159,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     @objc func back() {
         //トップに戻る
         self.navigationController?.popToRootViewController(animated: true)
-        }
+    }
     
     @objc func save() {
         //保存する

@@ -218,7 +218,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     
     private func speechFinish() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-        readTitle(message: "お疲れ様でした")
+            readTitle(message: "お疲れ様でした")
         }
     }
     

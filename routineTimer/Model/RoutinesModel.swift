@@ -83,5 +83,45 @@ extension Routine {
             targetRoutine?.totalTime = totalValue
         }
     }
+    
+    func removeRoutine(indexPath: Int) {
+        let realm = try! Realm()
+        let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
+        
+        let item = routineItems[indexPath]
+        let nextOrder:Int = item.routineOrder + 1
+        let lastOrder:Int = routineItems.count - 1
+        if lastOrder == 0 || nextOrder == routineItems.count {
+        } else {
+            for index in nextOrder...lastOrder {
+                let object = routineItems[index]
+                object.routineOrder -= 1
+            }
+        }
+        try! realm.write {
+            realm.delete(item)
+        }
+    }
+    
+//    func removeTask(indexPath: Int) {
+//        let realm = try! Realm()
+//        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
+//        let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+//        let item = taskItems?[indexPath]
+//        let nextOrder = (item?.taskOrder ?? 0) + 1
+//        let lastOrder = (taskItems?.count ?? 0) - 1
+//        if lastOrder == 0 || nextOrder == taskItems?.count {
+//            targetRoutine?.totalTime -= item?.taskTime ?? 0
+//        } else {
+//            targetRoutine?.totalTime -= item?.taskTime ?? 0
+//            for index in nextOrder...lastOrder {
+//                let object = taskItems?[index]
+//                object?.taskOrder -= 1
+//            }
+//        }
+//        try! realm.write {
+//            realm.delete(item!)
+//        }
+//    }
 }
 

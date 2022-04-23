@@ -39,6 +39,7 @@ class TaskViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationController?.navigationBar.isHidden = false
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
         titleTextField.text = targetRoutine?.routineTitle
         updateTotalTimeLabel()
@@ -111,12 +112,8 @@ class TaskViewController: UIViewController {
             alert(title: "タイトルがありません", message: "タイトルの欄に文字を入力してください")
             return
         }
-        
-        
-        
         let updateTitle = titleTextField.text ?? ""
         routineModel.updateRoutine(routineID: routineID, routineTitle: updateTitle)
-        self.navigationController?.popViewController(animated: true)
     }
     
     @IBAction func addTaskButtonAction(_ sender: Any) {
