@@ -58,14 +58,6 @@ class TaskViewController: UIViewController {
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
-    override var shouldAutorotate: Bool {
-        return false
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.titleTextField.resignFirstResponder()
         return true

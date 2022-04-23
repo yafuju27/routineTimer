@@ -61,14 +61,6 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         super.didReceiveMemoryWarning()
     }
     
-    override var shouldAutorotate: Bool {
-        return false
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    
     private func setupView() {
         //タイトルの色
         taskTitle.textColor = .color4

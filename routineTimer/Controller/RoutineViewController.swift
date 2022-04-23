@@ -43,14 +43,6 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
         routinesTableView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
-    //端末を回転させない
-    override var shouldAutorotate: Bool {
-        return false
-    }
-    //画面の向き
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
     
     private func setupView() {
         todayDateLabel.text = dateModel.getTodayDate()

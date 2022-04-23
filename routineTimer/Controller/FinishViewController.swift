@@ -25,14 +25,6 @@ class FinishViewController: UIViewController {
         navigationItem.hidesBackButton = true
     }
     
-    override var shouldAutorotate: Bool {
-        return false
-    }
-    
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
-    }
-    
     @IBAction func returnButton(_ sender: Any) {
         self.view.window?.rootViewController?.dismiss(animated: true, completion: nil)
         self.presentingViewController?.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
