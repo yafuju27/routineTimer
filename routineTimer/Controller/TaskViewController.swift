@@ -176,20 +176,9 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         cell.backView.layer.cornerRadius = viewWidth / 18
         cell.backgroundColor = .clear
         cell.layer.masksToBounds = false
-        //チェーンデザイン
-        if (indexPath.row == 0) && (targetTask?.count == 1) {
-            cell.chain1.alpha = 0.0
-            cell.chain2.alpha = 0.0
-        } else if (indexPath.row == 0) && (targetTask?.count != 1) {
-            cell.chain1.alpha = 0.0
-            cell.chain2.alpha = 1.0
-        } else if (indexPath.row != 0) && (targetTask?.count != 1) && (indexPath.row != Int(targetTask?.count ?? 0)-1) {
-            cell.chain1.alpha = 1.0
-            cell.chain2.alpha = 1.0
-        } else if (indexPath.row == Int(targetTask?.count ?? 0)-1) && (targetTask?.count != 1) {
-            cell.chain1.alpha = 1.0
-            cell.chain2.alpha = 0.0
-        }
+        
+        cell.chain1.alpha = indexPath.row == 0 ? 0.0 : 1.0
+        cell.chain2.alpha = indexPath.row == Int(targetTask?.endIndex ?? 0)-1 ? 0.0 : 1.0
         
         return cell
     }
