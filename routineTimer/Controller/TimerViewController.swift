@@ -428,6 +428,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             if arrayCount == titleArray.count {
                 //全てのタイマーが終了した時の処理
                 timer.invalidate()
+                finishedSound()
                 speechFinish()
                 let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishView") as! FinishViewController
                 finishVC.modalPresentationStyle = .overCurrentContext

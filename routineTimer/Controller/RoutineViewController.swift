@@ -46,8 +46,7 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
     //端末を回転させない
     override var shouldAutorotate: Bool {
         return false
-
-}
+    }
     //画面の向き
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
@@ -154,10 +153,10 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
                 let nextOrder:Int = item.routineOrder + 1
                 let lastOrder:Int = routineItems.count - 1
                 if (lastOrder == 0) || (nextOrder == routineItems.count) {
-                    } else {
-                        for index in nextOrder...lastOrder {
-                            let object = routineItems[index]
-                            object.routineOrder -= 1
+                } else {
+                    for index in nextOrder...lastOrder {
+                        let object = routineItems[index]
+                        object.routineOrder -= 1
                     }
                 }
                 self.realm.delete(item)
@@ -177,16 +176,17 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
                 let nextOrder:Int = item.routineOrder + 1
                 let lastOrder:Int = routineItems.count - 1
                 if (lastOrder == 0) || (nextOrder == routineItems.count) {
-                    } else {
-                        for index in nextOrder...lastOrder {
-                            let object = routineItems[index]
-                            object.routineOrder -= 1
+                } else {
+                    for index in nextOrder...lastOrder {
+                        let object = routineItems[index]
+                        object.routineOrder -= 1
                     }
                 }
                 self.realm.delete(item)
             }
             tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
+            completionHandler(true)
         }
         deleteAction.image = UIImage(named: "delete")
         deleteAction.backgroundColor = .systemRed
