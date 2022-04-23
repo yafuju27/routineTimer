@@ -28,19 +28,21 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     var titleArray = ["A"]
     var timeArray = [80]
     //残り時間
-    private var timeRemainingA:Float = 80
-    private var timeRemainingB:Float = 300
+    private var timeRemainingA: Float = 80
+    private var timeRemainingB: Float = 300
     //スタート時点の残り時間
-    private var totalTimeA:Int = 80
-    private var totalTimeB:Int = 300
-    private var timerCounting: Bool = false
+    private var totalTimeA = 80
+    private var totalTimeB = 300
+    private var timerCounting = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
+    }
+    
+    private func setupView() {
         taskTitle.text = "\(titleArray[arrayCount])"
-        if arrayCount != (titleArray.count)-1 {
+        if arrayCount != titleArray.count-1 {
             comingTaskTitle.text = "次のタスク：\(titleArray[arrayCount+1])"
         } else {
             comingTaskTitle.text = "これが最後のタスクです"
@@ -55,13 +57,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         self.synthesizer.delegate = self
         navigationController?.delegate = self
         endTimeLabel.isHidden = true
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-    
-    private func setupView() {
+        
         //タイトルの色
         taskTitle.textColor = .color4
         comingTaskTitle.textColor = .systemGray4
@@ -152,7 +148,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         
         animation.toValue = 1.2
         animation.duration = 1.0
-        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animation.timingFunction = CAMediaTimingFunction(name: .easeOut)
         animation.autoreverses = true
         animation.repeatCount = Float.infinity
         
@@ -169,109 +165,65 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     }
     
     private func forPlusMinus() {
-        if (totalTimeA-Int(timeRemainingA)) < 10 {
-            plusButton.isEnabled = false
-            print("プラスボタン無効")
-        } else if Int(timeRemainingA) < 10 {
-            minusButton.isEnabled = false
-            print("マイナスボタン無効")
-        } else {
-            minusButton.isEnabled = true
-            plusButton.isEnabled = true
+        minusButton.isEnabled = !(totalTimeA-Int(timeRemainingA) < 10)
+        plusButton.isEnabled = !(Int(timeRemainingA) < 10)
+    }
+    
+    private func playSound(forResource: String) {
+        if let soundURL = Bundle.main.url(forResource: forResource, withExtension: "mp3") {
+            do {
+                player = try AVAudioPlayer(contentsOf: soundURL)
+                player?.play()
+            } catch {
+                print("\(forResource)のエラー")
+            }
         }
     }
     
     private func missSound() {
-        if let soundURL = Bundle.main.url(forResource: "カコ", withExtension: "mp3") {
-            do {
-                player = try AVAudioPlayer(contentsOf: soundURL)
-                player?.play()
-            } catch {
-                print("カコのエラー")
-            }
-        }
+        playSound(forResource: "カコ")
     }
     
     private func alertSound() {
-        if let soundURL = Bundle.main.url(forResource: "ポーン", withExtension: "mp3") {
-            do {
-                player = try AVAudioPlayer(contentsOf: soundURL)
-                player?.play()
-            } catch {
-                print("ポーンのエラー")
-            }
-        }
+        playSound(forResource: "ポーン")
     }
     
     private func buttonSound() {
-        if let soundURL = Bundle.main.url(forResource: "ポカッ", withExtension: "mp3") {
-            do {
-                player = try AVAudioPlayer(contentsOf: soundURL)
-                player?.play()
-            } catch {
-                print("ポカッのエラー")
-            }
-        }
+        playSound(forResource: "ポカッ")
     }
     
     private func finishedSound() {
-        if let soundURL = Bundle.main.url(forResource: "キラーん", withExtension: "mp3") {
-            do {
-                player = try AVAudioPlayer(contentsOf: soundURL)
-                player?.play()
-            } catch {
-                print("キラーんのエラー")
-            }
-        }
+        playSound(forResource: "キラーん")
     }
     
     private func speechTitle() {
-        let nowCount = arrayCount
         //1秒後の処理
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
             synthesizer.stopSpeaking(at: .immediate)
             if (timeArray[arrayCount] / 60) >= 1 && (timeArray[arrayCount] % 60) != 0 {
-                let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] / 60))ふん\(timeArray[arrayCount] % 60))秒です")
-                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-                utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-                utterance.pitchMultiplier = 1.2
-                if nowCount == arrayCount {
-                    self.synthesizer.speak(utterance)
-                } else {
-                    return
-                }
+                readTitle(message: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] / 60))ふん\(timeArray[arrayCount] % 60))秒です")
             } else if (timeArray[arrayCount] / 60) < 1 && (timeArray[arrayCount] % 60) != 0 {
-                let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] % 60))秒です")
-                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-                utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-                utterance.pitchMultiplier = 1.2
-                if nowCount == arrayCount {
-                    self.synthesizer.speak(utterance)
-                } else {
-                    return
-                }
+                readTitle(message: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] % 60))秒です")
             } else if (timeArray[arrayCount] / 60) >= 1 && (timeArray[arrayCount] % 60) == 0 {
-                let utterance = AVSpeechUtterance(string: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] / 60))ふんです")
-                utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-                utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-                utterance.pitchMultiplier = 1.2
-                if nowCount == arrayCount {
-                    self.synthesizer.speak(utterance)
-                } else {
-                    return
-                }
+                readTitle(message: "\(titleArray[arrayCount])を始めてください。。。\(timeArray[arrayCount] / 60))ふんです")
             }
+        }
+    }
+    
+    private func readTitle(message: String) {
+        let nowCount = arrayCount
+        let utterance = AVSpeechUtterance(string: message)
+        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
+        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
+        utterance.pitchMultiplier = 1.2
+        if nowCount == arrayCount {
+            self.synthesizer.speak(utterance)
         }
     }
     
     private func speechFinish() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
-        //しゃべる内容
-        let utterance = AVSpeechUtterance(string: "お疲れ様でした")
-        utterance.voice = AVSpeechSynthesisVoice(language: "ja-JP")
-        utterance.rate = AVSpeechUtteranceDefaultSpeechRate
-        utterance.pitchMultiplier = 1.2
-        synthesizer.speak(utterance)
+        readTitle(message: "お疲れ様でした")
         }
     }
     
@@ -334,18 +286,15 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     
     @IBAction func startStopButton(_ sender: UIButton) {
         Feedbacker.impact(style: .medium)
-        if(timerCounting){
-            timerCounting = false
+        timer.invalidate()
+        if timerCounting {
             startStopButton.setImage(playIcon, for: state)
             //STOPボタンの役割
             buttonSound()
-            timer.invalidate()
             synthesizer.stopSpeaking(at: .immediate)
         } else {
-            timerCounting = true
             startStopButton.setImage(stopIcon, for: state)
             //STARTボタンの役割
-            timer.invalidate()
             timer = Timer.scheduledTimer(timeInterval: 0.1,
                                          target: self,
                                          selector: #selector(TimerViewController.timerClass),
@@ -357,10 +306,10 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             }
             animateCircle()
         }
+        timerCounting.toggle()
         // アプリ初期化時等
         do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback,
-                                                            options: [AVAudioSession.CategoryOptions.duckOthers])
+            try AVAudioSession.sharedInstance().setCategory(.playback, options: [.duckOthers])
         } catch _ {
             NSLog("audio session set category failure")
         }
@@ -375,40 +324,36 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     @IBAction func minusButton(_ sender: Any) {
         if Int(timeRemainingA) < 6 {
             missSound()
-        } else {
-            minusButton.isEnabled = true
-            forPlusMinus()
-            Feedbacker.impact(style: .medium)
-            timeRemainingA -= 5
-            timeRemainingB -= 5
-            makeTimerLabel()
-            animateCircle()
-            buttonSound()
-            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
-            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
-            self.shapeLayerA.strokeEnd = percentageA
-            self.shapeLayerB.strokeEnd = percentageB
-            minusButton.isEnabled = true
+            return
         }
+        timerAdjuster(isPlus: false)
     }
     
     @IBAction func plusButton(_ sender: Any) {
-        if (totalTimeA-Int(timeRemainingA)) < 6 {
+        if totalTimeA-Int(timeRemainingA) < 6 {
             missSound()
-        } else {
-            plusButton.isEnabled = true
+            return
+        }
+        timerAdjuster(isPlus: true)
+    }
+    
+    private func timerAdjuster(isPlus: Bool) {
+        plusButton.isEnabled = true
+        if isPlus {
             timeRemainingA += 5
             timeRemainingB += 5
-            makeTimerLabel()
-            animateCircle()
-            Feedbacker.impact(style: .medium)
-            buttonSound()
-            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
-            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
-            self.shapeLayerA.strokeEnd = percentageA
-            self.shapeLayerB.strokeEnd = percentageB
+        } else {
+            timeRemainingA -= 5
+            timeRemainingB -= 5
         }
-        
+        makeTimerLabel()
+        animateCircle()
+        Feedbacker.impact(style: .medium)
+        buttonSound()
+        let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
+        let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
+        self.shapeLayerA.strokeEnd = percentageA
+        self.shapeLayerB.strokeEnd = percentageB
     }
     
     @objc func timerClass() {

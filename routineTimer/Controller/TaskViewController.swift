@@ -36,16 +36,6 @@ class TaskViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
-        taskTableView.delegate = self
-        taskTableView.dataSource = self
-        taskTableView.dragDelegate = self
-        taskTableView.dropDelegate = self
-        taskTableView.dragInteractionEnabled = true
-        
-        taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "taskCell")
-        taskTableView.separatorStyle = .none
-        taskTableView.showsVerticalScrollIndicator = false
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -64,16 +54,22 @@ class TaskViewController: UIViewController {
     }
     
     private func alert(title:String, message:String) {
-        alertController = UIAlertController(title: title,
-                                            message: message,
-                                            preferredStyle: .alert)
-        alertController.addAction(UIAlertAction(title: "OK",
-                                                style: .default,
-                                                handler: nil))
+        alertController = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         present(alertController, animated: true)
     }
     
     private func setupView() {
+        taskTableView.delegate = self
+        taskTableView.dataSource = self
+        taskTableView.dragDelegate = self
+        taskTableView.dropDelegate = self
+        taskTableView.dragInteractionEnabled = true
+        
+        taskTableView.register(UINib(nibName: "TaskTableViewCell", bundle: nil), forCellReuseIdentifier: "taskCell")
+        taskTableView.separatorStyle = .none
+        taskTableView.showsVerticalScrollIndicator = false
+        
         startButton.layer.shadowOpacity = 0.2
         startButton.layer.shadowRadius = 12
         startButton.layer.shadowColor = UIColor.black.cgColor
@@ -98,7 +94,7 @@ class TaskViewController: UIViewController {
         titleBackView.layer.borderWidth = 3.0
         titleBackView.layer.borderColor = UIColor.darkGray.cgColor
         
-        //画面がタップされたらキーボード閉じるための処理準備
+        // 画面がタップされたらキーボード閉じるための処理準備
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
         self.view.addGestureRecognizer(tapGR)
@@ -112,18 +108,17 @@ class TaskViewController: UIViewController {
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
         unwrappedAllTimeInt = targetRoutine?.totalTime ?? 0
         allTimeLabel.text = "合計\(Int(unwrappedAllTimeInt/60))分\(Int(unwrappedAllTimeInt%60))秒"
-        
     }
     
     @IBAction func saveButton(_ sender: Any) {
-        if titleTextField.text == "" {
-            alert(title: "タイトルがありません",
-                  message: "タイトルの欄に文字を入力してください")
-        } else {
-            let updateTitle = titleTextField.text ?? ""
-            routineModel.updateRoutine(routineID: routineID, routineTitle: updateTitle)
-        }
         Feedbacker.impact(style: .medium)
+        if titleTextField.text == "" {
+            alert(title: "タイトルがありません", message: "タイトルの欄に文字を入力してください")
+            return
+        }
+        
+        let updateTitle = titleTextField.text ?? ""
+        routineModel.updateRoutine(routineID: routineID, routineTitle: updateTitle)
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -142,22 +137,20 @@ class TaskViewController: UIViewController {
         Feedbacker.impact(style: .medium)
         let timerVC = self.storyboard?.instantiateViewController(withIdentifier: "TimerView") as! TimerViewController
         let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
-        if taskItems?.count != 0 {
-            let taskNumber = (taskItems?.count ?? 0) - 1
-            taskTitleArray = []
-            taskTimeArray = []
-            for i in 0...taskNumber {
-                taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
-                taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
-            }
-            timerVC.titleArray = taskTitleArray
-            timerVC.timeArray = taskTimeArray
-            self.navigationController?.pushViewController(timerVC, animated: true)
-        } else {
-            alert(title: "タスクがありません",
-                  message: "タスクを追加してください")
+        if taskItems?.count == 0 {
+            alert(title: "タスクがありません", message: "タスクを追加してください")
+            return
         }
-        
+        let taskNumber = (taskItems?.count ?? 0) - 1
+        taskTitleArray = []
+        taskTimeArray = []
+        for i in 0...taskNumber {
+            taskTitleArray.append(contentsOf: ["\(taskItems?[i].taskTitle ?? "")"])
+            taskTimeArray.append(contentsOf: [taskItems?[i].taskTime ?? 0])
+        }
+        timerVC.titleArray = taskTitleArray
+        timerVC.timeArray = taskTimeArray
+        self.navigationController?.pushViewController(timerVC, animated: true)
     }
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
@@ -181,14 +174,6 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
             cell.taskTime.text = "\(Int(unwrappedTime/60))分\(Int(unwrappedTime%60))秒"
         } else {
             print("taskTimeはnil")
-        }
-        
-        if cell.taskName.text == "新規タスク" {
-            cell.taskName.textColor = .systemGray2
-            cell.taskTime.textColor = .systemGray2
-        } else {
-            cell.taskName.textColor = .black
-            cell.taskTime.textColor = .black
         }
         
         cell.backView.layer.cornerRadius = viewWidth / 18
@@ -228,8 +213,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         self.present(detailVC, animated: true)
     }
     //セルの編集許可
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
-    {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
     //スワイプしたセルを削除
@@ -240,20 +224,20 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
                 let targetRoutine = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
                 let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
-                let nextOrder:Int = (item?.taskOrder ?? 0) + 1
-                let lastOrder:Int = (taskItems?.count ?? 0) - 1
-                if (lastOrder == 0) || (nextOrder == taskItems?.count) {
+                let nextOrder = (item?.taskOrder ?? 0) + 1
+                let lastOrder = (taskItems?.count ?? 0) - 1
+                if lastOrder == 0 || nextOrder == taskItems?.count {
                     targetRoutine?.totalTime -= item?.taskTime ?? 0
-                    } else {
-                        targetRoutine?.totalTime -= item?.taskTime ?? 0
-                        for index in nextOrder...lastOrder {
-                            let object = taskItems?[index]
-                            object?.taskOrder -= 1
+                } else {
+                    targetRoutine?.totalTime -= item?.taskTime ?? 0
+                    for index in nextOrder...lastOrder {
+                        let object = taskItems?[index]
+                        object?.taskOrder -= 1
                     }
                 }
                 self.realm.delete(item!)
             }
-            tableView.deleteRows(at: [indexPath as IndexPath], with: UITableView.RowAnimation.automatic)
+            tableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
             updateTotalTimeLabel()
             tableView.reloadData()
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
@@ -261,23 +245,22 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         updateTotalTimeLabel()
     }
     //deleteボタンのカスタマイズ
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath)
-    -> UISwipeActionsConfiguration? {
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             Feedbacker.impact(style: .medium)
             try! self.realm.write {
                 let targetRoutine = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
                 let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
-                let nextOrder:Int = (item?.taskOrder ?? 0) + 1
-                let lastOrder:Int = (taskItems?.count ?? 0) - 1
-                if (lastOrder == 0) || (nextOrder == taskItems?.count) {
+                let nextOrder = (item?.taskOrder ?? 0) + 1
+                let lastOrder = (taskItems?.count ?? 0) - 1
+                if lastOrder == 0 || nextOrder == taskItems?.count {
                     targetRoutine?.totalTime -= item?.taskTime ?? 0
-                    } else {
-                        targetRoutine?.totalTime -= item?.taskTime ?? 0
-                        for index in nextOrder...lastOrder {
-                            let object = taskItems?[index]
-                            object?.taskOrder -= 1
+                } else {
+                    targetRoutine?.totalTime -= item?.taskTime ?? 0
+                    for index in nextOrder...lastOrder {
+                        let object = taskItems?[index]
+                        object?.taskOrder -= 1
                     }
                 }
                 self.realm.delete(item!)
@@ -335,5 +318,11 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
     }
 }
+
+
+
+
+
+
 
 
