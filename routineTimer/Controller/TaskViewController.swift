@@ -1,8 +1,7 @@
 import UIKit
 import RealmSwift
 
-class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
-    
+class TaskViewController: UIViewController {
     
     @IBOutlet weak var taskTableView: UITableView!
     @IBOutlet weak var titleBackView: UIView!
@@ -12,7 +11,6 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     @IBOutlet weak var allTimeLabel: UILabel!
     @IBOutlet weak var addButton: UIButton!
     
-    
     private var viewWidth: CGFloat!
     private var viewHeight: CGFloat!
     private var cellWidth: CGFloat!
@@ -20,19 +18,20 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     private var cellOffset: CGFloat!
     private var navHeight: CGFloat!
     private var alertController: UIAlertController!
+    
+    let realm = try! Realm()
     private let routineModel = Routine()
     
-    let timeList = [[Int](0...60), [Int](0...60)]
-    let screenWidth = UIScreen.main.bounds.width - 20
-    let screenHeight = UIScreen.main.bounds.height / 2
-    var selectedRow = 0
-    
     var routineID = ""
-    var unwrappedAllTimeInt = 0
-    var allTimeCount = 0
-    let realm = try! Realm()
-    var taskTitleArray = [""]
-    var taskTimeArray = [0]
+    private var unwrappedAllTimeInt = 0
+    private var allTimeCount = 0
+    private var taskTitleArray = [""]
+    private var taskTimeArray = [0]
+    
+    private let timeList = [[Int](0...60), [Int](0...60)]
+    private let screenWidth = UIScreen.main.bounds.width - 20
+    private let screenHeight = UIScreen.main.bounds.height / 2
+    private var selectedRow = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,20 +58,13 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
     
-    
-    
     override var shouldAutorotate: Bool {
         return false
     }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
-    
-    //キーボード閉じる処理
-    @objc func dismissKeyboard() {
-        self.view.endEditing(true)
-    }
-    
     
     private func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.titleTextField.resignFirstResponder()
@@ -90,12 +82,15 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
     }
     
     private func setupView() {
-//        startButton.layer.cornerRadius = 12
         startButton.layer.shadowOpacity = 0.2
         startButton.layer.shadowRadius = 12
         startButton.layer.shadowColor = UIColor.black.cgColor
         startButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-//        startButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
+        
+        addButton.layer.shadowOpacity = 0.2
+        addButton.layer.shadowRadius = 12
+        addButton.layer.shadowColor = UIColor.black.cgColor
+        addButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         
         saveButton.layer.cornerRadius = 10
         saveButton.backgroundColor = .color3
@@ -172,25 +167,9 @@ class TaskViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDa
         }
         
     }
-    
-    //コンポーネントの個数
-    func numberOfComponents(in pickerView: UIPickerView) -> Int {
-        return timeList.count
-    }
-    //コンポーネントのデータの個数
-    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        return timeList[component].count
-    }
-    //データの中身
-    func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
-        let pickerLabel = UILabel(frame: CGRect(x: 0, y: 0, width: screenWidth, height: 30))
-        pickerLabel.textAlignment = NSTextAlignment.left
-        pickerLabel.text = String(timeList[component][row])
-        pickerLabel.sizeToFit()
-        return pickerLabel
-    }
-    func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 60
+    //キーボード閉じる処理
+    @objc func dismissKeyboard() {
+        self.view.endEditing(true)
     }
 }
 
@@ -240,7 +219,6 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         
         return cell
     }
-    
     //セルの高さ
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 50
@@ -361,6 +339,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
         }
         return UITableViewDropProposal(operation: .cancel, intent: .unspecified)
     }
+    
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
     }
 }

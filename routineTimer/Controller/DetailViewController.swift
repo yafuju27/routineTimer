@@ -11,15 +11,15 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var backViewButton: UIButton!
     @IBOutlet weak var frontView: UIView!
     
+    let realm = try! Realm()
     private let routineModel = Routine()
     
     private var timer:Timer = Timer()
     private var alertController: UIAlertController!
-    let timeList = [[Int](0...60), [Int](0...60)]
+    private let timeList = [[Int](0...60), [Int](0...60)]
     
     var selectedRoutineID = ""
     var selectedTaskID = ""
-    let realm = try! Realm()
     var targetTitle = ""
     var targetTime = 0
     var targetMin = 0
@@ -50,6 +50,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         }
         super.viewWillAppear(animated)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if #available(iOS 13.0, *) {
@@ -57,6 +58,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             presentingViewController?.endAppearanceTransition()
         }
     }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         if #available(iOS 13.0, *) {
@@ -71,21 +73,12 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
     override var shouldAutorotate: Bool {
         return false
     }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
     
-    @objc func back() {
-        //トップに戻る
-        self.navigationController?.popToRootViewController(animated: true)
-        }
-    @objc func save() {
-        //保存する
-        self.navigationController?.popToRootViewController(animated: true)
-    }
-    
-    
-    func forKeyBoard() {
+    private func forKeyBoard() {
         //画面がタップされたらキーボード閉じるための処理準備
         let tapGR: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGR.cancelsTouchesInView = false
@@ -95,7 +88,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
-    func setStatus() {
+    private func setStatus() {
         //ScondViewControllerの値を反映
         let targetTask = realm.object(ofType: Task.self, forPrimaryKey: selectedTaskID)
         targetTitle = targetTask?.taskTitle ?? ""
@@ -170,6 +163,16 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
         }
     }
+    
+    @objc func back() {
+        //トップに戻る
+        self.navigationController?.popToRootViewController(animated: true)
+        }
+    
+    @objc func save() {
+        //保存する
+        self.navigationController?.popToRootViewController(animated: true)
+    }
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
@@ -179,6 +182,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         self.taskTextField.resignFirstResponder()
         return true
     }
+    
     @objc func keyboardWillShow(notification: NSNotification) {
         if !taskTextField.isFirstResponder {
             return
@@ -189,6 +193,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
             }
         }
     }
+    
     @objc func keyboardWillHide(notification: NSNotification) {
         if self.view.frame.origin.y != 0 {
             self.view.frame.origin.y = 0
@@ -211,7 +216,6 @@ extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
         pickerLabel.text = String(timeList[component][row])
         return pickerLabel
     }
-    
     //データ選択時
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         targetMin = timeList[0][taskTimePickerView.selectedRow(inComponent: 0)]
@@ -222,25 +226,4 @@ extension DetailViewController: UIPickerViewDelegate, UIPickerViewDataSource {
     func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         return taskTimePickerView.bounds.width * 1/3
     }
-    
-    //    func createPickerLabels() {
-    //        //「分」のラベルを追加
-    //        var mStr = UILabel()
-    //        mStr.text = "分"
-    //        mStr.sizeToFit()
-    //        mStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width/3 - mStr.bounds.width/2,
-    //                                     y: taskTimePickerView.bounds.height/2 - (mStr.bounds.height/2),
-    //                                     width: mStr.bounds.width,
-    //                                     height: mStr.bounds.height))
-    //        taskTimePickerView.addSubview(mStr)
-    //        //「秒」のラベルを追加
-    //        var sStr = UILabel()
-    //        sStr.text = "秒"
-    //        sStr.sizeToFit()
-    //        sStr = UILabel(frame: CGRect(x: taskTimePickerView.bounds.width*2/3 - sStr.bounds.width/2,
-    //                                     y: taskTimePickerView.bounds.height/2 - (sStr.bounds.height/2),
-    //                                     width: sStr.bounds.width,
-    //                                     height: sStr.bounds.height))
-    //        taskTimePickerView.addSubview(sStr)
-    //    }
 }

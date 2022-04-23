@@ -15,14 +15,13 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
     private var navHeight: CGFloat!
     
     let realm = try! Realm()
-    
     private let routineModel = Routine()
     private let dateModel = DateModel()
     
-    private var unwrappedAllTimeInt = 0
-    var selectedID = ""
     var routineID = ""
+    var selectedID = ""
     var routineOrder = 0
+    private var unwrappedAllTimeInt = 0
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,14 +43,29 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
         routinesTableView.reloadData()
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
-    
+    //端末を回転させない
     override var shouldAutorotate: Bool {
         return false
-    }
+
+}
+    //画面の向き
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
     
+    private func setupView() {
+        todayDateLabel.text = dateModel.getTodayDate()
+        addButton.tintColor = .darkGray
+        addButton.layer.shadowOpacity = 0.2
+        addButton.layer.shadowRadius = 8
+        addButton.layer.shadowColor = UIColor.black.cgColor
+        addButton.layer.shadowOffset = CGSize(width: 1, height: 1)
+        
+        viewWidth = view.frame.width
+        viewHeight = view.frame.height
+        navHeight = self.navigationController?.navigationBar.frame.size.height
+    }
+    //finishViewControllerからの帰還
     @IBAction func unwindSegue(for unwindSegue: UIStoryboardSegue, towards subsequentVC: UIViewController) {}
     
     @IBAction func addButton(_ sender: Any) {
@@ -87,19 +101,6 @@ class RoutineViewController: UIViewController, UITextFieldDelegate {
                          animated: true,
                          completion: nil)
         }
-    }
-    
-    private func setupView() {
-        todayDateLabel.text = dateModel.getTodayDate()
-        addButton.tintColor = .darkGray
-        addButton.layer.shadowOpacity = 0.2
-        addButton.layer.shadowRadius = 8
-        addButton.layer.shadowColor = UIColor.black.cgColor
-        addButton.layer.shadowOffset = CGSize(width: 1, height: 1)
-        
-        viewWidth = view.frame.width
-        viewHeight = view.frame.height
-        navHeight = self.navigationController?.navigationBar.frame.size.height
     }
 }
 
@@ -147,8 +148,8 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
+            let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
             try! self.realm.write {
-                let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
                 let item = routineItems[indexPath.row]
                 let nextOrder:Int = item.routineOrder + 1
                 let lastOrder:Int = routineItems.count - 1
@@ -231,6 +232,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
         }
         return UITableViewDropProposal(operation: .cancel, intent: .unspecified)
     }
+    
     func tableView(_ tableView: UITableView, performDropWith coordinator: UITableViewDropCoordinator) {
     }
 }

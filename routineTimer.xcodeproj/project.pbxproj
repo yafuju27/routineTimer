@@ -12,6 +12,7 @@
 		98313EC527D5AAB30023E69C /* DateModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98313EC427D5AAB30023E69C /* DateModel.swift */; };
 		9839688E280BCA1D008C5D2A /* FinishViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9839688D280BCA1D008C5D2A /* FinishViewController.swift */; };
 		98396898280C048D008C5D2A /* カコ.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 98396897280C048D008C5D2A /* カコ.mp3 */; };
+		9839689C2813B3A8008C5D2A /* キラーん.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 9839689B2813B3A8008C5D2A /* キラーん.mp3 */; };
 		9847C33327C7CAEF004C5BDE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33227C7CAEF004C5BDE /* AppDelegate.swift */; };
 		9847C33527C7CAEF004C5BDE /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33427C7CAEF004C5BDE /* SceneDelegate.swift */; };
 		9847C33727C7CAEF004C5BDE /* RoutineViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9847C33627C7CAEF004C5BDE /* RoutineViewController.swift */; };
@@ -38,6 +39,7 @@
 		98313EC427D5AAB30023E69C /* DateModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateModel.swift; sourceTree = "<group>"; };
 		9839688D280BCA1D008C5D2A /* FinishViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FinishViewController.swift; sourceTree = "<group>"; };
 		98396897280C048D008C5D2A /* カコ.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "カコ.mp3"; sourceTree = "<group>"; };
+		9839689B2813B3A8008C5D2A /* キラーん.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "キラーん.mp3"; sourceTree = "<group>"; };
 		9847C32F27C7CAEF004C5BDE /* routineTimer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = routineTimer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9847C33227C7CAEF004C5BDE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		9847C33427C7CAEF004C5BDE /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -124,6 +126,18 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		9839689D2813B3C6008C5D2A /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				98396897280C048D008C5D2A /* カコ.mp3 */,
+				9896A7CB280A79180006F1CC /* ポーン.mp3 */,
+				9896A7C9280A79180006F1CC /* ポカッ.mp3 */,
+				9839689B2813B3A8008C5D2A /* キラーん.mp3 */,
+			);
+			name = Sounds;
+			path = ..;
+			sourceTree = "<group>";
+		};
 		9847C32627C7CAEF004C5BDE = {
 			isa = PBXGroup;
 			children = (
@@ -154,9 +168,7 @@
 				986E4F4A2801F3B2009C01BE /* ShadowView.swift */,
 				98313EBD27D59C9D0023E69C /* View */,
 				9847C33B27C7CAF0004C5BDE /* Assets.xcassets */,
-				98396897280C048D008C5D2A /* カコ.mp3 */,
-				9896A7CB280A79180006F1CC /* ポーン.mp3 */,
-				9896A7C9280A79180006F1CC /* ポカッ.mp3 */,
+				9839689D2813B3C6008C5D2A /* Sounds */,
 				9847C33D27C7CAF0004C5BDE /* LaunchScreen.storyboard */,
 				9847C34027C7CAF0004C5BDE /* Info.plist */,
 			);
@@ -224,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				98396898280C048D008C5D2A /* カコ.mp3 in Resources */,
+				9839689C2813B3A8008C5D2A /* キラーん.mp3 in Resources */,
 				9847C33F27C7CAF0004C5BDE /* LaunchScreen.storyboard in Resources */,
 				9896A7CE280A79180006F1CC /* ポーン.mp3 in Resources */,
 				9896A7CC280A79180006F1CC /* ポカッ.mp3 in Resources */,

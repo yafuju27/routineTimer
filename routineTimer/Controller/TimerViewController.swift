@@ -16,26 +16,24 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     private var shapeLayerA = CAShapeLayer()
     private var shapeLayerB = CAShapeLayer()
     private var pulsatingLayer: CAShapeLayer!
-    var timer = Timer()
+    private var timer = Timer()
+    private var player: AVAudioPlayer?
+    private let synthesizer = AVSpeechSynthesizer()
     
-    let playIcon = UIImage(named: "playTimer")
-    let stopIcon = UIImage(named: "stopTimer")
-    let state = UIControl.State.normal
+    private let playIcon = UIImage(named: "playTimer")
+    private let stopIcon = UIImage(named: "stopTimer")
+    private let state = UIControl.State.normal
+    
+    private var arrayCount = 0
+    var titleArray = ["A"]
+    var timeArray = [80]
     //残り時間
     private var timeRemainingA:Float = 80
     private var timeRemainingB:Float = 300
     //スタート時点の残り時間
-    private var timeStartA:Int = 80
-    private var timeStartB:Int = 300
-    var timerCounting: Bool = false
-    
-    var titleArray = ["A"]
-    var timeArray = [80]
-    var arrayCount = 0
-    var finishTime: Int = 0
-    
-    var player: AVAudioPlayer?
-    let synthesizer = AVSpeechSynthesizer()
+    private var totalTimeA:Int = 80
+    private var totalTimeB:Int = 300
+    private var timerCounting: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -49,8 +47,8 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
         timeRemainingA = Float(timeArray[arrayCount])
         timeRemainingB = Float(timeArray.reduce(0, +))
-        timeStartA = timeArray[arrayCount]
-        timeStartB = timeArray.reduce(0, +)
+        totalTimeA = timeArray[arrayCount]
+        totalTimeB = timeArray.reduce(0, +)
         
         makeTimerLabel()
         
@@ -66,6 +64,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     override var shouldAutorotate: Bool {
         return false
     }
+    
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         return .portrait
     }
@@ -103,8 +102,82 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         view.addSubview(endTimeLabel)
     }
     
-    func forPlusMinus() {
-        if (timeStartA-Int(timeRemainingA)) < 10 {
+    private func setupCircleLayers() {
+        
+        pulsatingLayer = createCircleShapeLayerA(strokeColor: .color3, fillColor: .color2)
+        view.layer.addSublayer(pulsatingLayer)
+        //animatePulsatingLayer()
+        
+        let trackLayerA = createCircleShapeLayerA(strokeColor: .color2, fillColor: .color1)
+        view.layer.addSublayer(trackLayerA)
+        let trackLayerB = createCircleShapeLayerB(strokeColor: .color2, fillColor: .color1)
+        view.layer.addSublayer(trackLayerB)
+        
+        shapeLayerA = createCircleShapeLayerA(strokeColor: .color3, fillColor: .clear)
+        shapeLayerA.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+        shapeLayerA.strokeEnd = 0
+        
+        shapeLayerB = createCircleShapeLayerB(strokeColor: UIColor.rgb(r: 234, g: 130, b: 54), fillColor: .clear)
+        shapeLayerB.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
+        shapeLayerB.strokeEnd = 0
+        
+        view.layer.addSublayer(shapeLayerA)
+        view.layer.addSublayer(shapeLayerB)
+    }
+    
+    private func makeTimerLabel() {
+        let min = Int(Int(timeRemainingA) / 60)
+        let sec = Int(Int(timeRemainingA) % 60)
+        self.timerLabel.text = String(format: "%02d：%02d", min, sec)
+    }
+    
+    private func createCircleShapeLayerA(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
+        let layer = CAShapeLayer()
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 2.5, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        layer.path = circularPath.cgPath
+        layer.strokeColor = strokeColor.cgColor
+        layer.lineWidth = 15
+        layer.fillColor = fillColor.cgColor
+        layer.lineCap = CAShapeLayerLineCap.round
+        layer.position = view.center
+        return layer
+    }
+    
+    private func createCircleShapeLayerB(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
+        let layer = CAShapeLayer()
+        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 13, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
+        layer.path = circularPath.cgPath
+        layer.strokeColor = strokeColor.cgColor
+        layer.lineWidth = 5
+        layer.fillColor = fillColor.cgColor
+        layer.lineCap = CAShapeLayerLineCap.round
+        layer.position = view.center
+        return layer
+    }
+    
+    private func animatePulsatingLayer() {
+        let animation = CABasicAnimation(keyPath: "transform.scale")
+        
+        animation.toValue = 1.2
+        animation.duration = 1.0
+        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
+        animation.autoreverses = true
+        animation.repeatCount = Float.infinity
+        
+        pulsatingLayer.add(animation, forKey: "pulsing")
+    }
+    
+    fileprivate func animateCircle(){
+        //アニメーションに関してはここで完結している
+        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
+        basicAnimation.fillMode = .forwards
+        basicAnimation.isRemovedOnCompletion = false
+        shapeLayerA.add(basicAnimation, forKey: "urSoBasic")
+        shapeLayerB.add(basicAnimation, forKey: "urSoBasic")
+    }
+    
+    private func forPlusMinus() {
+        if (totalTimeA-Int(timeRemainingA)) < 10 {
             plusButton.isEnabled = false
             print("プラスボタン無効")
         } else if Int(timeRemainingA) < 10 {
@@ -116,7 +189,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
-    func missSound() {
+    private func missSound() {
         if let soundURL = Bundle.main.url(forResource: "カコ", withExtension: "mp3") {
             do {
                 player = try AVAudioPlayer(contentsOf: soundURL)
@@ -127,7 +200,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
-    func alertSound() {
+    private func alertSound() {
         if let soundURL = Bundle.main.url(forResource: "ポーン", withExtension: "mp3") {
             do {
                 player = try AVAudioPlayer(contentsOf: soundURL)
@@ -138,7 +211,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
-    func buttonSound() {
+    private func buttonSound() {
         if let soundURL = Bundle.main.url(forResource: "ポカッ", withExtension: "mp3") {
             do {
                 player = try AVAudioPlayer(contentsOf: soundURL)
@@ -149,7 +222,18 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
-    func speechTitle() {
+    private func finishedSound() {
+        if let soundURL = Bundle.main.url(forResource: "キラーん", withExtension: "mp3") {
+            do {
+                player = try AVAudioPlayer(contentsOf: soundURL)
+                player?.play()
+            } catch {
+                print("キラーんのエラー")
+            }
+        }
+    }
+    
+    private func speechTitle() {
         let nowCount = arrayCount
         //1秒後の処理
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
@@ -188,7 +272,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
-    func speechFinish() {
+    private func speechFinish() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
         //しゃべる内容
         let utterance = AVSpeechUtterance(string: "お疲れ様でした")
@@ -197,80 +281,6 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         utterance.pitchMultiplier = 1.2
         synthesizer.speak(utterance)
         }
-    }
-    
-    func makeTimerLabel() {
-        let min = Int(Int(timeRemainingA) / 60)
-        let sec = Int(Int(timeRemainingA) % 60)
-        self.timerLabel.text = String(format: "%02d：%02d", min, sec)
-    }
-    
-    private func createCircleShapeLayerA(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
-        let layer = CAShapeLayer()
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: view.frame.width / 2.5, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
-        layer.path = circularPath.cgPath
-        layer.strokeColor = strokeColor.cgColor
-        layer.lineWidth = 15
-        layer.fillColor = fillColor.cgColor
-        layer.lineCap = CAShapeLayerLineCap.round
-        layer.position = view.center
-        return layer
-    }
-    
-    private func createCircleShapeLayerB(strokeColor: UIColor, fillColor: UIColor) -> CAShapeLayer {
-        let layer = CAShapeLayer()
-        let circularPath = UIBezierPath(arcCenter: .zero, radius: (view.frame.width / 2.5) - 13, startAngle: 0, endAngle: 2 * CGFloat.pi, clockwise: true)
-        layer.path = circularPath.cgPath
-        layer.strokeColor = strokeColor.cgColor
-        layer.lineWidth = 5
-        layer.fillColor = fillColor.cgColor
-        layer.lineCap = CAShapeLayerLineCap.round
-        layer.position = view.center
-        return layer
-    }
-    
-    private func setupCircleLayers() {
-        
-        pulsatingLayer = createCircleShapeLayerA(strokeColor: .color3, fillColor: .color2)
-        view.layer.addSublayer(pulsatingLayer)
-        //animatePulsatingLayer()
-        
-        let trackLayerA = createCircleShapeLayerA(strokeColor: .color2, fillColor: .color1)
-        view.layer.addSublayer(trackLayerA)
-        let trackLayerB = createCircleShapeLayerB(strokeColor: .color2, fillColor: .color1)
-        view.layer.addSublayer(trackLayerB)
-        
-        shapeLayerA = createCircleShapeLayerA(strokeColor: .color3, fillColor: .clear)
-        shapeLayerA.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
-        shapeLayerA.strokeEnd = 0
-        
-        shapeLayerB = createCircleShapeLayerB(strokeColor: UIColor.rgb(r: 234, g: 130, b: 54), fillColor: .clear)
-        shapeLayerB.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
-        shapeLayerB.strokeEnd = 0
-        
-        view.layer.addSublayer(shapeLayerA)
-        view.layer.addSublayer(shapeLayerB)
-    }
-    
-    private func animatePulsatingLayer() {
-        let animation = CABasicAnimation(keyPath: "transform.scale")
-        
-        animation.toValue = 1.2
-        animation.duration = 1.0
-        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.easeOut)
-        animation.autoreverses = true
-        animation.repeatCount = Float.infinity
-        
-        pulsatingLayer.add(animation, forKey: "pulsing")
-    }
-    
-    fileprivate func animateCircle(){
-        //アニメーションに関してはここで完結している
-        let basicAnimation = CABasicAnimation(keyPath: "strokeEnd")
-        basicAnimation.fillMode = .forwards
-        basicAnimation.isRemovedOnCompletion = false
-        shapeLayerA.add(basicAnimation, forKey: "urSoBasic")
-        shapeLayerB.add(basicAnimation, forKey: "urSoBasic")
     }
     
     @IBAction func nextButton(_ sender: Any) {
@@ -293,7 +303,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             timeRemainingA = Float(timeArray[arrayCount])
             timeRemainingB -= Float(timeArray[i])
         }
-        timeStartA = timeArray[arrayCount]
+        totalTimeA = timeArray[arrayCount]
         makeTimerLabel()
         if timer.isValid == true {
             alertSound()
@@ -322,7 +332,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             timeRemainingB = Float(timeArray.reduce(0, +))
         }
         comingTaskTitle.text = "次のタスク：\(titleArray[arrayCount+1])"
-        timeStartA = timeArray[arrayCount]
+        totalTimeA = timeArray[arrayCount]
         makeTimerLabel()
         if timer.isValid == true {
             alertSound()
@@ -382,8 +392,8 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             makeTimerLabel()
             animateCircle()
             buttonSound()
-            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
-            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
+            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
+            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
             self.shapeLayerA.strokeEnd = percentageA
             self.shapeLayerB.strokeEnd = percentageB
             minusButton.isEnabled = true
@@ -391,7 +401,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     }
     
     @IBAction func plusButton(_ sender: Any) {
-        if (timeStartA-Int(timeRemainingA)) < 6 {
+        if (totalTimeA-Int(timeRemainingA)) < 6 {
             missSound()
         } else {
             plusButton.isEnabled = true
@@ -401,8 +411,8 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             animateCircle()
             Feedbacker.impact(style: .medium)
             buttonSound()
-            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
-            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
+            let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
+            let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
             self.shapeLayerA.strokeEnd = percentageA
             self.shapeLayerB.strokeEnd = percentageB
         }
@@ -433,7 +443,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
                     comingTaskTitle.text = "最後のタスクです"
                 }
                 timeRemainingA = Float(timeArray[arrayCount])
-                timeStartA = timeArray[arrayCount]
+                totalTimeA = timeArray[arrayCount]
                 makeTimerLabel()
                 synthesizer.stopSpeaking(at: .immediate)
                 alertSound()
@@ -441,8 +451,8 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             }
         }
         
-        let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(timeStartA))
-        let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(timeStartB))
+        let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
+        let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
         self.shapeLayerA.strokeEnd = percentageA
         self.shapeLayerB.strokeEnd = percentageB
         makeTimerLabel()
