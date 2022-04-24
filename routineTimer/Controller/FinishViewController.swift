@@ -22,7 +22,7 @@ class FinishViewController: UIViewController {
         frontView.layer.shadowOffset = CGSize(width: 1, height: 1)
         returnButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
         returnButton.layer.cornerRadius = 8
-        navigationItem.hidesBackButton = true
+        navigationController?.navigationBar.isHidden = true
     }
     
     @IBAction func returnButton(_ sender: Any) {

@@ -39,6 +39,11 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         setupView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        navigationController?.navigationBar.isHidden = true
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSession.Category.playback)
+    }
+    
     private func setupView() {
         taskTitle.text = "\(titleArray[arrayCount])"
         if arrayCount != titleArray.count-1 {
@@ -234,6 +239,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             }
         } else {
             missSound()
+            return
         }
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
@@ -257,6 +263,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             arrayCount -= 1
         } else {
             self.missSound()
+            return
         }
         taskTitle.text = "\(titleArray[arrayCount])"
         timeRemainingA = Float(timeArray[arrayCount])
@@ -390,6 +397,12 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         self.shapeLayerB.strokeEnd = percentageB
         makeTimerLabel()
         print("割合は\(percentageA)")
+    }
+    
+    @IBAction func backBtnAction(_ sender: Any) {
+        timer.invalidate()
+        synthesizer.stopSpeaking(at: .immediate)
+        self.navigationController?.popViewController(animated: true)
     }
 }
 

@@ -39,11 +39,11 @@ class TaskViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationController?.navigationBar.isHidden = false
         let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
         titleTextField.text = targetRoutine?.routineTitle
         updateTotalTimeLabel()
         taskTableView.reloadData()
+        navigationController?.navigationBar.isHidden = true
         print("🟦遷移後のselectedID:\(routineID)")
         print ("🟥全てのデータ🟥\n\(realm.objects(Routine.self))")
     }
@@ -108,10 +108,6 @@ class TaskViewController: UIViewController {
     }
     
     @IBAction func titleTextfieldChanged(_ sender: Any) {
-        if titleTextField.text == "" {
-            alert(title: "タイトルがありません", message: "タイトルの欄に文字を入力してください")
-            return
-        }
         let updateTitle = titleTextField.text ?? ""
         routineModel.updateRoutine(routineID: routineID, routineTitle: updateTitle)
     }
@@ -146,6 +142,15 @@ class TaskViewController: UIViewController {
         timerVC.timeArray = taskTimeArray
         self.navigationController?.pushViewController(timerVC, animated: true)
     }
+    
+    @IBAction func backBtnAction(_ sender: Any) {
+        if titleTextField.text == "" {
+            alert(title: "タイトルがありません", message: "タイトルの欄に文字を入力してください")
+            return
+        }
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     //キーボード閉じる処理
     @objc func dismissKeyboard() {
         self.view.endEditing(true)
