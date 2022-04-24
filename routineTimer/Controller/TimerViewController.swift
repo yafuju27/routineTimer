@@ -180,22 +180,6 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
-    private func missSound() {
-        playSound(forResource: "カコ")
-    }
-    
-    private func alertSound() {
-        playSound(forResource: "ポーン")
-    }
-    
-    private func buttonSound() {
-        playSound(forResource: "ポカッ")
-    }
-    
-    private func finishedSound() {
-        playSound(forResource: "キラーん")
-    }
-    
     private func speechTitle() {
         //1秒後の処理
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [self] in
@@ -227,6 +211,25 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         }
     }
     
+    private func timerAdjuster(isPlus: Bool) {
+        plusButton.isEnabled = true
+        if isPlus {
+            timeRemainingA += 5
+            timeRemainingB += 5
+        } else {
+            timeRemainingA -= 5
+            timeRemainingB -= 5
+        }
+        makeTimerLabel()
+        animateCircle()
+        Feedbacker.impact(style: .medium)
+        playSound(forResource: "ポカッ")
+        let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
+        let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
+        self.shapeLayerA.strokeEnd = percentageA
+        self.shapeLayerB.strokeEnd = percentageB
+    }
+    
     @IBAction func nextButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
         synthesizer.stopSpeaking(at: .immediate)
@@ -238,7 +241,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
                 comingTaskTitle.text = "最後のタスクです"
             }
         } else {
-            missSound()
+            playSound(forResource: "カコ")
             return
         }
         taskTitle.text = "\(titleArray[arrayCount])"
@@ -251,7 +254,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         totalTimeA = timeArray[arrayCount]
         makeTimerLabel()
         if timer.isValid == true {
-            alertSound()
+            playSound(forResource: "ポーン")
             speechTitle()
         }
     }
@@ -262,7 +265,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         if arrayCount > 0 {
             arrayCount -= 1
         } else {
-            self.missSound()
+            self.playSound(forResource: "カコ")
             return
         }
         taskTitle.text = "\(titleArray[arrayCount])"
@@ -281,7 +284,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         totalTimeA = timeArray[arrayCount]
         makeTimerLabel()
         if timer.isValid == true {
-            alertSound()
+            playSound(forResource: "ポーン")
             speechTitle()
         }
     }
@@ -292,7 +295,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         if timerCounting {
             startStopButton.setImage(playIcon, for: state)
             //STOPボタンの役割
-            buttonSound()
+            playSound(forResource: "ポカッ")
             synthesizer.stopSpeaking(at: .immediate)
         } else {
             startStopButton.setImage(stopIcon, for: state)
@@ -302,7 +305,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
                                          selector: #selector(TimerViewController.timerClass),
                                          userInfo: nil,
                                          repeats: true)
-            alertSound()
+            playSound(forResource: "ポーン")
             if arrayCount == 0 && Int(timeRemainingA) == timeArray[0] {
                 speechTitle()
             }
@@ -325,7 +328,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     
     @IBAction func minusButton(_ sender: Any) {
         if Int(timeRemainingA) < 6 {
-            missSound()
+            playSound(forResource: "カコ")
             return
         }
         timerAdjuster(isPlus: false)
@@ -333,29 +336,10 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     
     @IBAction func plusButton(_ sender: Any) {
         if totalTimeA-Int(timeRemainingA) < 6 {
-            missSound()
+            playSound(forResource: "カコ")
             return
         }
         timerAdjuster(isPlus: true)
-    }
-    
-    private func timerAdjuster(isPlus: Bool) {
-        plusButton.isEnabled = true
-        if isPlus {
-            timeRemainingA += 5
-            timeRemainingB += 5
-        } else {
-            timeRemainingA -= 5
-            timeRemainingB -= 5
-        }
-        makeTimerLabel()
-        animateCircle()
-        Feedbacker.impact(style: .medium)
-        buttonSound()
-        let percentageA = CGFloat(1 - Float(timeRemainingA) * 1 / Float(totalTimeA))
-        let percentageB = CGFloat(1 - Float(timeRemainingB) * 1 / Float(totalTimeB))
-        self.shapeLayerA.strokeEnd = percentageA
-        self.shapeLayerB.strokeEnd = percentageB
     }
     
     @objc func timerClass() {
@@ -367,7 +351,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
             if arrayCount == titleArray.count {
                 //全てのタイマーが終了した時の処理
                 timer.invalidate()
-                finishedSound()
+                playSound(forResource: "キラーん")
                 speechFinish()
                 let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishView") as! FinishViewController
                 finishVC.modalPresentationStyle = .overCurrentContext
@@ -386,7 +370,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
                 totalTimeA = timeArray[arrayCount]
                 makeTimerLabel()
                 synthesizer.stopSpeaking(at: .immediate)
-                alertSound()
+                playSound(forResource: "ポーン")
                 speechTitle()
             }
         }
