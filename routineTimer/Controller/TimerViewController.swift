@@ -2,7 +2,6 @@ import UIKit
 import AVFoundation
 
 class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavigationControllerDelegate {
-    
     @IBOutlet weak var taskTitle: UILabel!
     @IBOutlet weak var comingTaskTitle: UILabel!
     @IBOutlet weak var timerLabel: UILabel!

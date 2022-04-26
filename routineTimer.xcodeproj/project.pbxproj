@@ -98,6 +98,9 @@
 			children = (
 				98313EC027D5A9120023E69C /* RoutinesModel.swift */,
 				98313EC427D5AAB30023E69C /* DateModel.swift */,
+				98BA192227CC55860045E0C0 /* Extensions.swift */,
+				985DF91327E8B57C0081DC4A /* MyButton.swift */,
+				986E4F4A2801F3B2009C01BE /* ShadowView.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -163,9 +166,6 @@
 				9847C33427C7CAEF004C5BDE /* SceneDelegate.swift */,
 				98313EBC27D59C7D0023E69C /* Model */,
 				98313EBF27D59CD50023E69C /* Controller */,
-				98BA192227CC55860045E0C0 /* Extensions.swift */,
-				985DF91327E8B57C0081DC4A /* MyButton.swift */,
-				986E4F4A2801F3B2009C01BE /* ShadowView.swift */,
 				98313EBD27D59C9D0023E69C /* View */,
 				9847C33B27C7CAF0004C5BDE /* Assets.xcassets */,
 				9839689D2813B3C6008C5D2A /* Sounds */,
