@@ -89,6 +89,7 @@ extension Routine {
         let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
         
         let item = routineItems[indexPath]
+        try! realm.write {
         let nextOrder:Int = item.routineOrder + 1
         let lastOrder:Int = routineItems.count - 1
         if lastOrder == 0 || nextOrder == routineItems.count {
@@ -98,30 +99,28 @@ extension Routine {
                 object.routineOrder -= 1
             }
         }
-        try! realm.write {
             realm.delete(item)
         }
     }
     
 //    func removeTask(indexPath: Int) {
 //        let realm = try! Realm()
-//        try! realm.write {
-//            let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
-//            let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
-//            let item = taskItems?[indexPath]
-//            let nextOrder = (item?.taskOrder ?? 0) + 1
-//            let lastOrder = (taskItems?.count ?? 0) - 1
-//            if lastOrder == 0 || nextOrder == taskItems?.count {
-//                targetRoutine?.totalTime -= item?.taskTime ?? 0
-//            } else {
-//                targetRoutine?.totalTime -= item?.taskTime ?? 0
-//                for index in nextOrder...lastOrder {
-//                    let object = taskItems?[index]
-//                    object?.taskOrder -= 1
-//                }
+//        let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+//        let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
+//        let item = taskItems?[indexPath]
+//    try! realm.write {
+//        let nextOrder = (item?.taskOrder ?? 0) + 1
+//        let lastOrder = (taskItems?.count ?? 0) - 1
+//        if lastOrder == 0 || nextOrder == taskItems?.count {
+//            targetRoutine?.totalTime -= item?.taskTime ?? 0
+//        } else {
+//            targetRoutine?.totalTime -= item?.taskTime ?? 0
+//            for index in nextOrder...lastOrder {
+//                let object = taskItems?[index]
+//                object?.taskOrder -= 1
 //            }
-//            realm.delete(item!)
 //        }
+//        realm.delete(item!)
+//    }
 //    }
 }
-

@@ -208,10 +208,11 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
-            try! self.realm.write {
-                let targetRoutine = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
+            
+                let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
                 let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
+            try! realm.write {
                 let nextOrder = (item?.taskOrder ?? 0) + 1
                 let lastOrder = (taskItems?.count ?? 0) - 1
                 if lastOrder == 0 || nextOrder == taskItems?.count {
@@ -223,8 +224,9 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
                         object?.taskOrder -= 1
                     }
                 }
-                self.realm.delete(item!)
+                realm.delete(item!)
             }
+            //routineModel.removeTask(indexPath: indexPath.row)
             tableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
             updateTotalTimeLabel()
             tableView.reloadData()
@@ -236,10 +238,11 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             Feedbacker.impact(style: .medium)
-            try! self.realm.write {
+            
                 let targetRoutine = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)
                 let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
                 let item = taskItems?[indexPath.row]
+            try! self.realm.write {
                 let nextOrder = (item?.taskOrder ?? 0) + 1
                 let lastOrder = (taskItems?.count ?? 0) - 1
                 if lastOrder == 0 || nextOrder == taskItems?.count {
@@ -253,6 +256,7 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
                 }
                 self.realm.delete(item!)
             }
+            //self.routineModel.removeTask(indexPath: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: UITableView.RowAnimation.automatic)
             self.updateTotalTimeLabel()
             tableView.reloadData()

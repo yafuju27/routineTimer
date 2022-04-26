@@ -136,9 +136,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             Feedbacker.impact(style: .medium)
-            
             routineModel.removeRoutine(indexPath: indexPath.row)
-            
             tableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
         }
@@ -147,9 +145,7 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { (_, _, completionHandler) in
             Feedbacker.impact(style: .medium)
-            
             self.routineModel.removeRoutine(indexPath: indexPath.row)
-            
             tableView.deleteRows(at: [indexPath as IndexPath], with: .automatic)
             print("🟥全てのデータ🟥\n\(self.realm.objects(Routine.self))")
             completionHandler(true)
