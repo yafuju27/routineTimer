@@ -1,10 +1,3 @@
-//
-//  ShadowView.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/04/10.
-//
-
 import UIKit
 
 class ShadowView: UIView {
@@ -15,7 +8,7 @@ class ShadowView: UIView {
         didSet {
             viewWidth = UIScreen.main.bounds.size.width
             setupShadow()
-            self.backgroundColor = UIColor(red: 0/255, green: 173/255, blue: 181/255, alpha: 1)
+            self.backgroundColor = .customeBlue
         }
     }
     private func setupShadow() {

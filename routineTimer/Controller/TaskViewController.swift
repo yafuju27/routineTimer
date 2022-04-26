@@ -81,8 +81,7 @@ class TaskViewController: UIViewController {
         addButton.layer.shadowOffset = CGSize(width: 1, height: 1)
         
         titleBackView.layer.cornerRadius = 15
-        
-        titleTextField.setCustomeLine()
+        titleTextField.borderStyle = .none
         
         viewWidth = view.frame.width
         viewHeight = view.frame.height
@@ -125,7 +124,8 @@ class TaskViewController: UIViewController {
     
     @IBAction func startButton(_ sender: Any) {
         Feedbacker.impact(style: .medium)
-        let timerVC = self.storyboard?.instantiateViewController(withIdentifier: "TimerView") as! TimerViewController
+        let storyboard = UIStoryboard(name: "Timer", bundle: nil)
+        let timerVC = storyboard.instantiateViewController(withIdentifier: "TimerView") as! TimerViewController
         let taskItems = self.realm.object(ofType: Routine.self, forPrimaryKey: self.routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
         if taskItems?.count == 0 {
             alert(title: "タスクがありません", message: "タスクを追加してください")
@@ -190,9 +190,9 @@ extension TaskViewController: UITableViewDelegate, UITableViewDataSource, UITabl
     }
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //画面遷移
-        let detailVC = self.storyboard?.instantiateViewController(withIdentifier: "DetailView") as! DetailViewController
-        //let targetRoutine = realm.object(ofType: Routine.self, forPrimaryKey: routineID)
+        let storyboard = UIStoryboard(name: "Detail", bundle: nil)
+        let detailVC = storyboard.instantiateViewController(withIdentifier: "DetailView") as! DetailViewController
+        
         let taskItems = realm.object(ofType: Routine.self, forPrimaryKey: routineID)?.task.sorted(byKeyPath: "taskOrder", ascending: true)
         detailVC.selectedRoutineID = routineID
         detailVC.selectedTaskID = taskItems?[indexPath.row].taskID ?? ""

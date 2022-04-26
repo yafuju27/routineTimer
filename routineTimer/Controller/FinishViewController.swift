@@ -1,10 +1,3 @@
-//
-//  FinishViewController.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/04/17.
-//
-
 import UIKit
 
 class FinishViewController: UIViewController {
@@ -20,7 +13,7 @@ class FinishViewController: UIViewController {
         frontView.layer.shadowRadius = 12
         frontView.layer.shadowColor = UIColor.black.cgColor
         frontView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        returnButton.backgroundColor = UIColor.rgb(r: 234, g: 130, b: 54)
+        returnButton.backgroundColor = .customeOrange
         returnButton.layer.cornerRadius = 8
         navigationController?.navigationBar.isHidden = true
     }

@@ -1,10 +1,3 @@
-//
-//  DateModel.swift
-//  Swift6MyDiary1
-//
-//  Created by Yazici Yahya on 2021/11/06.
-//
-
 import Foundation
 
 

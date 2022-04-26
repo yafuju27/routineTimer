@@ -61,7 +61,7 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         navigationController?.delegate = self
         
         //タイトルの色
-        taskTitle.textColor = .color4
+        taskTitle.textColor = .white
         comingTaskTitle.textColor = .systemGray4
         
         //ボタンの丸み
@@ -73,15 +73,12 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
         minusButton.backgroundColor = .clear
         plusButton.backgroundColor = .clear
         //背景の色
-        view.backgroundColor = .color1
-        //ボタンのテキストの色
-        minusButton.setTitleColor(UIColor.rgb(r: 0, g: 173, b: 181), for: .normal)
-        plusButton.setTitleColor(UIColor.rgb(r: 234, g: 130, b: 54), for: .normal)
+        view.backgroundColor = .customeBlack
         //残り時間表示ラベル
         timerLabel.textAlignment = .center
         timerLabel.font = .boldSystemFont(ofSize: view.frame.width / 8)
         timerLabel.font = UIFont(name:"Helvetica Light", size: view.frame.width / 8)
-        timerLabel.textColor = .color4
+        timerLabel.textColor = .white
         timerLabel.frame = CGRect(x: 0, y: 0, width: 200, height: 100)
         timerLabel.center = view.center
         
@@ -91,20 +88,20 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
     
     private func setupCircleLayers() {
         
-        pulsatingLayer = createCircleShapeLayerA(strokeColor: .color3, fillColor: .color2)
+        pulsatingLayer = createCircleShapeLayerA(strokeColor: .customeGray, fillColor: .customeGray)
         view.layer.addSublayer(pulsatingLayer)
         //animatePulsatingLayer()
         
-        let trackLayerA = createCircleShapeLayerA(strokeColor: .color2, fillColor: .color1)
+        let trackLayerA = createCircleShapeLayerA(strokeColor: .customeGray, fillColor: .customeBlack)
         view.layer.addSublayer(trackLayerA)
-        let trackLayerB = createCircleShapeLayerB(strokeColor: .color2, fillColor: .color1)
+        let trackLayerB = createCircleShapeLayerB(strokeColor: .customeGray, fillColor: .customeBlack)
         view.layer.addSublayer(trackLayerB)
         
-        shapeLayerA = createCircleShapeLayerA(strokeColor: .color3, fillColor: .clear)
+        shapeLayerA = createCircleShapeLayerA(strokeColor: .customeBlue, fillColor: .clearColor)
         shapeLayerA.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
         shapeLayerA.strokeEnd = 0
         
-        shapeLayerB = createCircleShapeLayerB(strokeColor: UIColor.rgb(r: 234, g: 130, b: 54), fillColor: .clear)
+        shapeLayerB = createCircleShapeLayerB(strokeColor: .customeOrange, fillColor: .clearColor)
         shapeLayerB.transform = CATransform3DMakeRotation(-CGFloat.pi / 2, 0, 0, 1)
         shapeLayerB.strokeEnd = 0
         
@@ -352,7 +349,9 @@ class TimerViewController: UIViewController, AVSpeechSynthesizerDelegate, UINavi
                 timer.invalidate()
                 playSound(forResource: "キラーん")
                 speechFinish()
-                let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishView") as! FinishViewController
+                //let finishVC = self.storyboard?.instantiateViewController(withIdentifier: "FinishView") as! FinishViewController
+                let storyboard = UIStoryboard(name: "Finish", bundle: nil)
+                let finishVC = storyboard.instantiateViewController(withIdentifier: "FinishView") as! FinishViewController
                 finishVC.modalPresentationStyle = .overCurrentContext
                 finishVC.modalTransitionStyle = .crossDissolve
                 self.present(finishVC, animated: true)

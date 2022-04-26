@@ -121,7 +121,10 @@ extension RoutineViewController: UITableViewDelegate, UITableViewDataSource, UIT
     //セルが選択された時
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //画面遷移
-        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
+//        let taskVC = self.storyboard?.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
+        let storyboard = UIStoryboard(name: "Task", bundle: nil)
+        let taskVC = storyboard.instantiateViewController(withIdentifier: "TaskView") as! TaskViewController
+        
         let routineItems = realm.objects(Routine.self).sorted(byKeyPath: "routineOrder", ascending: true)
         taskVC.routineID = routineItems[indexPath.row].routineID
         self.navigationController?.pushViewController(taskVC, animated: true)

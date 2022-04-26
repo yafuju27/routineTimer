@@ -106,7 +106,7 @@ class DetailViewController: UIViewController, UITextFieldDelegate {
         frontView.layer.shadowRadius = 12
         frontView.layer.shadowColor = UIColor.black.cgColor
         frontView.layer.shadowOffset = CGSize(width: 1, height: 1)
-        doneButton.backgroundColor = UIColor(red: 0/255, green: 173/255, blue: 181/255, alpha: 1)
+        doneButton.backgroundColor = .customeBlue
         doneButton.layer.cornerRadius = 8
         cancelButton.layer.cornerRadius = 8
         backViewButton.titleLabel?.text = ""

@@ -1,10 +1,3 @@
-//
-//  MyButton.swift
-//  routineTimer
-//
-//  Created by Yazici Yahya on 2022/03/21.
-//
-
 import Foundation
 import UIKit
  
@@ -33,7 +26,6 @@ struct Feedbacker {
       generator.selectionChanged()
     }
   }
- 
 }
 //使い方(ボタンの記述にこの１行追加するだけ)
  
